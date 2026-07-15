@@ -35,6 +35,24 @@
             opacity: 0.30;
             z-index: -1;
         }
+        .donate-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .donate-btn a {
+            color: #4a6984;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: 0.3s;
+            border: 1px solid #1e2d4a;
+            padding: 5px 10px;
+        }
+        .donate-btn a:hover {
+            color: #00d2ff;
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.1);
+        }
         .lang-switcher {
             position: absolute;
             top: 20px;
@@ -86,6 +104,9 @@
     </style>
 </head>
 <body>
+    <div class="donate-btn">
+        <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">BAĞIŞ YAP</a>
+    </div>
     <div class="lang-switcher">
         <a href="../">EN</a>
     </div>
