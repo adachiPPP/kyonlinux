@@ -1,2 +1,3 @@
 # kyonlinux
-an indie debian based distro that focuses on ease of use for beginners
+an independent debian-based distribution designed with a focus on user-friendly accessibility and refined aesthetics.
+support me on https://github.com/sponsors/adachiPPP (please 3;)
