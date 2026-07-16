@@ -1,0 +1,15 @@
+[
+  {
+    "date": "2026-07-16",
+    "changes": [
+      "added kyonrepo support to pacman"
+    ]
+  },
+  {
+    "date": "2026-07-15",
+    "changes": [
+      "configuring calamares installer",
+      "configured some base files"
+    ]
+  }
+]
