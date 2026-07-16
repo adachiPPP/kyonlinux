@@ -1,5 +1,12 @@
 [
   {
+    "date": "26-07-17",
+    "changes": [
+      "the os is done only calamares is being annoying after fixing it the distro will be released as a public beta!",
+      "(im sleepy its late here rn)"
+    ]
+  },
+  {
     "date": "2026-07-16",
     "changes": [
       "added kyonrepo support to pacman",
