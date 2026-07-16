@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/x-icon" href="../icon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>kyon linux</title>
@@ -79,6 +79,7 @@
             letter-spacing: -2px;
             margin-bottom: 0;
             text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
+            text-align: center;
         }
         p {
             font-size: 1.2rem;
@@ -104,6 +105,61 @@
             color: #0a0f1d;
             box-shadow: 0 0 25px rgba(0, 210, 255, 0.8);
         }
+
+        /* mobile fixes */
+        @media (max-width: 600px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                justify-content: flex-start;
+                padding: 130px 20px 40px 20px;
+                box-sizing: border-box;
+                overflow-y: auto;
+            }
+            .donate-btn {
+                position: absolute;
+                top: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 40px);
+                text-align: center;
+            }
+            .donate-btn a {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                font-size: 0.9rem;
+            }
+            .top-right-nav {
+                position: absolute;
+                top: 60px;
+                left: 20px;
+                right: 20px;
+                justify-content: center;
+                gap: 8px;
+            }
+            .top-right-nav a {
+                flex: 1;
+                text-align: center;
+                font-size: 0.9rem;
+                padding: 5px 2px;
+            }
+            h1 {
+                font-size: 2.8rem;
+                margin-top: 20px;
+            }
+            p {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+            .btn {
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -112,7 +168,7 @@
     </div>
     <div class="top-right-nav">
         <a href="../gallery.html">galeri</a>
-        <a href="./releases.html">dev notları</a>
+        <a href="../releases.html">dev notları</a>
         <a href="../">🇬🇧</a>
     </div>
     <h1>kyon linux</h1>
