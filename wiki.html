@@ -123,9 +123,6 @@
             font-weight: bold;
             flex-grow: 1;
             text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
         .wiki-trigger {
             color: #4a6984;
@@ -225,19 +222,13 @@
                     const entryDiv = document.createElement('div');
                     entryDiv.className = 'wiki-entry';
                     
-                    // handle user preference limit of 20 characters on header
                     const rawHeader = item.header || '';
-                    const parsedSnippet = rawHeader.length > 20 
-                        ? rawHeader.substring(0, 20) + '...' 
-                        : rawHeader;
-                    
-                    // fetch paragraphs list safely mapping over custom structure
                     const lines = item.paragraph || item.changes || [];
                     const listItems = lines.map(line => `<li>${line}</li>`).join('');
                     
                     entryDiv.innerHTML = `
                         <div class="wiki-header">
-                            <span class="wiki-title">${parsedSnippet}</span>
+                            <span class="wiki-title">${rawHeader}</span>
                             <span class="wiki-date">${item.date}</span>
                             <span class="wiki-trigger">[open]</span>
                         </div>
