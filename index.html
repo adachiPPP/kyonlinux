@@ -36,12 +36,14 @@
             opacity: 0.30;
             z-index: -1;
         }
-        .donate-btn {
+        .top-left-nav {
             position: absolute;
             top: 20px;
             left: 20px;
+            display: flex;
+            gap: 10px;
         }
-        .donate-btn a {
+        .top-left-nav a {
             color: #4a6984;
             text-decoration: none;
             font-size: 1rem;
@@ -49,7 +51,7 @@
             border: 1px solid #1e2d4a;
             padding: 5px 10px;
         }
-        .donate-btn a:hover {
+        .top-left-nav a:hover {
             color: #00d2ff;
             border-color: #00d2ff;
             background: rgba(0, 210, 255, 0.1);
@@ -112,27 +114,28 @@
                 height: auto;
                 min-height: 100vh;
                 justify-content: flex-start;
-                padding: 130px 20px 40px 20px;
+                padding: 170px 20px 40px 20px;
                 box-sizing: border-box;
                 overflow-y: auto;
             }
-            .donate-btn {
+            .top-left-nav {
                 position: absolute;
                 top: 15px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: calc(100% - 40px);
-                text-align: center;
+                justify-content: center;
+                flex-wrap: wrap;
             }
-            .donate-btn a {
-                display: block;
-                width: 100%;
+            .top-left-nav a {
+                flex: 1 1 auto;
+                text-align: center;
                 box-sizing: border-box;
                 font-size: 0.9rem;
             }
             .top-right-nav {
                 position: absolute;
-                top: 60px;
+                top: 100px;
                 left: 20px;
                 right: 20px;
                 justify-content: center;
@@ -163,8 +166,11 @@
     </style>
 </head>
 <body>
-    <div class="donate-btn">
+    <div class="top-left-nav">
         <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">donations</a>
+        <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a>
+        <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a>
+        <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a>
     </div>
     <div class="top-right-nav">
         <a href="./gallery.html">gallery</a>
