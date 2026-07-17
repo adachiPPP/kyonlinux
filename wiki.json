@@ -1,10 +1,38 @@
 [
   {
+    "date": "2026-07-17"
+    "header": "how can i get cachy's kernel and drivers?"
+    "paragraph": [
+      "first grab the kernel: sudo pacman -S linux-cachyos",
+      "if you have nvidia, u can use the normal dkms drivers that was optional in the installation or if you are going to *only* use the cachy kernel, u can use the linux-cachyos-nvidia-open driver and get rid of dkms",
+      "if you want to get rid of dkms and only use the cachy kernel, do: sudo pacman -S linux-cachyos-nvidia-open",
+      "to get rid of the regular kernel run this: sudo pacman -R linux",
+      "but i *wouldn't* recommend getting rid of the regular kernel so if you want to keep the regular kernel and use nvidia too, you can run: sudo pacman -S nvidia-open" 
+    ]
+  },
+  {
     "date": "2026-07-17",
     "header": "it shows cli when bootup?",
     "paragraph": [
       "you only need to set the locals its not like archinstall",
       "the rest is gui"
+    ]
+  },
+  {
+    "date": "2026-07-17",
+    "header": "which type of users is kyonlinux for?",
+    "paragraph": [
+      "kyon linux is for elementary (not the os) linux users such as cachyOS users that know how to use pacman and other things",
+      "kyon linux is also for advanced users that want their distro preconfigured to save time, etc. kyonlinux also has some repos such as:",
+      "kyon repo (distros official repo)",
+      "official arch repositories",
+      "chaotic-aur (for people who want binary packages from aur)",
+      "endeavourOS",
+      "and lastly cachyOS's repo",
+      "for example, elementary (not the os) users can go and use cachy's optimised kernel and its drivers in kyonlinux",
+      "(will be included in another section)",
+      "and advanced users can use the nix package manager",
+      "but i heavily recommend this distro to elementary (NOT THE OS) users!"
     ]
   }
 ]
