@@ -114,22 +114,18 @@
             gap: 15px;
         }
         .wiki-date {
-            color: #00d2ff;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-        .wiki-preview {
             color: #4a6984;
             font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .wiki-title {
+            color: #00d2ff;
+            font-weight: bold;
+            flex-grow: 1;
+            text-align: left;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex-grow: 1;
-            text-align: left;
-            transition: 0.2s;
-        }
-        .wiki-entry.active .wiki-preview {
-            opacity: 0;
         }
         .wiki-trigger {
             color: #4a6984;
@@ -216,7 +212,7 @@
         <a href="./releases.html">dev notes</a>
     </div>
 
-    <h1>wiki records</h1>
+    <h1>wiki workspace</h1>
     <div id="wiki-container"></div>
 
     <script>
@@ -229,18 +225,20 @@
                     const entryDiv = document.createElement('div');
                     entryDiv.className = 'wiki-entry';
                     
-                    // get first item string and cut to 20 chars max
-                    const dynamicRaw = item.changes[0] || '';
-                    const parsedSnippet = dynamicRaw.length > 20 
-                        ? dynamicRaw.substring(0, 20) + '...' 
-                        : dynamicRaw;
+                    // handle user preference limit of 20 characters on header
+                    const rawHeader = item.header || '';
+                    const parsedSnippet = rawHeader.length > 20 
+                        ? rawHeader.substring(0, 20) + '...' 
+                        : rawHeader;
                     
-                    const listItems = item.changes.map(change => `<li>${change}</li>`).join('');
+                    // fetch paragraphs list safely mapping over custom structure
+                    const lines = item.paragraph || item.changes || [];
+                    const listItems = lines.map(line => `<li>${line}</li>`).join('');
                     
                     entryDiv.innerHTML = `
                         <div class="wiki-header">
+                            <span class="wiki-title">${parsedSnippet}</span>
                             <span class="wiki-date">${item.date}</span>
-                            <span class="wiki-preview">${parsedSnippet}</span>
                             <span class="wiki-trigger">[open]</span>
                         </div>
                         <div class="wiki-content">
@@ -259,7 +257,7 @@
                     container.appendChild(entryDiv);
                 });
             })
-            .catch(err => console.error('error parsing configuration source', err));
+            .catch(err => console.error('error parsing external asset configuration', err));
     </script>
 </body>
 </html>
