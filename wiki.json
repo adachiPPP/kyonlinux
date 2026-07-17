@@ -1,7 +1,7 @@
 [
   {
-    "date": "2026-07-17"
-    "header": "how can i get cachy's kernel and drivers?"
+    "date": "2026-07-17",
+    "header": "how can i get cachy's kernel and drivers?",
     "paragraph": [
       "first grab the kernel: sudo pacman -S linux-cachyos",
       "if you have nvidia, u can use the normal dkms drivers that was optional in the installation or if you are going to *only* use the cachy kernel, u can use the linux-cachyos-nvidia-open driver and get rid of dkms",
