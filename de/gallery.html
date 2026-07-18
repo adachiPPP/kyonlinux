@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie - Kyon Linux</title>
+    <style>
+        html {
+            background: linear-gradient(135deg, #000b47 0%, #00d2ff 100%);
+        }
+        body {
+            font-family: monospace;
+            color: #00d2ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 100px 20px 40px 20px;
+            box-sizing: border-box;
+            position: relative;
+            background: transparent;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('icon.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 250px;
+            opacity: 0.30;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .home-btn a {
+            color: #4a6984;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: 0.3s;
+            border: 1px solid #1e2d4a;
+            padding: 5px 10px;
+        }
+        .home-btn a:hover {
+            color: #00d2ff;
+            border-color: #00d2ff;
+            background: rgba(0, 210, 255, 0.1);
+        }
+        h1 {
+            font-size: 3rem;
+            letter-spacing: -2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
+            text-transform: uppercase;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 1440px;
+            width: 100%;
+            justify-content: center;
+        }
+        .gallery-item {
+            border: 1px solid #1e2d4a;
+            background: rgba(0, 11, 71, 0.6);
+            padding: 5px;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .gallery-item:hover {
+            border-color: #00d2ff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+        .gallery-item img {
+            width: 700px;
+            height: 360px;
+            object-fit: cover;
+            display: block;
+        }
+        /* fallback styling for small viewports so images don't overflow layout boundaries */
+        @media (max-width: 1460px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                max-width: 720px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="home-btn">
+        <a href="./">Zurück</a>
+    </div>
+
+    <h1>gallery</h1>
+
+    <div class="gallery-grid">
+        <div class="gallery-item">
+            <img src="../pic1.png" alt="kyon linux desktop preview 1">
+        </div>
+        <div class="gallery-item">
+            <img src="../pic2.png" alt="kyon linux desktop preview 2">
+        </div>
+        <div class="gallery-item">
+            <img src="../pic3.png" alt="kyon linux desktop preview 3">
+        </div>
+        <div class="gallery-item">
+            <img src="../pic4.png" alt="kyon linux desktop preview 4">
+        </div>
+    </div>
+</body>
+</html>
