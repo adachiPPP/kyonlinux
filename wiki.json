@@ -31,7 +31,7 @@
       "@!     and lastly cachyOS's repo",
       " ",
       "for example, semi-new users can go and use cachy's optimised kernel and its drivers in kyonlinux",
-      "(will be included in another section)",
+      "@! (will be included in another section)",
       "and advanced users can use the nix package manager",
       "but i heavily recommend this distro to semi-new users!"
     ]
