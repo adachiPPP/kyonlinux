@@ -1,40 +1,41 @@
 [
   {
     "date": "2026-07-17",
-    "header": "how can i get cachy's kernel and drivers?",
+    "header": "cachy kernelini ve driverlarını nasıl alabilirim?",
     "paragraph": [
-      "first grab the kernel: sudo pacman -S linux-cachyos",
-      "if you have nvidia, u can use the normal dkms drivers that was optional in the installation or if you are going to *only* use the cachy kernel, u can use the linux-cachyos-nvidia-open driver and get rid of dkms",
-      "if you want to get rid of dkms and only use the cachy kernel, do: sudo pacman -S linux-cachyos-nvidia-open",
-      "to get rid of the regular kernel run this: sudo pacman -R linux",
-      "but i *wouldn't* recommend getting rid of the regular kernel so if you want to keep the regular kernel and use nvidia too, you can run: sudo pacman -S nvidia-open" 
+      "ilk olarak kerneli yükleyin: sudo pacman -S linux-cachyos",
+      "eğer nvidia kullanıyorsanız, indirme kısmında seçilebilir olan dkms driverlarını kullanabilirsiniz veya *sadece* cachy kernelini kullanacaksanız, linux-cachyos-nvidia-open driverini kullanıp dkms'i silebilirsiniz",
+      "dkmsten kurtulup sadece cachy kernelini kullanacaksanız, şunu çalıştırın: sudo pacman -S linux-cachyos-nvidia-open",
+      "normal kerneli silmek için: sudo pacman -R linux",
+      "açıkçası normal kernelden kurtulmanızı önermem o yüzden normal kerneli saklayıp orada da nvidia driverlarını kullanmak istiyorsanız şunu çalıştırın: sudo pacman -S nvidia-open" 
     ]
   },
   {
     "date": "2026-07-17",
-    "header": "it shows cli when bootup?",
+    "header": "ilk açıldığında cli gözüküyor?",
     "paragraph": [
-      "it only asks for the local then it will boot to kde plasma like normal"
+      "sadece locali soruyor sonra kde plasmaya giriyor"
     ]
   },
   {
     "date": "2026-07-17",
-    "header": "which type of users is kyonlinux for?",
+    "header": "kyonlinux kimler icin",
     "paragraph": [
-      "kyon linux is for semi-new linux users such as cachyOS users that know how to use pacman and other things",
+      "kyon linux pacman ve diger seyleri kullanmayi bilen cachyos kullanicilari gibi yari yeni linux kullanicilari icindir",
       " ",
-      "kyon linux is also for advanced users that want their distro preconfigured to save time, etc. kyonlinux also has some repos such as:",
-      "@!     kyon repo (distros official repo)",
-      "@!     official arch repositories",
-      "@!     chaotic-aur (for people who want binary packages from aur)",
-      "@!     endeavourOS",
-      "@!     cachyOS",
-      "@!     and lastly nyarch's repo",
+      "kyon linux ayni zamanda zamandan tasarruf etmek icin dagitimlarinin onceden yapilandirilmasini isteyen ileri duzey kullanicilar icindir kyonlinuxun ayrica su depolar gibi bazi depolari da vardir",
+      "@!     kyon repo dagitimin resmi reposu",
+      "@!     resmi arch depolari",
+      "@!     chaotic-aur aurdan biner paketler isteyen kisiler icin",
+      "@!     custom repos...",
+      "@!     endeavouros",
+      "@!     cachyos",
+      "@!     ve son olarak nyarchin reposu",
       " ",
-      "for example, semi-new users can go and use cachy's optimised kernel and its drivers in kyonlinux",
-      "@! (will be included in another section)",
-      "and advanced users can use the nix package manager",
-      "but i heavily recommend this distro to semi-new users!"
+      "ornegin yari yeni kullanicilar kyonlinuxda cachynin optimize edilmis kernelini ve suruculerini kullanabilir",
+      "@! baska bir bolumde yer alacak",
+      "ve ileri duzey kullanicilar nix paket yoneticisini kullanabilir",
+      "ama bu dagitimi yari yeni kullanicilara siddetle oneriyorum"
     ]
   }
 ]
