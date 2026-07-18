@@ -275,10 +275,8 @@
                             content = content.trimStart().slice(2).trimStart();
                         }
 
-                        // support 
- inside a single line entry as a line break
-                        const withBreaks = escapeHtml(content).replace(/\n|
-/g, '<br>');
+                        // support \n inside a single line entry as a line break
+                        const withBreaks = escapeHtml(content).replace(/\\n|\n/g, '<br>');
                         const cssClass = noBullet ? ' class="wiki-nobullet"' : '';
                         return `<li${cssClass}>${withBreaks}</li>`;
                     }).join('');
@@ -287,7 +285,7 @@
                         <div class="wiki-header">
                             <span class="wiki-title">${rawHeader}</span>
                             <span class="wiki-date">${item.date}</span>
-                            <span class="wiki-trigger">[öffnen]</span>
+                            <span class="wiki-trigger">[open]</span>
                         </div>
                         <div class="wiki-content">
                             <ul>${listItems}</ul>
@@ -299,13 +297,13 @@
 
                     header.addEventListener('click', () => {
                         const isExpanded = entryDiv.classList.toggle('active');
-                        trigger.textContent = isExpanded ? '[schließen]' : '[öffnen]';
+                        trigger.textContent = isExpanded ? '[close]' : '[open]';
                     });
 
                     container.appendChild(entryDiv);
                 });
             })
-            .catch(err => console.error('Fehler beim Analysieren der externen Asset-Konfiguration', err));
+            .catch(err => console.error('error parsing external asset configuration', err));
     </script>
 </body>
 </html>
