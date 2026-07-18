@@ -1,40 +1,40 @@
 [
   {
     "date": "2026-07-17",
-    "header": "how can i get cachy's kernel and drivers?",
+    "header": "Wie bekomme ich Cachys Kernel und Treiber?",
     "paragraph": [
-      "first grab the kernel: sudo pacman -S linux-cachyos",
-      "if you have nvidia, u can use the normal dkms drivers that was optional in the installation or if you are going to *only* use the cachy kernel, u can use the linux-cachyos-nvidia-open driver and get rid of dkms",
-      "if you want to get rid of dkms and only use the cachy kernel, do: sudo pacman -S linux-cachyos-nvidia-open",
-      "to get rid of the regular kernel run this: sudo pacman -R linux",
-      "but i *wouldn't* recommend getting rid of the regular kernel so if you want to keep the regular kernel and use nvidia too, you can run: sudo pacman -S nvidia-open" 
+      "Hole dir zuerst den Kernel: sudo pacman -S linux-cachyos",
+      "Wenn du Nvidia hast, kannst du die normalen dkms-Treiber verwenden, die bei der Installation optional waren. Oder, wenn du nur den Cachy-Kernel nutzen wirst, kannst du den linux-cachyos-nvidia-open Treiber verwenden und dkms loswerden",
+      "Wenn du dkms loswerden und nur den Cachy-Kernel verwenden willst, führe aus: sudo pacman -S linux-cachyos-nvidia-open",
+      "Um den regulären Kernel zu entfernen, führe dies aus: sudo pacman -R linux",
+      "Aber ich würde nicht empfehlen, den regulären Kernel zu entfernen. Wenn du also den regulären Kernel behalten und auch Nvidia nutzen willst, kannst du ausführen: sudo pacman -S nvidia-open"
     ]
   },
   {
     "date": "2026-07-17",
-    "header": "it shows cli when bootup?",
+    "header": "Es zeigt beim Booten ein CLI an?",
     "paragraph": [
-      "it only asks for the local then it will boot to kde plasma like normal"
+      "Es fragt nur nach dem lokalen Tastaturlayout/Sprachauswahl, danach bootet es ganz normal in KDE Plasma"
     ]
   },
   {
     "date": "2026-07-17",
-    "header": "which type of users is kyonlinux for?",
+    "header": "Für welche Art von Benutzern ist KyonLinux gedacht?",
     "paragraph": [
-      "kyon linux is for semi-new linux users such as cachyOS users that know how to use pacman and other things",
+      "Kyon Linux ist für halb-neue Linux-Benutzer gedacht, wie z. B. CachyOS-Benutzer, die wissen, wie man Pacman und andere Dinge benutzt",
       " ",
-      "kyon linux is also for advanced users that want their distro preconfigured to save time, etc. kyonlinux also has some repos such as:",
-      "@!     kyon repo (distros official repo)",
-      "@!     official arch repositories",
-      "@!     chaotic-aur (for people who want binary packages from aur)",
+      "Kyon Linux ist auch für fortgeschrittene Benutzer, die ihre Distribution vorkonfiguriert haben wollen, um Zeit zu sparen, etc. KyonLinux hat auch einige Repositories wie:",
+      "@!     kyon repo (offizielles Repo der Distro)",
+      "@!     offizielle Arch-Repositories",
+      "@!     chaotic-aur (für Leute, die Binärpakete aus dem AUR wollen)",
       "@!     endeavourOS",
       "@!     cachyOS",
-      "@!     and lastly nyarch's repo",
+      "@!     und zu guter Letzt das Repo von nyarch",
       " ",
-      "for example, semi-new users can go and use cachy's optimised kernel and its drivers in kyonlinux",
-      "@! (will be included in another section)",
-      "and advanced users can use the nix package manager",
-      "but i heavily recommend this distro to semi-new users!"
+      "Zum Beispiel können halb-neue Benutzer hingehen und Cachys optimierten Kernel und dessen Treiber in KyonLinux verwenden",
+      "@! (wird in einem anderen Abschnitt enthalten sein)",
+      "und fortgeschrittene Benutzer können den Nix-Paketmanager verwenden",
+      "aber ich empfehle diese Distribution halb-neuen Benutzern wärmstens!"
     ]
   }
 ]
