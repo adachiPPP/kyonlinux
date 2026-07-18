@@ -28,7 +28,7 @@
       "@!     official arch repositories",
       "@!     chaotic-aur (for people who want binary packages from aur)",
       "@!     endeavourOS",
-      "@!     nyarch",
+      "@!     cachyOS",
       "@!     and lastly nyarch's repo",
       " ",
       "for example, semi-new users can go and use cachy's optimised kernel and its drivers in kyonlinux",
