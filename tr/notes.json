@@ -2,32 +2,32 @@
   {
     "date": "26-07-18",
     "changes": [
-      "distro will be released soon some small adjustments and it will be released as a public beta",
-      "i might do smth crazy like kyon but artix based but NOT for semi-new nor new users"
+      "distro yakında kullanıma sunulacak birkaç küçük ayarlamadan sonra public beta olarak yayınlancak",
+      "belki artix tabanlı kyon da yapma gibi çılgınca bir fikrim var ama yeni kullanıcılar için DEĞİL"
     ]
   },
   {
     "date": "26-07-17",
     "changes": [
-      "the os is done only calamares is being annoying after fixing it the distro will be released as a public beta!",
-      "(im sleepy its late here rn)",
-      "calamares is almost done some bugfixes and everything will be released as a public beta soon",
-      "the last update today: the iso is almost done i have some issues with the calamares configs then it will be done soon"
+      "sistem bitmek üzere sadece calamares kaldı ondan sonra yayınlayacağım public beta olarak",
+      "(uykum var)",
+      "calamares bitmek üzere birazcık daha bugfix ve distroyu yayınlayacağım",
+      "son change: calamares configleri birazcık sıkıntılı onları bitirmeye çalışıyorum sonra yayınlayacağım"
     ]
   },
   {
     "date": "2026-07-16",
     "changes": [
-      "added kyonrepo support to pacman",
-      "finishing the calamares installer",
-      "setting up autologin and desktop environments for the installation environment"
+      "pacmana kyonrepoyu ekledim",
+      "calamares yükleyicisini bitirmeye çalışıyorum",
+      "DE'yi ve autologini ayarladım"
     ]
   },
   {
     "date": "2026-07-15",
     "changes": [
-      "configuring calamares installer",
-      "configured some base files"
+      "calamares yükleyicisini ayarladım",
+      "bazı base dosyaları ayarladım"
     ]
   }
 ]
