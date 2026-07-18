@@ -163,6 +163,24 @@
         li::marker {
             color: #00d2ff;
         }
+        /* blank/spacer lines (from a " " entry in the json) render as a gap, no bullet */
+        li.wiki-spacer {
+            list-style: none;
+            margin: 0 0 8px 0;
+            padding: 0;
+            height: 0.6em;
+        }
+        li.wiki-spacer::marker {
+            content: none;
+        }
+        /* lines prefixed with @! render as plain text, no bullet */
+        li.wiki-nobullet {
+            list-style: none;
+            margin-left: -20px;
+        }
+        li.wiki-nobullet::marker {
+            content: none;
+        }
 
         @media (max-width: 768px) {
             body {
@@ -224,19 +242,46 @@
     <div id="wiki-container"></div>
 
     <script>
+        // minimal HTML escaper so raw text content doesn't get interpreted as markup
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
         fetch('wiki.json')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('wiki-container');
-                
+
                 data.forEach(item => {
                     const entryDiv = document.createElement('div');
                     entryDiv.className = 'wiki-entry';
-                    
+
                     const rawHeader = item.header || '';
                     const lines = item.paragraph || item.changes || [];
-                    const listItems = lines.map(line => `<li>${line}</li>`).join('');
-                    
+
+                    const listItems = lines.map(line => {
+                        // a blank/whitespace-only line is treated as a spacer, not a bulleted item
+                        if (line.trim() === '') {
+                            return `<li class="wiki-spacer"></li>`;
+                        }
+
+                        // a line prefixed with @! drops its bullet and renders as plain text
+                        let content = line;
+                        let noBullet = false;
+                        if (content.trimStart().startsWith('@!')) {
+                            noBullet = true;
+                            content = content.trimStart().slice(2).trimStart();
+                        }
+
+                        // support \n inside a single line entry as a line break
+                        const withBreaks = escapeHtml(content).replace(/\\n|\n/g, '<br>');
+                        const cssClass = noBullet ? ' class="wiki-nobullet"' : '';
+                        return `<li${cssClass}>${withBreaks}</li>`;
+                    }).join('');
+
                     entryDiv.innerHTML = `
                         <div class="wiki-header">
                             <span class="wiki-title">${rawHeader}</span>
@@ -247,15 +292,15 @@
                             <ul>${listItems}</ul>
                         </div>
                     `;
-                    
+
                     const header = entryDiv.querySelector('.wiki-header');
                     const trigger = entryDiv.querySelector('.wiki-trigger');
-                    
+
                     header.addEventListener('click', () => {
                         const isExpanded = entryDiv.classList.toggle('active');
                         trigger.textContent = isExpanded ? '[close]' : '[open]';
                     });
-                    
+
                     container.appendChild(entryDiv);
                 });
             })
