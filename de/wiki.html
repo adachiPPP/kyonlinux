@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <link rel="icon" type="image/x-icon" href="icon.ico">
     <meta charset="UTF-8">
@@ -230,14 +230,14 @@
 </head>
 <body>
     <div class="top-left-nav">
-        <a href="./index.html">home</a>
+        <a href="./index.html">Zurück</a>
     </div>
     <div class="top-right-nav">
-        <a href="./gallery.html">gallery</a>
-        <a href="./releases.html">dev notes</a>
+        <a href="./gallery.html">Galerie</a>
+        <a href="./releases.html">Entwickler-Notizen</a>
     </div>
 
-    <h1>wiki & asked questions</h1>
+    <h1>Wiki & Fragen</h1>
     <div id="wiki-container"></div>
 
     <script>
@@ -275,8 +275,10 @@
                             content = content.trimStart().slice(2).trimStart();
                         }
 
-                        // support \n inside a single line entry as a line break
-                        const withBreaks = escapeHtml(content).replace(/\\n|\n/g, '<br>');
+                        // support 
+ inside a single line entry as a line break
+                        const withBreaks = escapeHtml(content).replace(/\n|
+/g, '<br>');
                         const cssClass = noBullet ? ' class="wiki-nobullet"' : '';
                         return `<li${cssClass}>${withBreaks}</li>`;
                     }).join('');
@@ -285,7 +287,7 @@
                         <div class="wiki-header">
                             <span class="wiki-title">${rawHeader}</span>
                             <span class="wiki-date">${item.date}</span>
-                            <span class="wiki-trigger">[open]</span>
+                            <span class="wiki-trigger">[öffnen]</span>
                         </div>
                         <div class="wiki-content">
                             <ul>${listItems}</ul>
@@ -297,13 +299,13 @@
 
                     header.addEventListener('click', () => {
                         const isExpanded = entryDiv.classList.toggle('active');
-                        trigger.textContent = isExpanded ? '[close]' : '[open]';
+                        trigger.textContent = isExpanded ? '[schließen]' : '[öffnen]';
                     });
 
                     container.appendChild(entryDiv);
                 });
             })
-            .catch(err => console.error('error parsing external asset configuration', err));
+            .catch(err => console.error('Fehler beim Analysieren der externen Asset-Konfiguration', err));
     </script>
 </body>
 </html>
