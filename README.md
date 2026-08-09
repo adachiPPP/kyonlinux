@@ -8,7 +8,8 @@ support me on https://github.com/sponsors/adachiPPP (please 3;)
 
 Everything lives in a single file: **`index.html`** — home, music player with a cava-style visualizer, gallery, wiki, credits and dev notes are all niri-style scrolling windows on one page. The old pages (wiki/credits/gallery/releases) redirect into their sections.
 
-- **music**: name your songs anything — list them in `music/songs.json` (e.g. `["song.mp3", "tune.ogg"]`). Without that file it falls back to `music1.mp3` … `music16.mp3`. The song of the day is picked from the date, ⏮/⏯/⏭ buttons cycle through the list, and broken/missing songs are skipped. If no songs are found at all, a generative ambient beat keeps the visualizer alive (it stops as soon as a real song plays). Keyboard: `space` play/pause, `←`/`→` prev/next.
+- **music**: name your songs anything — list them in `music/songs.json` (e.g. `["song.mp3", "tune.ogg"]`), which is merged with classic `music1.mp3` … `music16.mp3` detection (only existing files are kept, so a stale manifest can't break playback). The song of the day is picked from the date, ⏮/⏯/⏭ cycle the list, broken songs auto-skip. If nothing is found, a generative ambient beat keeps the visualizer alive (it stops when a real song plays). Keyboard: `space` play/pause, `←`/`→` prev/next.
+  - ⚠️ `songs.json` is read with `fetch()`, which browsers **block on `file://`** — if you double-click `index.html`, serve the folder instead: `python3 -m http.server` in the project root.
 - **visualizer**: cava-style spectrum bars + beat-reactive logo pulse (WebAudio AnalyserNode).
 - **theme**: Jost (Futura-style) via Google Fonts, snow particles, aurora background.
 - **donations**: fixed ♥ donations button in the top-right (GitHub sponsors link).

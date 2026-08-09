@@ -407,7 +407,6 @@ footer .backtop:active{transform:scale(.95)}
 
 <footer>
   <p>© 2026 kyon linux — made by hand, by one human and a couple of friends</p>
-  <p>no templates were harmed in the making of this website · last updated 2026-08-09</p>
   <p><a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ donations</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
   <button class="backtop" id="backTop" type="button">↑ back to top</button>
 </footer>
@@ -901,8 +900,17 @@ function tryPlay(){
   if (tracks.length > 0){
     stopSynth();   /* never mix the fallback beat with real songs */
     connectSource();
-    player.play().then(function(){ setPlaying(true); }).catch(function(e){
+    player.play().then(function(){
+      setPlaying(true);
+      /* the context was created before any user gesture, so browsers keep it
+         suspended: the song may 'play' but stays silent until the first
+         interaction resumes the graph — say that instead of pretending */
+      if (ctx.state === 'suspended' && !userStarted){
+        $('playerNote').textContent = 'now playing · first click anywhere unmutes';
+      }
+    }).catch(function(e){
       if (e && e.name === 'AbortError') return;   /* superseded by a newer play() call */
+      /* browser blocked autoplay with sound — the first click/keypress anywhere starts it */
       setPlaying(false);
     });
   } else {
@@ -1012,6 +1020,9 @@ function startSynth(){
   synth = { running: true, step: 0, nextTime: ctx.currentTime + 0.06, timer: null };
   scheduleLoop();
   setPlaying(true);
+  if (ctx.state === 'suspended' && !userStarted){
+    $('playerNote').textContent = 'ambient mode · first click anywhere unmutes';
+  }
 }
 function scheduleStep(step, t){
   var eighth = 60 / 105 / 2;                 /* 105 bpm, eighth notes */
@@ -1172,12 +1183,20 @@ $('wikiSearch').addEventListener('input', wikiFilter);
    has its own handler) starts the music automatically */
 function startAudioOnce(e){
   var el = e.target;
-  if (e.type === 'click' && (el === playBtn || el === vizCanvas || (el.closest && el.closest('.controls')))) return;
+  /* player controls (play/prev/next/viz) have their own handlers — never touch
+     them here, otherwise a touchstart or Enter keydown would start the music and
+     the control's click would immediately pause it again */
+  if (el === playBtn || el === vizCanvas || (el.closest && el.closest('.controls'))) return;
   if (e.code === 'Space') return;   /* playPause() handles space */
+  /* wake the audio graph on the very first gesture — even if the song already
+     'started' on load, a context created before any click is suspended, so the
+     music can be silently playing but inaudible until this resume */
+  if (ctx && ctx.state === 'suspended') ctx.resume().catch(function(){});
   if (!playing){ userStarted = true; tryPlay(); }
 }
 document.addEventListener('click', startAudioOnce, {once:true});
 document.addEventListener('keydown', startAudioOnce, {once:true});
+document.addEventListener('touchstart', startAudioOnce, {once:true, passive:true});
 
 document.addEventListener('keydown', function(e){
   var tag = e.target && e.target.tagName;
@@ -1202,59 +1221,67 @@ function boot(){
 
   initAudio();
 }
-function initAudio(){
-  /* 1) a music/songs.json manifest lets you name your songs anything you want */
-  fetch('music/songs.json')
+function probeFiles(files, timeoutMs){
+  /* returns only the files that actually exist (a stale manifest can't break playback) */
+  return Promise.all(files.map(function(f){
+    return new Promise(function(resolve){
+      var a = new Audio(), done = false;
+      function ok(v){ if (done) return; done = true; a.removeAttribute('src'); a.load(); resolve(v); }
+      a.addEventListener('error', function(){ ok(false); });
+      a.addEventListener('loadedmetadata', function(){ ok(true); });
+      a.preload = 'metadata';
+      a.src = f;
+      a.load();
+      setTimeout(function(){ ok(a.readyState > 0); }, timeoutMs);
+    });
+  })).then(function(oks){
+    var out = [];
+    for (var i = 0; i < files.length; i++) if (oks[i]) out.push(files[i]);
+    return out;
+  });
+}
+function fetchManifest(){
+  /* only works over http(s); blocked on file:// so it falls back to numeric probing */
+  return fetch('music/songs.json')
     .then(function(r){ if (!r.ok) throw new Error('no manifest'); return r.json(); })
     .then(function(list){
-      if (!Array.isArray(list)) throw new Error('bad manifest');
-      tracks = list
+      if (!Array.isArray(list)) return [];
+      var files = list
         .filter(function(f){ return typeof f === 'string' && f.trim(); })
         .map(function(f){ return /^music\//.test(f.trim()) ? f.trim() : 'music/' + f.trim(); });
-      if (!tracks.length) throw new Error('empty manifest');
-      readyWithTracks();
+      return probeFiles(files, 4000);
     })
-    .catch(probeNumericTracks);
-}
-function readyWithTracks(){
-  probeDone = true;
-  current = dayOfYear() % tracks.length;
-  loadTrack();
-  enableButtons();
-  updateTrackLabel();
-  if (wantPlay) playPause();
-  else tryPlay();   /* attempt autoplay — browsers may block until first click */
+    .catch(function(){ return []; });
 }
 function probeNumericTracks(){
-  probeTracks().then(function(ok){
-    probeDone = true;
-    tracks = [];
-    for (var i = 0; i < ok.length; i++) if (ok[i]) tracks.push('music/music' + (i + 1) + '.' + TRACK_EXT);
-    if (tracks.length === 0){
-      /* none found — give today's candidate one more chance before ambient mode */
-      var candidateN = (dayOfYear() % TRACK_MAX) + 1;
-      probeRange([candidateN], 6000).then(function(res){
-        if (res[0]){
-          tracks = ['music/music' + candidateN + '.' + TRACK_EXT];
-          current = 0;
-          loadTrack();
-          enableButtons();
-          updateTrackLabel();
-          if (wantPlay) playPause();
-          else tryPlay();
-        } else {
-          updateTrackLabel();
-        }
-      });
-      return;
-    }
-    current = dayOfYear() % tracks.length;
-    loadTrack();
-    enableButtons();
-    updateTrackLabel();
-    if (wantPlay) playPause();
-    else tryPlay();
+  /* classic music1.mp3 … music16.mp3 detection */
+  return probeTracks().then(function(ok){
+    var files = [];
+    for (var i = 0; i < ok.length; i++) if (ok[i]) files.push('music/music' + (i + 1) + '.' + TRACK_EXT);
+    return files;
   });
+}
+function initAudio(){
+  /* combine manifest songs + classic musicN.mp3 detection; keep only real files */
+  Promise.all([fetchManifest(), probeNumericTracks()])
+    .then(function(res){
+      var seen = {}, list = [];
+      function add(f){ if (f && !seen[f]){ seen[f] = 1; list.push(f); } }
+      (res[0] || []).forEach(add);
+      (res[1] || []).forEach(add);
+      tracks = list;
+      probeDone = true;
+      if (tracks.length === 0){
+        updateTrackLabel();   /* nothing found — ambient mode */
+        return;
+      }
+      current = dayOfYear() % tracks.length;
+      loadTrack();
+      enableButtons();
+      updateTrackLabel();
+      if (wantPlay) playPause();
+      else tryPlay();   /* attempt autoplay — browsers may block until first click */
+    });
 }
 function enableButtons(){
   [playBtn, prevBtn, nextBtn].forEach(function(b){
