@@ -1,187 +1,1089 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kyon Linux</title>
-    <style>
-        html {
-            background: linear-gradient(135deg, #000b47 0%, #00d2ff 100%);
-        }
-        body {
-            font-family: monospace;
-            color: #fffff0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            position: relative;
-            overflow: hidden;
-            background: transparent;
-        }
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('icon.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 250px;
-            opacity: 0.30;
-            z-index: -1;
-        }
-        .top-left-nav {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .top-left-nav a {
-            color: #4a6984;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: 0.3s;
-            border: 1px solid #1e2d4a;
-            padding: 5px 10px;
-        }
-        .top-left-nav a:hover {
-            color: #00d2ff;
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-        }
-        .top-right-nav {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .top-right-nav a {
-            color: #4a6984;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: 0.3s;
-            border: 1px solid #1e2d4a;
-            padding: 5px 10px;
-        }
-        .top-right-nav a:hover {
-            color: #00d2ff;
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-        }
-        h1 {
-            font-size: 4rem;
-            letter-spacing: -2px;
-            margin-bottom: 0;
-            text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
-            text-align: center;
-        }
-        p {
-            font-size: 1.2rem;
-            color: #fffff0;
-            margin-top: 10px;
-            max-width: 600px;
-            line-height: 1.6;
-            text-align: center;
-        }
-        .btn {
-            display: inline-block;
-            border: 1px solid #00d2ff;
-            color: #00d2ff;
-            padding: 15px 30px;
-            text-decoration: none;
-            margin-top: 30px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        .btn:hover {
-            background: #00d2ff;
-            color: #0a0f1d;
-            box-shadow: 0 0 25px rgba(0, 210, 255, 0.8);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kyon linux — arch-based, accessible, aesthetic</title>
+<meta name="description" content="kyon linux — an independent arch-based distribution designed with a focus on user-friendly accessibility and refined aesthetics. Wiki, credits, gallery, dev notes and a music visualizer, all in one page.">
+<meta name="theme-color" content="#000b47">
+<link rel="icon" type="image/x-icon" href="icon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#02081f;
+  --navy:#000b47;
+  --cyan:#00d2ff;
+  --ice:#7df9ff;
+  --violet:#8b6cff;
+  --text:#f2f7ff;
+  --dim:#5d7f9c;
+  --panel:rgba(8,16,44,.62);
+  --line:rgba(0,210,255,.26);
+  --beat:0;
+  --font:'Jost','Century Gothic','Futura','Trebuchet MS',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  color:var(--text);
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(0,210,255,.16), transparent 60%),
+    radial-gradient(1000px 700px at 8% 110%, rgba(139,108,255,.15), transparent 60%),
+    linear-gradient(160deg,#02081f 0%,#000b47 48%,#002452 100%);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+/* faint techy grid */
+body::after{
+  content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,210,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,210,255,.05) 1px,transparent 1px);
+  background-size:46px 46px;
+}
+::selection{background:rgba(0,210,255,.35);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#02081f}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--cyan),#0a4b8a);border-radius:8px}
 
-        /* mobile fixes */
-        @media (max-width: 600px) {
-            body {
-                height: auto;
-                min-height: 100vh;
-                justify-content: flex-start;
-                padding: 170px 20px 40px 20px;
-                box-sizing: border-box;
-                overflow-y: auto;
-            }
-            .top-left-nav {
-                position: absolute;
-                top: 15px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: calc(100% - 40px);
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            .top-left-nav a {
-                flex: 1 1 auto;
-                text-align: center;
-                box-sizing: border-box;
-                font-size: 0.9rem;
-            }
-            .top-right-nav {
-                position: absolute;
-                top: 100px;
-                left: 20px;
-                right: 20px;
-                justify-content: center;
-                gap: 8px;
-            }
-            .top-right-nav a {
-                flex: 1;
-                text-align: center;
-                font-size: 0.9rem;
-                padding: 5px 2px;
-            }
-            h1 {
-                font-size: 2.8rem;
-                margin-top: 20px;
-            }
-            p {
-                font-size: 1rem;
-                padding: 0 10px;
-            }
-            .btn {
-                width: 100%;
-                box-sizing: border-box;
-                text-align: center;
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+/* ---------- aurora ---------- */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
+.a1{width:62vmax;height:62vmax;left:-22vmax;top:-22vmax;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 65%)}
+.a2{width:52vmax;height:52vmax;right:-16vmax;top:22%;background:radial-gradient(circle,rgba(139,108,255,.45),transparent 65%);animation-delay:-8s;animation-duration:34s}
+.a3{width:46vmax;height:46vmax;left:28%;bottom:-26vmax;background:radial-gradient(circle,rgba(125,249,255,.3),transparent 65%);animation-delay:-16s;animation-duration:40s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(7vw,5vh) scale(1.18)}}
+
+/* ---------- snow ---------- */
+#snow{position:fixed;inset:0;z-index:60;pointer-events:none}
+
+/* ---------- scroll progress ---------- */
+#progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:80;background:rgba(255,255,255,.06)}
+#progressBar{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--ice),var(--violet));box-shadow:0 0 12px rgba(0,210,255,.8)}
+
+/* ---------- dot nav ---------- */
+#dotnav{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:14px}
+#dotnav a{width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(0,210,255,.5);position:relative;transition:transform .3s,background .3s,box-shadow .3s;text-decoration:none}
+#dotnav a::after{content:attr(data-tip);position:absolute;right:24px;top:50%;transform:translateY(-50%) translateX(8px);white-space:nowrap;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ice);background:rgba(8,16,44,.92);border:1px solid rgba(0,210,255,.3);padding:5px 9px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+#dotnav a:hover::after{opacity:1;transform:translateY(-50%) translateX(0)}
+#dotnav a:hover{transform:scale(1.3)}
+#dotnav a.active{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 14px var(--cyan);transform:scale(1.4)}
+
+/* ---------- windows ---------- */
+main{position:relative;z-index:2;padding:26px 16px 0}
+.window{
+  width:min(1020px,100%);margin:0 auto 100px;
+  background:var(--panel);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);
+  overflow:hidden;position:relative;
+  transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s;
+}
+/* windows start hidden only when JS is alive (html gets the .anim class) */
+html.anim .window{opacity:0;transform:translateY(52px) scale(.985)}
+html.anim .window.in{opacity:1;transform:none}
+.window:hover{border-color:rgba(0,210,255,.55);box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 46px rgba(0,210,255,.14)}
+.winbar{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(0,210,255,.14);background:linear-gradient(90deg,rgba(0,210,255,.09),rgba(139,108,255,.05))}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.d1{background:#ff5f57}.d2{background:#febc2e}.d3{background:#28c840}
+.wintitle{flex:1;text-align:center;font-weight:600;letter-spacing:.34em;text-transform:uppercase;font-size:.74rem;color:var(--ice);opacity:.85}
+.winmeta{font-size:.72rem;color:var(--dim);letter-spacing:.1em;white-space:nowrap}
+.winmeta a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s;margin:0 2px}
+.winmeta a:hover{color:var(--cyan)}
+.winbody{padding:clamp(24px,5vw,56px) clamp(18px,5vw,60px)}
+h2.section-title{
+  font-size:clamp(1.6rem,4vw,2.3rem);font-weight:600;letter-spacing:.02em;margin-bottom:26px;
+  background:linear-gradient(120deg,#fff,var(--ice) 60%,var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.section-sub{color:var(--dim);margin:-16px 0 30px;font-size:.95rem;letter-spacing:.04em}
+
+/* ---------- home ---------- */
+#home{min-height:calc(100vh - 40px)}
+#home .winbody{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:calc(100vh - 120px);gap:22px;padding-bottom:40px}
+.logo-wrap{width:220px;height:220px;display:grid;place-items:center;animation:breathe 3.6s ease-in-out infinite}
+.logo-wrap img{width:190px;height:190px;border-radius:28px;object-fit:cover;
+  box-shadow:0 0 40px rgba(0,210,255,.35),0 0 120px rgba(0,210,255,.16);
+  transition:transform .1s linear;will-change:transform}
+@keyframes breathe{0%,100%{filter:drop-shadow(0 0 16px rgba(0,210,255,.35))}50%{filter:drop-shadow(0 0 36px rgba(125,249,255,.7))}}
+h1{
+  font-size:clamp(3rem,10vw,5.6rem);font-weight:700;letter-spacing:-.02em;line-height:1;
+  background:linear-gradient(120deg,#fff,#7df9ff 55%,#00d2ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px rgba(0,210,255,.4));
+  animation:titleIn 1.2s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes titleIn{from{opacity:0;letter-spacing:.28em;transform:translateY(20px) scale(.95)}to{opacity:1;letter-spacing:-.02em;transform:none}}
+.tagline{max-width:560px;color:rgba(242,247,255,.85);font-size:clamp(1rem,2.4vw,1.18rem);font-weight:300;letter-spacing:.03em}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;justify-content:center;
+  border:1px solid var(--cyan);color:#03122e;text-decoration:none;
+  background:linear-gradient(135deg,#7df9ff,#00d2ff);
+  padding:15px 34px;border-radius:999px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.88rem;
+  position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s,background .25s;
+  box-shadow:0 6px 20px rgba(0,210,255,.25);
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(0,210,255,.5)}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);transition:left .55s}
+.btn:hover::after{left:135%}
+.btn small{font-weight:500;opacity:.75;text-transform:none;letter-spacing:0}
+.btn.ghost{background:transparent;color:var(--ice);border-color:rgba(0,210,255,.45);box-shadow:none}
+.btn.ghost:hover{background:rgba(0,210,255,.14);box-shadow:0 14px 34px rgba(0,210,255,.3)}
+.socials{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.socials a{color:var(--ice);text-decoration:none;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid rgba(0,210,255,.3);padding:8px 16px;border-radius:999px;transition:.3s}
+.socials a:hover{background:rgba(0,210,255,.15);border-color:var(--cyan);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,210,255,.25)}
+.langs{display:flex;gap:14px;margin-top:4px;color:var(--dim);font-size:.85rem}
+.langs a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s}
+.langs a:hover{color:var(--cyan)}
+.scroll-hint{margin-top:6px;color:var(--dim);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;animation:hint 2s ease-in-out infinite}
+@keyframes hint{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(7px)}}
+
+/* ---------- ticker ---------- */
+.ticker{width:min(1020px,100%);margin:-60px auto 100px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(8,16,44,.55);backdrop-filter:blur(10px);position:relative;z-index:2}
+.ticker-track{display:flex;gap:3.2rem;white-space:nowrap;width:max-content;animation:marquee 24s linear infinite;padding:13px 0;font-weight:500;letter-spacing:.22em;text-transform:uppercase;font-size:.74rem;color:rgba(242,247,255,.72)}
+.ticker-track span{display:flex;align-items:center;gap:3.2rem}
+.ticker-track i{color:var(--cyan);font-style:normal}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- player ---------- */
+#player{border-color:rgba(0,210,255,calc(.26 + var(--beat)*.5));box-shadow:0 24px 70px rgba(0,0,0,.45),0 0 calc(10px + var(--beat)*46px) rgba(0,210,255,calc(.05 + var(--beat)*.25))}
+#viz{width:100%;height:230px;display:block;border-radius:16px;background:rgba(2,8,31,.68);border:1px solid rgba(0,210,255,.16);cursor:pointer;transition:border-color .3s}
+#viz:hover{border-color:rgba(0,210,255,.5)}
+.track-meta{display:flex;justify-content:space-between;align-items:center;margin-top:20px;flex-wrap:wrap;gap:12px}
+.track-name{font-weight:600;color:var(--ice);font-size:1.1rem;letter-spacing:.04em}
+.track-sub{color:var(--dim);font-size:.84rem;letter-spacing:.06em;margin-top:2px}
+.track-date{color:var(--dim);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-align:right}
+.controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:24px}
+.ctrl{border:1px solid rgba(0,210,255,.4);background:rgba(0,210,255,.08);color:var(--ice);width:54px;height:54px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.25s;flex-shrink:0}
+.ctrl svg{width:20px;height:20px;fill:currentColor}
+.ctrl:hover{background:rgba(0,210,255,.22);transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,210,255,.35)}
+.ctrl:active{transform:scale(.93)}
+.ctrl.play{width:72px;height:72px;background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;border:none;box-shadow:0 0 30px rgba(0,210,255,.55)}
+.ctrl.play svg{width:26px;height:26px}
+.ctrl.play:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 0 46px rgba(0,210,255,.8)}
+.ctrl:disabled{opacity:.35;pointer-events:none}
+.player-note{text-align:center;color:var(--dim);font-size:.85rem;margin-top:16px;letter-spacing:.06em}
+
+/* ---------- gallery ---------- */
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.g-item{position:relative;border:1px solid rgba(0,210,255,.2);border-radius:16px;overflow:hidden;background:rgba(2,8,31,.5);transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s;animation:gIn .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes gIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.g-item:hover{transform:translateY(-7px) scale(1.015);border-color:var(--cyan);box-shadow:0 24px 54px rgba(0,0,0,.5),0 0 32px rgba(0,210,255,.2)}
+.g-item img{width:100%;height:320px;object-fit:cover;display:block;transition:transform .7s ease}
+.g-item:hover img{transform:scale(1.07)}
+.g-item figcaption{position:absolute;inset:auto 0 0 0;padding:34px 18px 14px;background:linear-gradient(transparent,rgba(2,8,31,.88));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);opacity:0;transform:translateY(10px);transition:.35s}
+.g-item:hover figcaption{opacity:1;transform:none}
+.g-item:only-child{grid-column:1/-1}
+.g-item:only-child img{height:440px}
+.empty-note{grid-column:1/-1;text-align:center;color:var(--dim);padding:46px;border:1px dashed rgba(0,210,255,.3);border-radius:16px}
+
+/* ---------- wiki ---------- */
+.wiki-entry{border:1px solid rgba(0,210,255,.18);border-radius:14px;margin-bottom:16px;background:rgba(2,8,31,.45);overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.wiki-entry:hover{border-color:rgba(0,210,255,.45)}
+.wiki-entry.active{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,210,255,.14)}
+.wiki-header{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:background .3s}
+.wiki-header:hover{background:rgba(0,210,255,.05)}
+.wiki-title{font-weight:600;color:var(--ice);flex:1}
+.wiki-date{color:var(--dim);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+.wiki-trigger{color:var(--dim);font-size:.8rem;letter-spacing:.08em;flex-shrink:0;transition:.3s}
+.wiki-entry.active .wiki-trigger{color:var(--cyan)}
+.wiki-content{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,.7,.2,1)}
+.wiki-entry.active .wiki-content{max-height:2200px}
+.wiki-content ul{list-style:none;padding:2px 20px 20px;color:#bfe9ff}
+.wiki-content li{padding:6px 0 6px 20px;position:relative;line-height:1.65;font-size:.96rem;font-weight:300}
+.wiki-content li::before{content:"▹";position:absolute;left:0;color:var(--cyan)}
+.wiki-content li.wiki-spacer{list-style:none;padding:0;height:.6em}
+.wiki-content li.wiki-spacer::before{content:""}
+.wiki-content li.wiki-nobullet{list-style:none;padding-left:20px}
+.wiki-content li.wiki-nobullet::before{content:""}
+
+/* ---------- credits ---------- */
+.credits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.credit{border:1px solid rgba(0,210,255,.18);border-radius:16px;padding:24px;background:rgba(2,8,31,.45);transition:transform .35s,box-shadow .35s,border-color .35s;position:relative;overflow:hidden}
+.credit::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--violet));opacity:0;transition:.35s}
+.credit:hover{transform:translateY(-6px);border-color:rgba(0,210,255,.5);box-shadow:0 22px 48px rgba(0,0,0,.45)}
+.credit:hover::before{opacity:1}
+.credit h3{color:var(--ice);font-size:1.12rem;margin-bottom:12px;letter-spacing:.04em}
+.credit ul{list-style:none;color:#bfe9ff;font-size:.92rem;font-weight:300}
+.credit li{padding:4px 0 4px 22px;position:relative}
+.credit li::before{content:"✦";position:absolute;left:0;color:var(--cyan);font-size:.8em}
+
+/* ---------- notes ---------- */
+.notes{position:relative;padding-left:28px}
+.notes::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--cyan),rgba(0,210,255,.05))}
+.note{position:relative;margin-bottom:26px;border:1px solid rgba(0,210,255,.16);border-radius:14px;padding:18px 22px;background:rgba(2,8,31,.45);transition:transform .3s,border-color .3s,box-shadow .3s}
+.note:hover{border-color:rgba(0,210,255,.5);transform:translateX(8px);box-shadow:0 16px 38px rgba(0,0,0,.4)}
+.note::before{content:"";position:absolute;left:-25px;top:24px;width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px var(--cyan);transition:transform .3s}
+.note:hover::before{transform:scale(1.5)}
+.note time{color:var(--dim);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase}
+.note ul{list-style:none;margin-top:10px;color:#bfe9ff;font-size:.95rem;font-weight:300}
+.note li{padding:4px 0 4px 22px;position:relative}
+.note li::before{content:"▹";position:absolute;left:0;color:var(--cyan)}
+
+/* ---------- footer ---------- */
+footer{position:relative;z-index:2;text-align:center;padding:20px 20px 70px;color:var(--dim);font-size:.84rem;letter-spacing:.12em}
+footer p{margin:6px 0}
+footer .heart{color:#ff5f57;display:inline-block;animation:heartbeat 1.4s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.3)}40%{transform:scale(1)}55%{transform:scale(1.2)}}
+footer .backtop{margin-top:16px;background:transparent;color:var(--ice);border:1px solid rgba(0,210,255,.4);padding:10px 22px;border-radius:999px;cursor:pointer;font-family:var(--font);letter-spacing:.14em;text-transform:uppercase;font-size:.74rem;transition:.3s}
+footer .backtop:hover{background:rgba(0,210,255,.15);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,210,255,.3)}
+footer .backtop:active{transform:scale(.95)}
+
+/* ---------- responsive ---------- */
+@media (max-width:760px){
+  #dotnav{display:none}
+  .winmeta{display:none}
+  .gallery-grid{grid-template-columns:1fr}
+  .g-item:only-child img{height:300px}
+  #home .winbody{gap:16px}
+  .logo-wrap{width:160px;height:160px}
+  .logo-wrap img{width:140px;height:140px}
+  .controls{gap:12px}
+  #viz{height:170px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
 </head>
 <body>
-    <div class="top-left-nav">
-        <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">Donations</a>
-        <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">Tiktok</a>
-        <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">Discord</a>
-        <a href="./credits.html">Credits</a>
+
+<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+<canvas id="snow" aria-hidden="true"></canvas>
+<div id="progress"><span id="progressBar"></span></div>
+<nav id="dotnav" aria-label="sections"></nav>
+
+<main>
+  <!-- ============ HOME ============ -->
+  <section class="window" id="home" data-tip="home">
+    <div class="winbar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="wintitle">kyon linux</span>
+      <span class="winmeta">en · <a href="tr/">tr</a> · <a href="de/">de</a></span>
     </div>
-    <div class="top-right-nav">
-        <a href="./gallery.html">Gallery</a>
-        <a href="./releases.html">Dev notes</a>
-        <a href="./tr/">🇹🇷</a>
-        <a href="./de/">🇩🇪</a>
-        <a href="./wiki.html">Wiki</a>
+    <div class="winbody">
+      <div class="logo-wrap"><img id="logo" src="icon.png" alt="kyon linux logo" width="190" height="190"></div>
+      <h1>kyon linux</h1>
+      <p class="tagline">An independent arch-based distribution designed with a focus on user-friendly accessibility and refined aesthetics.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#player">▶&nbsp;listen to the song of the day</a>
+        <a class="btn ghost" href="#">download iso <small>(coming soon…)</small></a>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">sponsors</a>
+        <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a>
+        <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a>
+        <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a>
+      </div>
+      <div class="langs"><span>language:</span><a href="tr/">türkçe</a><a href="de/">deutsch</a></div>
+      <div class="scroll-hint" aria-hidden="true">scroll ↓</div>
     </div>
-    <h1>kyon linux</h1>
-    <p>An independent arch-based distribution designed with a focus on user-friendly accessibility and refined aesthetics.</p>
-    <a href="#" class="btn">download iso! (coming soon...)</a>
+  </section>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>kyon linux <i>✦</i> arch-based <i>✦</i> accessible <i>✦</i> aesthetic <i>✦</i> open source <i>✦</i> free forever <i>✦</i> made with ♥ <i>✦</i></span>
+      <span>kyon linux <i>✦</i> arch-based <i>✦</i> accessible <i>✦</i> aesthetic <i>✦</i> open source <i>✦</i> free forever <i>✦</i> made with ♥ <i>✦</i></span>
+    </div>
+  </div>
+
+  <!-- ============ MUSIC / VISUALIZER ============ -->
+  <section class="window" id="player" data-tip="music">
+    <div class="winbar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="wintitle">music</span>
+      <span class="winmeta">cava-style visualizer</span>
+    </div>
+    <div class="winbody">
+      <canvas id="viz" height="230" aria-label="audio spectrum visualizer"></canvas>
+      <div class="track-meta">
+        <div>
+          <div class="track-name" id="trackName">loading…</div>
+          <div class="track-sub" id="trackSub">detecting songs in /music</div>
+        </div>
+        <div class="track-date" id="trackDate"></div>
+      </div>
+      <div class="controls">
+        <button class="ctrl" id="prevBtn" aria-label="previous song" title="previous song" disabled>
+          <svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
+        </button>
+        <button class="ctrl play" id="playBtn" aria-label="play music" title="play / pause" disabled>
+          <svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>
+        </button>
+        <button class="ctrl" id="nextBtn" aria-label="next song" title="next song" disabled>
+          <svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg>
+        </button>
+      </div>
+      <p class="player-note" id="playerNote">the song of the day is picked from the date — press play to start</p>
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section class="window" id="gallery" data-tip="gallery">
+    <div class="winbar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="wintitle">gallery</span>
+      <span class="winmeta">screenshots</span>
+    </div>
+    <div class="winbody">
+      <h2 class="section-title">gallery</h2>
+      <p class="section-sub">a look inside the kyon linux desktop.</p>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ WIKI ============ -->
+  <section class="window" id="wiki" data-tip="wiki">
+    <div class="winbar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="wintitle">wiki</span>
+      <span class="winmeta">asked questions</span>
+    </div>
+    <div class="winbody">
+      <h2 class="section-title">wiki &amp; asked questions</h2>
+      <p class="section-sub">click an entry to expand it.</p>
+      <div id="wikiList"></div>
+    </div>
+  </section>
+
+  <!-- ============ CREDITS ============ -->
+  <section class="window" id="credits" data-tip="credits">
+    <div class="winbar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="wintitle">credits</span>
+      <span class="winmeta">people who helped</span>
+    </div>
+    <div class="winbody">
+      <h2 class="section-title">credits</h2>
+      <p class="section-sub">everyone who made kyon linux possible. &lt;3</p>
+      <div class="credits-grid" id="creditsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ DEV NOTES ============ -->
+  <section class="window" id="notes" data-tip="dev notes">
+    <div class="winbar">
+      <span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+      <span class="wintitle">dev notes</span>
+      <span class="winmeta">changelog</span>
+    </div>
+    <div class="winbody">
+      <h2 class="section-title">developing notes</h2>
+      <p class="section-sub">the journey so far.</p>
+      <div class="notes" id="notesList"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 kyon linux — made with <span class="heart">♥</span> and arch</p>
+  <p><a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">sponsors</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
+  <button class="backtop" id="backTop" type="button">↑ back to top</button>
+</footer>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+(function(){
+'use strict';
+
+/* gate the reveal animations behind JS availability (see html.anim rules) */
+document.documentElement.classList.add('anim');
+
+/* ===================== inlined data (was: wiki.json, credits.json, notes.json) ===================== */
+var WIKI_DATA = [
+  {
+    "date": "2026-07-17",
+    "header": "how can i get cachy's kernel and drivers?",
+    "paragraph": [
+      "first grab the kernel: sudo pacman -S linux-cachyos",
+      "if you have nvidia, u can use the normal dkms drivers that was optional in the installation or if you are going to *only* use the cachy kernel, u can use the linux-cachyos-nvidia-open driver and get rid of dkms",
+      "if you want to get rid of dkms and only use the cachy kernel, do: sudo pacman -S linux-cachyos-nvidia-open",
+      "to get rid of the regular kernel run this: sudo pacman -R linux",
+      "but i *wouldn't* recommend getting rid of the regular kernel so if you want to keep the regular kernel and use nvidia too, you can run: sudo pacman -S nvidia-open"
+    ]
+  },
+  {
+    "date": "2026-07-17",
+    "header": "it shows cli when bootup?",
+    "paragraph": [
+      "it only asks for the local then it will boot to kde plasma like normal"
+    ]
+  },
+  {
+    "date": "2026-07-17",
+    "header": "which type of users is kyonlinux for?",
+    "paragraph": [
+      "kyon linux is for semi-new linux users such as cachyOS users that know how to use pacman and other things",
+      " ",
+      "kyon linux is also for advanced users that want their distro preconfigured to save time, etc. kyonlinux also has some repos such as:",
+      "@!     kyon repo (distros official repo)",
+      "@!     official arch repositories",
+      "@!     chaotic-aur (for people who want binary packages from aur)",
+      "@!     endeavourOS",
+      "@!     cachyOS",
+      "@!     and lastly nyarch's repo",
+      " ",
+      "for example, semi-new users can go and use cachy's optimised kernel and its drivers in kyonlinux",
+      "@! (will be included in another section)",
+      "and advanced users can use the nix package manager",
+      "but i heavily recommend this distro to semi-new users!"
+    ]
+  }
+];
+
+var CREDITS_DATA = [
+  {
+    "ppl": "adachiP",
+    "changes": [
+      "Creator of Kyon Linux",
+      "Translation of the website to turkish"
+    ]
+  },
+  {
+    "ppl": "SmyczyKox",
+    "changes": [
+      "Been here since day 1",
+      "Maker of the i3 dotfiles in Kyon Linux",
+      "Tested the website a lot"
+    ]
+  },
+  {
+    "ppl": "waffle",
+    "changes": [
+      "Made the ascii art",
+      "Translation of the website to german"
+    ]
+  },
+  {
+    "ppl": "flame",
+    "changes": [
+      "Helped adachiP fix the iso"
+    ]
+  }
+];
+
+var NOTES_DATA = [
+  {
+    "date": "26-07-18",
+    "changes": [
+      "distro will be released soon some small adjustments and it will be released as a public beta",
+      "i might do smth crazy like kyon but artix based but NOT for semi-new nor new users"
+    ]
+  },
+  {
+    "date": "26-07-17",
+    "changes": [
+      "the os is done only calamares is being annoying after fixing it the distro will be released as a public beta!",
+      "(im sleepy its late here rn)",
+      "calamares is almost done some bugfixes and everything will be released as a public beta soon",
+      "the last update today: the iso is almost done i have some issues with the calamares configs then it will be done soon"
+    ]
+  },
+  {
+    "date": "2026-07-16",
+    "changes": [
+      "added kyonrepo support to pacman",
+      "finishing the calamares installer",
+      "setting up autologin and desktop environments for the installation environment"
+    ]
+  },
+  {
+    "date": "2026-07-15",
+    "changes": [
+      "configuring calamares installer",
+      "configured some base files"
+    ]
+  }
+];
+
+var GALLERY_FILES = ['pic1.png','pic2.png','pic3.png','pic4.png'];
+
+/* ===================== tiny helpers ===================== */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function dayOfYear(){
+  var n = new Date();
+  return Math.floor((n - new Date(n.getFullYear(),0,0)) / 864e5);
+}
+
+/* ===================== renderers ===================== */
+function renderWiki(){
+  var list = $('wikiList');
+  WIKI_DATA.forEach(function(item){
+    var entry = document.createElement('div');
+    entry.className = 'wiki-entry';
+    var lines = item.paragraph || item.changes || [];
+    var lis = lines.map(function(line){
+      if (line.trim() === '') return '<li class="wiki-spacer"></li>';
+      var content = line, noBullet = false;
+      if (/^\s*@!/.test(content)) { noBullet = true; content = content.replace(/^\s*@!\s*/,''); }
+      var breaks = esc(content).replace(/\\n|\n/g,'<br>');
+      return '<li class="' + (noBullet ? 'wiki-nobullet' : '') + '">' + breaks + '</li>';
+    }).join('');
+    entry.innerHTML =
+      '<div class="wiki-header">' +
+        '<span class="wiki-title">' + esc(item.header) + '</span>' +
+        '<span class="wiki-date">' + esc(item.date) + '</span>' +
+        '<span class="wiki-trigger">[open]</span>' +
+      '</div>' +
+      '<div class="wiki-content"><ul>' + lis + '</ul></div>';
+    var header = entry.querySelector('.wiki-header');
+    var trigger = entry.querySelector('.wiki-trigger');
+    header.addEventListener('click', function(){
+      var active = entry.classList.toggle('active');
+      trigger.textContent = active ? '[close]' : '[open]';
+    });
+    list.appendChild(entry);
+  });
+}
+
+function renderCredits(){
+  var grid = $('creditsGrid');
+  CREDITS_DATA.forEach(function(p){
+    var d = document.createElement('div');
+    d.className = 'credit';
+    var lis = (p.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
+    d.innerHTML = '<h3>' + esc(p.ppl) + '</h3><ul>' + lis + '</ul>';
+    grid.appendChild(d);
+  });
+}
+
+function renderNotes(){
+  var list = $('notesList');
+  NOTES_DATA.forEach(function(n){
+    var d = document.createElement('div');
+    d.className = 'note';
+    var lis = (n.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
+    d.innerHTML = '<time>' + esc(n.date) + '</time><ul>' + lis + '</ul>';
+    list.appendChild(d);
+  });
+}
+
+function renderGallery(){
+  var grid = $('galleryGrid');
+  var pending = GALLERY_FILES.length, shown = 0;
+  function finish(){ if (--pending <= 0 && shown === 0){ grid.innerHTML = '<p class="empty-note">no screenshots available yet</p>'; } }
+  GALLERY_FILES.forEach(function(src, i){
+    var img = new Image();
+    img.onload = function(){
+      var f = document.createElement('figure');
+      f.className = 'g-item';
+      f.style.animationDelay = (i * 0.12) + 's';
+      f.innerHTML = '<img src="' + src + '" alt="kyon linux desktop preview ' + (i+1) + '" loading="lazy">' +
+                    '<figcaption>kyon linux — preview ' + (i+1) + '</figcaption>';
+      grid.appendChild(f);
+      shown++;
+      finish();
+    };
+    img.onerror = finish;
+    img.src = src;
+  });
+}
+
+/* ===================== dot nav + scroll UI ===================== */
+var nav = $('dotnav');
+function buildDotNav(){
+  var sections = [].slice.call(document.querySelectorAll('.window'));
+  sections.forEach(function(s){
+    var a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.setAttribute('data-tip', s.getAttribute('data-tip') || s.id);
+    a.setAttribute('aria-label', 'go to ' + (s.getAttribute('data-tip') || s.id));
+    a.addEventListener('click', function(e){ e.preventDefault(); s.scrollIntoView({behavior:'smooth'}); });
+    nav.appendChild(a);
+  });
+}
+
+var progressBar = $('progressBar'), scrollTicking = false;
+function updateScrollUI(){
+  var st = window.pageYOffset || document.documentElement.scrollTop;
+  var max = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (max > 0 ? Math.min(100, st/max*100) : 0) + '%';
+  var wins = document.querySelectorAll('.window');
+  var idx = 0;
+  for (var i = 0; i < wins.length; i++){
+    if (wins[i].getBoundingClientRect().top <= window.innerHeight * 0.45) idx = i;
+  }
+  var dots = nav.querySelectorAll('a');
+  for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('active', j === idx);
+}
+window.addEventListener('scroll', function(){
+  if (!scrollTicking){
+    scrollTicking = true;
+    requestAnimationFrame(function(){ updateScrollUI(); scrollTicking = false; });
+  }
+}, {passive:true});
+window.addEventListener('resize', function(){ sizeSnow(); sizeViz(); updateScrollUI(); }, {passive:true});
+
+/* reveal-on-scroll */
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+  });
+}, {threshold:0.12});
+[].slice.call(document.querySelectorAll('.window')).forEach(function(w){ io.observe(w); });
+$('backTop').addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+/* ===================== snow ===================== */
+var snowCanvas = $('snow'), sctx = snowCanvas.getContext('2d');
+var flakes = [];
+function newFlake(anywhere){
+  return {
+    x: Math.random() * window.innerWidth,
+    y: anywhere ? Math.random() * window.innerHeight : -12,
+    r: 0.8 + Math.random() * 2.2,
+    v: 0.4 + Math.random() * 1.6,
+    s: 0.5 + Math.random() * 1.2,
+    p: Math.random() * Math.PI * 2,
+    o: 0.35 + Math.random() * 0.5
+  };
+}
+function sizeSnow(){
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  snowCanvas.width = window.innerWidth * dpr;
+  snowCanvas.height = window.innerHeight * dpr;
+  sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var want = Math.min(150, Math.max(50, Math.floor(window.innerWidth * window.innerHeight / 16000)));
+  if (flakes.length !== want){
+    flakes = [];
+    for (var i = 0; i < want; i++) flakes.push(newFlake(true));
+  }
+}
+function stepSnow(dt){
+  var k = dt / 16.7;
+  for (var i = 0; i < flakes.length; i++){
+    var f = flakes[i];
+    f.y += f.v * k;
+    f.p += f.s * 0.03 * k;
+    f.x += Math.sin(f.p) * 0.5 * k;
+    if (f.y > window.innerHeight + 10) flakes[i] = newFlake(false);
+  }
+}
+function drawSnow(){
+  sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  sctx.fillStyle = '#eafaff';
+  for (var i = 0; i < flakes.length; i++){
+    var f = flakes[i];
+    sctx.globalAlpha = f.o;
+    sctx.beginPath();
+    sctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    sctx.fill();
+  }
+  sctx.globalAlpha = 1;
+}
+
+/* ===================== audio engine ===================== */
+var TRACK_MAX = 16, TRACK_EXT = 'mp3';   /* music1.mp3 … music16.mp3 */
+var player = $('audio');
+var ctx = null, analyser = null, master = null, mediaSrc = null, srcConnected = false;
+var tracks = [], current = -1, probeDone = false, wantPlay = false;
+var playing = false, userStarted = false;
+var synth = null, noiseBuf = null;
+var playBtn = $('playBtn'), prevBtn = $('prevBtn'), nextBtn = $('nextBtn');
+
+function probeRange(range, timeoutMs){
+  return Promise.all(range.map(function(n){
+    return new Promise(function(resolve){
+      var a = new Audio(), done = false;
+      function ok(v){ if (done) return; done = true; a.removeAttribute('src'); a.load(); resolve(v); }
+      a.addEventListener('error', function(){ ok(false); });
+      a.addEventListener('loadedmetadata', function(){ ok(true); });
+      a.preload = 'metadata';
+      a.src = 'music/music' + n + '.' + TRACK_EXT;
+      a.load();
+      setTimeout(function(){ ok(a.readyState > 0); }, timeoutMs);
+    });
+  }));
+}
+function probeTracks(){
+  /* probe in small batches: browsers cap concurrent connections (~6/origin) */
+  var results = new Array(TRACK_MAX).fill(false);
+  var idx = 0, CONC = 6;
+  function nextBatch(){
+    var batch = [];
+    while (batch.length < CONC && idx < TRACK_MAX) batch.push(++idx);
+    if (batch.length === 0) return Promise.resolve();
+    return probeRange(batch, 4000).then(function(oks){
+      for (var i = 0; i < batch.length; i++) results[batch[i] - 1] = oks[i];
+      return nextBatch();
+    });
+  }
+  return nextBatch().then(function(){ return results; });
+}
+
+function ensureCtx(){
+  if (!ctx){
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    ctx = new AC();
+    analyser = ctx.createAnalyser();
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.82;
+    master = ctx.createGain();
+    master.gain.value = 0.9;
+    analyser.connect(master);
+    master.connect(ctx.destination);
+  }
+  if (ctx.state === 'suspended') ctx.resume().catch(function(){});
+  return true;
+}
+function connectSource(){
+  if (srcConnected) return;
+  mediaSrc = ctx.createMediaElementSource(player);
+  mediaSrc.connect(analyser);
+  srcConnected = true;
+}
+
+var ICON_PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>';
+var ICON_PAUSE = '<svg viewBox="0 0 24 24"><path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/></svg>';
+
+function setPlaying(p){
+  playing = p;
+  playBtn.innerHTML = p ? ICON_PAUSE : ICON_PLAY;
+  playBtn.setAttribute('aria-label', p ? 'pause music' : 'play music');
+  $('playerNote').textContent =
+    tracks.length === 0
+      ? (p ? 'ambient mode — generative beat' : 'no songs found — press play for ambient mode')
+      : (p ? 'now playing · music' + tracks[current] + '.mp3' : (userStarted ? 'paused' : 'press play to start — the song follows the date'));
+}
+
+function updateTrackLabel(){
+  var nameEl = $('trackName'), subEl = $('trackSub');
+  if (tracks.length === 0){
+    nameEl.textContent = 'ambient mode';
+    subEl.textContent = 'no songs found — drop music1.mp3 … music16.mp3 into /music';
+  } else {
+    nameEl.textContent = 'music' + tracks[current] + '.mp3';
+    subEl.textContent = 'song of the day · track ' + (current + 1) + ' of ' + tracks.length + ' · picked by date';
+  }
+  $('trackDate').textContent = new Date().toLocaleDateString(undefined, {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+}
+
+function loadTrack(){
+  if (tracks.length === 0) return;
+  player.src = 'music/music' + tracks[current] + '.' + TRACK_EXT;
+  updateTrackLabel();
+}
+
+function tryPlay(){
+  if (!ensureCtx()) return;
+  if (tracks.length > 0){
+    connectSource();
+    player.play().then(function(){ setPlaying(true); }).catch(function(e){
+      if (e && e.name === 'AbortError') return;   /* superseded by a newer play() call */
+      setPlaying(false);
+    });
+  } else {
+    startSynth();
+  }
+}
+
+function playPause(){
+  userStarted = true;
+  if (!probeDone){ wantPlay = true; return; }
+  if (!ensureCtx()) return;
+  if (tracks.length > 0){
+    if (playing){
+      player.pause();
+      setPlaying(false);
+    } else {
+      tryPlay();
+    }
+  } else {
+    if (synth && synth.running){
+      synth.running = false;
+      clearTimeout(synth.timer);
+      setPlaying(false);
+    } else {
+      startSynth();
+    }
+  }
+}
+
+function cycle(dir){
+  if (!probeDone || tracks.length === 0) return;
+  userStarted = true;
+  current = (current + dir + tracks.length) % tracks.length;
+  loadTrack();
+  tryPlay();
+}
+
+/* ---------- generative fallback (no songs found) ---------- */
+function getNoise(){
+  if (noiseBuf) return noiseBuf;
+  var len = Math.floor(ctx.sampleRate * 0.5);
+  noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+  var d = noiseBuf.getChannelData(0);
+  for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return noiseBuf;
+}
+function kick(t){
+  var o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(165, t);
+  o.frequency.exponentialRampToValueAtTime(42, t + 0.13);
+  g.gain.setValueAtTime(0.95, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  o.connect(g); g.connect(analyser);
+  o.start(t); o.stop(t + 0.18);
+}
+function hat(t, dur, vol){
+  var s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+  s.buffer = getNoise();
+  f.type = 'highpass'; f.frequency.value = 7500;
+  g.gain.setValueAtTime(vol, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  s.connect(f); f.connect(g); g.connect(analyser);
+  s.start(t); s.stop(t + dur + 0.02);
+}
+function bassNote(t, freq){
+  var o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+  o.type = 'triangle';
+  o.frequency.value = freq;
+  f.type = 'lowpass'; f.frequency.value = 340;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.16, t + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.24);
+  o.connect(f); f.connect(g); g.connect(analyser);
+  o.start(t); o.stop(t + 0.26);
+}
+function padChord(t, dur, freqs){
+  freqs.forEach(function(f){
+    var o = ctx.createOscillator(), f2 = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.value = f;
+    o.detune.value = (Math.random() - 0.5) * 10;
+    f2.type = 'lowpass'; f2.frequency.value = 1600;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.045, t + 0.6);
+    g.gain.setValueAtTime(0.045, t + dur - 0.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(f2); f2.connect(g); g.connect(analyser);
+    o.start(t); o.stop(t + dur + 0.05);
+  });
+}
+var CHORDS = [
+  [220.0, 261.63, 329.63],   /* Am */
+  [174.61, 220.0, 261.63],   /* F  */
+  [130.81, 164.81, 196.0],   /* C  */
+  [196.0, 246.94, 293.66]    /* G  */
+];
+var ROOTS = [110.0, 87.31, 65.41, 98.0];
+var PAD_OFFSET = dayOfYear() % 4;
+
+function startSynth(){
+  if (!ensureCtx()) return;
+  if (synth && synth.running) return;
+  synth = { running: true, step: 0, nextTime: ctx.currentTime + 0.06, timer: null };
+  scheduleLoop();
+  setPlaying(true);
+}
+function scheduleStep(step, t){
+  var eighth = 60 / 105 / 2;                 /* 105 bpm, eighth notes */
+  var bar = Math.floor(step / 16) % 4;
+  var s = step % 16;
+  if (s % 4 === 0) kick(t);                  /* four on the floor */
+  if (s % 2 === 1) hat(t, 0.035, 0.12);
+  if (s === 14) hat(t, 0.15, 0.09);
+  if (s === 0 || s === 8) bassNote(t, ROOTS[(PAD_OFFSET + bar) % 4]);
+  if (step % 32 === 0) padChord(t, eighth * 32, CHORDS[(PAD_OFFSET + Math.floor(step / 32)) % 4]);
+}
+function scheduleLoop(){
+  if (!synth || !synth.running) return;
+  var lookahead = 0.12;
+  while (synth.nextTime < ctx.currentTime + lookahead){
+    scheduleStep(synth.step, synth.nextTime);
+    synth.step++;
+    synth.nextTime += 60 / 105 / 2;
+    if (synth.step >= 64) synth.step = 0;
+  }
+  synth.timer = setTimeout(scheduleLoop, 30);
+}
+
+/* ===================== visualizer + beat + master loop ===================== */
+var vizCanvas = $('viz'), vctx = vizCanvas.getContext('2d');
+var BARS = 64, bars = [], peaks = [];
+var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, bassEma = 55;
+var logo = $('logo');
+
+function sizeViz(){
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  vizCanvas.width = vizCanvas.clientWidth * dpr;
+  vizCanvas.height = vizCanvas.clientHeight * dpr;
+  vctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  BARS = Math.max(24, Math.min(96, Math.floor(vizCanvas.clientWidth / 11)));
+  bars = []; peaks = [];
+  for (var i = 0; i < BARS; i++){ bars.push(0); peaks.push(0); }
+}
+
+function roundRect(x, y, w, h, r){
+  r = Math.min(r, w / 2, h / 2);
+  vctx.beginPath();
+  vctx.moveTo(x + r, y);
+  vctx.arcTo(x + w, y, x + w, y + h, r);
+  vctx.arcTo(x + w, y + h, x, y + h, r);
+  vctx.arcTo(x, y + h, x, y, r);
+  vctx.arcTo(x, y, x + w, y, r);
+  vctx.closePath();
+}
+
+var lastTs = performance.now(), running = true;
+function loop(ts){
+  if (!running) return;
+  requestAnimationFrame(loop);
+  var dt = Math.min(50, Math.max(1, ts - lastTs));
+  lastTs = ts;
+
+  stepSnow(dt);
+  drawSnow();
+
+  /* ---- audio analysis ---- */
+  var live = !!(ctx && analyser && playing);
+  var bass = 0;
+  if (live){
+    if (!freq) freq = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(freq);
+    for (var b = 2; b <= 14; b++) bass += freq[b];
+    bass /= 13;
+    bassEma = bassEma * 0.9 + bass * 0.1;
+    if (bass > 88 && bass > bassEma * 1.22) pulse = 1;
+  }
+  pulse *= 0.88;
+  smoothPulse += (pulse - smoothPulse) * 0.25;
+
+  /* ---- beat-reactive logo ---- */
+  var target = 1 + smoothPulse * 0.5 + (ctx ? bass / 1500 : 0);
+  logoScale += (target - logoScale) * 0.3;
+  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ')';
+  document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
+
+  /* ---- cava-style bars ---- */
+  /* context is scaled by devicePixelRatio, so draw in CSS pixels */
+  var w = vizCanvas.clientWidth, h = vizCanvas.clientHeight;
+  vctx.clearRect(0, 0, w, h);
+  var barW = w / BARS, gap = Math.max(1, barW * 0.3);
+  for (var i = 0; i < BARS; i++){
+    var t = 0;
+    if (live){
+      var binStart = Math.floor(i * freq.length / BARS);
+      var binEnd = Math.floor((i + 1) * freq.length / BARS);
+      var m = 0;
+      for (var k = binStart; k < binEnd; k++) if (freq[k] > m) m = freq[k];
+      t = Math.pow(m / 255, 1.6);
+    } else {
+      var ph = ts * 0.001;
+      t = Math.max(0, Math.abs(Math.sin(i * 0.35 + ph)) * 0.34 + Math.sin(ph * 1.7 + i * 0.7) * 0.1);
+    }
+    if (t > bars[i]) bars[i] = t;
+    else bars[i] += (t - bars[i]) * 0.12 * (dt / 16.7);
+    if (bars[i] > peaks[i]) peaks[i] = bars[i];
+    else peaks[i] -= 0.014 * (dt / 16.7);
+
+    var bh = Math.max(3, bars[i] * (h - 10));
+    var x = i * barW + gap / 2, bw = barW - gap;
+    var hue = 190 + bars[i] * 55;
+    vctx.fillStyle = 'hsla(' + hue + ',95%,' + (52 + bars[i] * 18) + '%,.92)';
+    vctx.shadowColor = 'hsla(' + hue + ',95%,65%,.85)';
+    vctx.shadowBlur = 5 + bars[i] * 16;
+    roundRect(x, h - bh, bw, bh, Math.min(6, bw / 2));
+    vctx.fill();
+    vctx.shadowBlur = 0;
+    vctx.fillStyle = 'rgba(242,247,255,.95)';
+    vctx.fillRect(x, h - peaks[i] * (h - 10) - 2, bw, 2);
+  }
+  vctx.shadowBlur = 0;
+}
+requestAnimationFrame(loop);
+
+document.addEventListener('visibilitychange', function(){
+  if (document.hidden){
+    running = false;
+  } else {
+    running = true;
+    lastTs = performance.now();
+    requestAnimationFrame(loop);
+  }
+});
+
+/* ===================== events ===================== */
+playBtn.addEventListener('click', playPause);
+prevBtn.addEventListener('click', function(){ cycle(-1); });
+nextBtn.addEventListener('click', function(){ cycle(1); });
+vizCanvas.addEventListener('click', playPause);
+
+document.addEventListener('keydown', function(e){
+  var tag = e.target && e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A') return;
+  if (e.code === 'Space'){ e.preventDefault(); playPause(); }
+  else if (e.key === 'ArrowRight') cycle(1);
+  else if (e.key === 'ArrowLeft') cycle(-1);
+});
+
+/* ===================== boot ===================== */
+function boot(){
+  buildDotNav();
+  renderWiki();
+  renderCredits();
+  renderNotes();
+  renderGallery();
+  sizeSnow();
+  sizeViz();
+  updateTrackLabel();
+  updateScrollUI();
+
+  probeTracks().then(function(ok){
+    probeDone = true;
+    tracks = [];
+    for (var i = 0; i < ok.length; i++) if (ok[i]) tracks.push(i + 1);
+    if (tracks.length === 0){
+      /* none found — give today's candidate one more chance before ambient mode */
+      var candidate = (dayOfYear() % TRACK_MAX) + 1;
+      probeRange([candidate], 6000).then(function(res){
+        if (res[0]){
+          tracks = [candidate];
+          current = 0;
+          loadTrack();
+          enableButtons();
+          updateTrackLabel();
+          if (wantPlay) playPause();
+          else tryPlay();
+        } else {
+          updateTrackLabel();
+        }
+      });
+      return;
+    }
+    current = dayOfYear() % tracks.length;
+    loadTrack();
+    enableButtons();
+    updateTrackLabel();
+    if (wantPlay) playPause();
+    else tryPlay();   /* attempt autoplay — browsers may block until first click */
+  });
+}
+function enableButtons(){
+  [playBtn, prevBtn, nextBtn].forEach(function(b){
+    b.disabled = false;
+    b.classList.remove('disabled');
+  });
+}
+boot();
+})();
+</script>
 </body>
 </html>
