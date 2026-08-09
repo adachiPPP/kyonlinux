@@ -491,6 +491,12 @@ var CREDITS_DATA = [
     "changes": [
       "Helped adachiP fix the iso"
     ]
+  },
+  {
+    "ppl": "nimomo",
+    "changes": [
+      "Holy supporter </3"
+    ]
   }
 ];
 
@@ -590,13 +596,22 @@ function wikiFilter(){
 
 function renderCredits(){
   var grid = $('creditsGrid');
-  CREDITS_DATA.forEach(function(p){
-    var d = document.createElement('div');
-    d.className = 'credit';
-    var lis = (p.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
-    d.innerHTML = '<h3>' + esc(p.ppl) + '</h3><ul>' + lis + '</ul>';
-    grid.appendChild(d);
-  });
+  function draw(data){
+    grid.innerHTML = '';
+    data.forEach(function(p){
+      var d = document.createElement('div');
+      d.className = 'credit';
+      var lis = (p.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
+      d.innerHTML = '<h3>' + esc(p.ppl) + '</h3><ul>' + lis + '</ul>';
+      grid.appendChild(d);
+    });
+  }
+  /* credits come from credits.json so you can edit the file freely;
+     if it can't be fetched (e.g. file://), fall back to the inlined copy */
+  fetch('credits.json')
+    .then(function(r){ if (!r.ok) throw new Error('no file'); return r.json(); })
+    .then(draw)
+    .catch(function(){ draw(CREDITS_DATA); });
 }
 
 function renderNotes(){
@@ -777,7 +792,7 @@ function drawSnow(){
 }
 
 /* ===================== audio engine ===================== */
-var TRACK_MAX = 16, TRACK_EXT = 'mp3';   /* music1.mp3 … music16.mp3 */
+var TRACK_MAX = 16, TRACK_EXT = 'mp3';   /* only used when music/songs.json is missing */
 var player = $('audio');
 var ctx = null, analyser = null, master = null, mediaSrc = null, srcConnected = false;
 var tracks = [], current = -1, probeDone = false, wantPlay = false;
@@ -848,16 +863,16 @@ function setPlaying(p){
   $('playerNote').textContent =
     tracks.length === 0
       ? (p ? 'ambient mode — generative beat' : 'no songs found — press play for ambient mode')
-      : (p ? 'now playing · music' + tracks[current] + '.mp3' : (userStarted ? 'paused' : 'browser blocked autoplay — click anywhere to start'));
+      : (p ? 'now playing · ' + fileName(tracks[current]) : (userStarted ? 'paused' : 'browser blocked autoplay — click anywhere to start'));
 }
 
 function updateTrackLabel(){
   var nameEl = $('trackName'), subEl = $('trackSub');
   if (tracks.length === 0){
     nameEl.textContent = 'ambient mode';
-    subEl.textContent = 'no songs found — drop music1.mp3 … music16.mp3 into /music';
+    subEl.textContent = 'no songs found — add music/songs.json or drop music1.mp3 … music16.mp3 into /music';
   } else {
-    nameEl.textContent = 'music' + tracks[current] + '.mp3';
+    nameEl.textContent = fileName(tracks[current]);
     subEl.textContent = 'song of the day · track ' + (current + 1) + ' of ' + tracks.length + ' · picked by date';
   }
   $('trackDate').textContent = new Date().toLocaleDateString(undefined, {
@@ -865,15 +880,26 @@ function updateTrackLabel(){
   });
 }
 
+function fileName(f){ return String(f).replace(/^.*\//,''); }
+
 function loadTrack(){
   if (tracks.length === 0) return;
-  player.src = 'music/music' + tracks[current] + '.' + TRACK_EXT;
+  player.src = tracks[current];
   updateTrackLabel();
+}
+
+function stopSynth(){
+  if (synth && synth.running){
+    synth.running = false;
+    clearTimeout(synth.timer);
+    synth = null;
+  }
 }
 
 function tryPlay(){
   if (!ensureCtx()) return;
   if (tracks.length > 0){
+    stopSynth();   /* never mix the fallback beat with real songs */
     connectSource();
     player.play().then(function(){ setPlaying(true); }).catch(function(e){
       if (e && e.name === 'AbortError') return;   /* superseded by a newer play() call */
@@ -891,14 +917,14 @@ function playPause(){
   if (tracks.length > 0){
     if (playing){
       player.pause();
+      stopSynth();
       setPlaying(false);
     } else {
       tryPlay();
     }
   } else {
     if (synth && synth.running){
-      synth.running = false;
-      clearTimeout(synth.timer);
+      stopSynth();
       setPlaying(false);
     } else {
       startSynth();
@@ -980,6 +1006,9 @@ var PAD_OFFSET = dayOfYear() % 4;
 function startSynth(){
   if (!ensureCtx()) return;
   if (synth && synth.running) return;
+  if (tracks.length > 0) return;          /* real songs exist — never fall back */
+  stopSynth();                            /* clear stale state */
+  if (!player.paused) player.pause();     /* silence any real track */
   synth = { running: true, step: 0, nextTime: ctx.currentTime + 0.06, timer: null };
   scheduleLoop();
   setPlaying(true);
@@ -1118,6 +1147,22 @@ playBtn.addEventListener('click', playPause);
 prevBtn.addEventListener('click', function(){ cycle(-1); });
 nextBtn.addEventListener('click', function(){ cycle(1); });
 vizCanvas.addEventListener('click', playPause);
+
+/* auto-skip songs that fail to load (e.g. listed in songs.json but missing) */
+var skipFails = 0;
+player.addEventListener('error', function(){
+  if (!probeDone || tracks.length === 0 || !userStarted) return;
+  skipFails++;
+  if (skipFails >= tracks.length){
+    skipFails = 0;
+    setPlaying(false);
+    $('playerNote').textContent = 'none of the songs could be loaded — check music/songs.json';
+    return;
+  }
+  cycle(1);
+});
+player.addEventListener('playing', function(){ skipFails = 0; });
+
 $('gPrev').addEventListener('click', function(){ maybeAutoGallery(); goGallery(galleryIdx - 1); });
 $('gNext').addEventListener('click', function(){ maybeAutoGallery(); goGallery(galleryIdx + 1); });
 $('wikiSearch').addEventListener('input', wikiFilter);
@@ -1155,16 +1200,42 @@ function boot(){
   updateTrackLabel();
   updateScrollUI();
 
+  initAudio();
+}
+function initAudio(){
+  /* 1) a music/songs.json manifest lets you name your songs anything you want */
+  fetch('music/songs.json')
+    .then(function(r){ if (!r.ok) throw new Error('no manifest'); return r.json(); })
+    .then(function(list){
+      if (!Array.isArray(list)) throw new Error('bad manifest');
+      tracks = list
+        .filter(function(f){ return typeof f === 'string' && f.trim(); })
+        .map(function(f){ return /^music\//.test(f.trim()) ? f.trim() : 'music/' + f.trim(); });
+      if (!tracks.length) throw new Error('empty manifest');
+      readyWithTracks();
+    })
+    .catch(probeNumericTracks);
+}
+function readyWithTracks(){
+  probeDone = true;
+  current = dayOfYear() % tracks.length;
+  loadTrack();
+  enableButtons();
+  updateTrackLabel();
+  if (wantPlay) playPause();
+  else tryPlay();   /* attempt autoplay — browsers may block until first click */
+}
+function probeNumericTracks(){
   probeTracks().then(function(ok){
     probeDone = true;
     tracks = [];
-    for (var i = 0; i < ok.length; i++) if (ok[i]) tracks.push(i + 1);
+    for (var i = 0; i < ok.length; i++) if (ok[i]) tracks.push('music/music' + (i + 1) + '.' + TRACK_EXT);
     if (tracks.length === 0){
       /* none found — give today's candidate one more chance before ambient mode */
-      var candidate = (dayOfYear() % TRACK_MAX) + 1;
-      probeRange([candidate], 6000).then(function(res){
+      var candidateN = (dayOfYear() % TRACK_MAX) + 1;
+      probeRange([candidateN], 6000).then(function(res){
         if (res[0]){
-          tracks = [candidate];
+          tracks = ['music/music' + candidateN + '.' + TRACK_EXT];
           current = 0;
           loadTrack();
           enableButtons();
@@ -1182,7 +1253,7 @@ function boot(){
     enableButtons();
     updateTrackLabel();
     if (wantPlay) playPause();
-    else tryPlay();   /* attempt autoplay — browsers may block until first click */
+    else tryPlay();
   });
 }
 function enableButtons(){
