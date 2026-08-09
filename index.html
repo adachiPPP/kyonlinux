@@ -745,6 +745,7 @@ $('backTop').addEventListener('click', function(){ window.scrollTo({top:0, behav
 /* ===================== snow ===================== */
 var snowCanvas = $('snow'), sctx = snowCanvas.getContext('2d');
 var flakes = [];
+var mouseX = -999, mouseY = -999, trail = [];
 function newFlake(anywhere){
   return {
     x: Math.random() * window.innerWidth,
@@ -774,6 +775,15 @@ function stepSnow(dt){
     f.y += f.v * k;
     f.p += f.s * 0.03 * k;
     f.x += Math.sin(f.p) * 0.5 * k;
+    /* snow gently dodges the cursor */
+    var dx = f.x - mouseX, dy = f.y - mouseY;
+    var d2 = dx * dx + dy * dy;
+    if (d2 < 3600){
+      var d = Math.sqrt(d2) || 1;
+      var push = 1.7 * k * (1 - d / 60);
+      f.x += (dx / d) * push;
+      f.y += (dy / d) * push;
+    }
     if (f.y > window.innerHeight + 10) flakes[i] = newFlake(false);
   }
 }
@@ -789,6 +799,58 @@ function drawSnow(){
   }
   sctx.globalAlpha = 1;
 }
+
+/* ---------- cursor snow-trail: the mouse kicks up little snow sparkles ---------- */
+function spawnTrail(x, y){
+  for (var i = 0; i < 2; i++){
+    trail.push({
+      x: x + (Math.random() - 0.5) * 12,
+      y: y + (Math.random() - 0.5) * 12,
+      vx: (Math.random() - 0.5) * 1.1,
+      vy: -0.4 - Math.random() * 0.7,
+      r: 1 + Math.random() * 2.2,
+      life: 1,
+      o: 0.45 + Math.random() * 0.45
+    });
+  }
+  if (trail.length > 140) trail.splice(0, trail.length - 140);
+}
+function stepTrail(dt){
+  var k = dt / 16.7;
+  for (var i = trail.length - 1; i >= 0; i--){
+    var t = trail[i];
+    t.x += t.vx * k;
+    t.y += t.vy * k;
+    t.vy += 0.03 * k;
+    t.vx *= 0.98;
+    t.life -= 0.028 * k;
+    if (t.life <= 0) trail.splice(i, 1);
+  }
+}
+function drawTrail(){
+  for (var i = 0; i < trail.length; i++){
+    var t = trail[i];
+    sctx.globalAlpha = t.o * Math.max(0, t.life);
+    sctx.fillStyle = '#eafaff';
+    sctx.beginPath();
+    sctx.arc(t.x, t.y, t.r * (0.6 + 0.4 * t.life), 0, Math.PI * 2);
+    sctx.fill();
+  }
+  sctx.globalAlpha = 1;
+}
+/* mouse movement spawns the trail AND tries to unlock the audio once — it works
+   where the browser allows it; a click always works */
+var mouseUnlock = true;
+document.addEventListener('mousemove', function(e){
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  spawnTrail(mouseX, mouseY);
+  if (mouseUnlock){
+    mouseUnlock = false;
+    if (ctx && ctx.state === 'suspended') ctx.resume().catch(function(){});
+    if (!playing) tryPlay();
+  }
+}, {passive:true});
 
 /* ===================== audio engine ===================== */
 var TRACK_MAX = 16, TRACK_EXT = 'mp3';   /* only used when music/songs.json is missing */
@@ -862,7 +924,7 @@ function setPlaying(p){
   $('playerNote').textContent =
     tracks.length === 0
       ? (p ? 'ambient mode — generative beat' : 'no songs found — press play for ambient mode')
-      : (p ? 'now playing · ' + fileName(tracks[current]) : (userStarted ? 'paused' : 'browser blocked autoplay — click anywhere to start'));
+      : (p ? 'now playing · ' + fileName(tracks[current]) : (userStarted ? 'paused' : 'move the mouse or click anywhere to play'));
 }
 
 function updateTrackLabel(){
@@ -904,18 +966,9 @@ function tryPlay(){
       setPlaying(true);
     }).catch(function(e){
       if (e && e.name === 'AbortError') return;   /* superseded by a newer play() call */
-      if (!userStarted){
-        /* audible autoplay was blocked — restart muted (muted autoplay is
-           always allowed), so the music still plays from the start; the first
-           click/keypress/tap anywhere turns the sound on */
-        player.muted = true;
-        player.play().then(function(){ setPlaying(true); }).catch(function(e2){
-          if (e2 && e2.name === 'AbortError') return;
-          setPlaying(false);
-        });
-      } else {
-        setPlaying(false);
-      }
+      /* NO silent play, ever — if the browser blocks audible autoplay, the
+         music just waits for a mouse move / click / keypress to start */
+      setPlaying(false);
     });
   } else {
     startSynth();
@@ -927,14 +980,6 @@ function playPause(){
   if (!probeDone){ wantPlay = true; return; }
   if (!ensureCtx()) return;
   if (tracks.length > 0){
-    if (player.muted){
-      /* the music is already 'playing' silently (muted autoplay) — this press
-         turns the sound on instead of accidentally pausing it */
-      player.muted = false;
-      if (ctx.state === 'suspended') ctx.resume().catch(function(){});
-      if (!playing) tryPlay();
-      return;
-    }
     if (playing){
       player.pause();
       stopSynth();
@@ -1023,10 +1068,18 @@ var CHORDS = [
 var ROOTS = [110.0, 87.31, 65.41, 98.0];
 var PAD_OFFSET = dayOfYear() % 4;
 
+function userHasGestured(){
+  if (navigator.userActivation) return navigator.userActivation.hasBeenActive;
+  return true;   /* older browsers without userActivation: don't block */
+}
 function startSynth(){
   if (!ensureCtx()) return;
   if (synth && synth.running) return;
   if (tracks.length > 0) return;          /* real songs exist — never fall back */
+  if (ctx.state === 'suspended' && !userHasGestured()){
+    /* no gesture yet — the synth would be silent; wait instead of fake-playing */
+    return;
+  }
   stopSynth();                            /* clear stale state */
   if (!player.paused) player.pause();     /* silence any real track */
   synth = { running: true, step: 0, nextTime: ctx.currentTime + 0.06, timer: null };
@@ -1091,6 +1144,8 @@ function loop(ts){
 
   stepSnow(dt);
   drawSnow();
+  stepTrail(dt);
+  drawTrail();
 
   /* ---- audio analysis ---- */
   var live = !!(ctx && analyser && playing);
@@ -1196,21 +1251,19 @@ document.addEventListener('keydown', function(e){
   else if (e.key === 'ArrowLeft') cycle(-1);
 });
 
-/* autoplay fallback (first-build technique): if the song is silently playing
-   muted, the very first click/keypress/tap anywhere turns the sound on — and
-   if it never started, starts it. Player controls are skipped (playPause()
-   handles the unmute-then-pause logic for them). */
-function firstGesture(e){
+/* audio unlock: browsers only allow sound after real user activation (click /
+   keypress / tap). A mouse move isn't activation, but where the browser is
+   lenient it still works — so we try it too. No silent play, ever. */
+function unlockAudio(e){
   var el = e.target;
-  if (e.type === 'click' && (el === playBtn || el === vizCanvas || (el.closest && el.closest('.controls')))) return;
-  if (e.code === 'Space') return;   /* playPause() handles space */
-  if (player.muted) player.muted = false;
+  if (e.type === 'click' && (el === playBtn || el === vizCanvas || (el.closest && el.closest('.controls')))) return; /* handled by playPause() */
+  if (e.code === 'Space') return;   /* handled by playPause() */
   if (ctx && ctx.state === 'suspended') ctx.resume().catch(function(){});
   if (!playing){ userStarted = true; tryPlay(); }
 }
-document.addEventListener('click', firstGesture, {once:true});
-document.addEventListener('keydown', firstGesture, {once:true});
-document.addEventListener('touchstart', firstGesture, {once:true, passive:true});
+document.addEventListener('click', unlockAudio, {once:true});
+document.addEventListener('keydown', unlockAudio, {once:true});
+document.addEventListener('touchstart', unlockAudio, {once:true, passive:true});
 
 /* ===================== boot ===================== */
 function boot(){
@@ -1279,6 +1332,7 @@ function initAudio(){
       probeDone = true;
       if (tracks.length === 0){
         updateTrackLabel();   /* nothing found — ambient mode */
+        $('playerNote').textContent = 'no songs found — click anywhere for ambient music';
         return;
       }
       current = dayOfYear() % tracks.length;
