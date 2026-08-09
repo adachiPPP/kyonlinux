@@ -141,7 +141,8 @@ h1{
 .langs a:hover{color:var(--cyan)}
 .scroll-hint{margin-top:6px;color:var(--dim);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;animation:hint 2s ease-in-out infinite}
 @keyframes hint{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(7px)}}
-.humannote{max-width:520px;color:var(--dim);font-size:.9rem;font-style:italic;font-weight:400}
+.humannote{max-width:520px;color:var(--dim);font-size:.9rem;font-style:italic;font-weight:400;transition:opacity .5s ease}
+.humannote.fade{opacity:0}
 
 /* fixed top-right donations button */
 .donate-top{position:fixed;top:14px;right:16px;z-index:75;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;font-weight:600;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(0,210,255,.35);transition:transform .25s,box-shadow .25s}
@@ -286,7 +287,7 @@ footer .backtop:active{transform:scale(.95)}
       <div class="logo-wrap"><img id="logo" src="icon.png" alt="kyon linux logo" width="190" height="190"></div>
       <h1>kyon linux</h1>
       <p class="tagline">An independent arch-based distribution designed with a focus on user-friendly accessibility and refined aesthetics.</p>
-      <p class="humannote">yes, this is yet another linux distro website. made at 2am, one block of css at a time.</p>
+      <p class="humannote" id="humannote">yes, this is yet another linux distro website. made at 2am, one block of css at a time.</p>
       <div class="hero-actions">
         <a class="btn" href="#">download iso <small>(coming soon…)</small></a>
       </div>
@@ -655,6 +656,32 @@ function maybeAutoGallery(){
   galleryTimer = setInterval(function(){
     if (!document.hidden) goGallery(galleryIdx + 1);
   }, 5000);
+}
+
+/* ===================== rotating humannote (edit humornotes.json) ===================== */
+var HUMAN_FALLBACK = ['yes, this is yet another linux distro website. made at 2am, one block of css at a time.'];
+var humanEl = $('humannote'), humanList = [], humanIdx = 0;
+function rotateHumanNote(){
+  if (humanList.length < 2) return;
+  humanEl.classList.add('fade');
+  setTimeout(function(){
+    humanIdx = (humanIdx + 1) % humanList.length;
+    humanEl.textContent = humanList[humanIdx];
+    humanEl.classList.remove('fade');
+  }, 500);
+}
+function initHumanNote(){
+  if (!humanEl) return;
+  fetch('humornotes.json')
+    .then(function(r){ if (!r.ok) throw new Error('no file'); return r.json(); })
+    .then(function(arr){
+      if (Array.isArray(arr)) humanList = arr.filter(function(x){ return typeof x === 'string' && x.trim(); });
+    })
+    .catch(function(){ humanList = HUMAN_FALLBACK.slice(); })
+    .then(function(){
+      if (humanList.length) humanEl.textContent = humanList[0];
+      if (humanList.length > 1) setInterval(rotateHumanNote, 5000);
+    });
 }
 
 /* ===================== dot nav + scroll UI ===================== */
@@ -1122,6 +1149,7 @@ function boot(){
   renderCredits();
   renderNotes();
   renderGallery();
+  initHumanNote();
   sizeSnow();
   sizeViz();
   updateTrackLabel();

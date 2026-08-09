@@ -15,6 +15,7 @@ Everything lives in a single file: **`index.html`** — home, music player with 
 - **gallery**: carousel with ‹ › arrows, dots and auto-advance.
 - **wiki**: live search bar that filters the accordions.
 - The Turkish (`tr/`) and German (`de/`) sites are restyled to match (same theme, top nav, carousel + wiki search).
+- **rotating jokes**: the italic line under the tagline cycles through the phrases in `humornotes.json` every 5 seconds — edit that file to add your own.
 
 # people who helped me <3
 
