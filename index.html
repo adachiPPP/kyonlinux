@@ -904,7 +904,18 @@ function tryPlay(){
       setPlaying(true);
     }).catch(function(e){
       if (e && e.name === 'AbortError') return;   /* superseded by a newer play() call */
-      setPlaying(false);
+      if (!userStarted){
+        /* audible autoplay was blocked — restart muted (muted autoplay is
+           always allowed), so the music still plays from the start; the first
+           click/keypress/tap anywhere turns the sound on */
+        player.muted = true;
+        player.play().then(function(){ setPlaying(true); }).catch(function(e2){
+          if (e2 && e2.name === 'AbortError') return;
+          setPlaying(false);
+        });
+      } else {
+        setPlaying(false);
+      }
     });
   } else {
     startSynth();
@@ -916,6 +927,14 @@ function playPause(){
   if (!probeDone){ wantPlay = true; return; }
   if (!ensureCtx()) return;
   if (tracks.length > 0){
+    if (player.muted){
+      /* the music is already 'playing' silently (muted autoplay) — this press
+         turns the sound on instead of accidentally pausing it */
+      player.muted = false;
+      if (ctx.state === 'suspended') ctx.resume().catch(function(){});
+      if (!playing) tryPlay();
+      return;
+    }
     if (playing){
       player.pause();
       stopSynth();
@@ -1177,18 +1196,21 @@ document.addEventListener('keydown', function(e){
   else if (e.key === 'ArrowLeft') cycle(-1);
 });
 
-/* autoplay fallback — same technique the earlier builds used: if the browser
-   blocked audible autoplay, the very first click/keypress anywhere on the page
-   starts the music (player controls are skipped, they have their own handlers) */
-function startAudioOnce(e){
+/* autoplay fallback (first-build technique): if the song is silently playing
+   muted, the very first click/keypress/tap anywhere turns the sound on — and
+   if it never started, starts it. Player controls are skipped (playPause()
+   handles the unmute-then-pause logic for them). */
+function firstGesture(e){
   var el = e.target;
   if (e.type === 'click' && (el === playBtn || el === vizCanvas || (el.closest && el.closest('.controls')))) return;
   if (e.code === 'Space') return;   /* playPause() handles space */
+  if (player.muted) player.muted = false;
+  if (ctx && ctx.state === 'suspended') ctx.resume().catch(function(){});
   if (!playing){ userStarted = true; tryPlay(); }
 }
-document.addEventListener('click', startAudioOnce, {once:true});
-document.addEventListener('keydown', startAudioOnce, {once:true});
-document.addEventListener('touchstart', startAudioOnce, {once:true, passive:true});
+document.addEventListener('click', firstGesture, {once:true});
+document.addEventListener('keydown', firstGesture, {once:true});
+document.addEventListener('touchstart', firstGesture, {once:true, passive:true});
 
 /* ===================== boot ===================== */
 function boot(){
