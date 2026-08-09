@@ -1,0 +1,33 @@
+[
+  {
+    "date": "26-07-18",
+    "changes": [
+      "distro erscheint bald — nach ein paar kleinen Anpassungen kommt sie als öffentliche Beta",
+      "ich hab vielleicht eine verrückte Idee: kyon, aber auf Artix-Basis — aber NICHT für semi-neue oder neue Nutzer"
+    ]
+  },
+  {
+    "date": "26-07-17",
+    "changes": [
+      "das OS ist fertig, nur calamares nervt noch — sobald das gefixt ist, kommt die öffentliche Beta!",
+      "(ich bin müde, es ist schon spät)",
+      "calamares ist fast fertig, ein paar Bugfixes noch und alles erscheint bald als öffentliche Beta",
+      "letztes Update heute: die ISO ist fast fertig, ich habe ein paar Probleme mit den calamares-Konfigs, dann ist es bald soweit"
+    ]
+  },
+  {
+    "date": "2026-07-16",
+    "changes": [
+      "kyonrepo-Unterstützung zu pacman hinzugefügt",
+      "calamares-Installer fertigstellen",
+      "Autologin und Desktop-Umgebungen für die Installationsumgebung eingerichtet"
+    ]
+  },
+  {
+    "date": "2026-07-15",
+    "changes": [
+      "calamares-Installer konfiguriert",
+      "einige Basisdateien konfiguriert"
+    ]
+  }
+]

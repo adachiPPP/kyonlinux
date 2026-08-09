@@ -1,309 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kyon Linux - Viki</title>
-    <style>
-        html {
-            background: linear-gradient(135deg, #000b47 0%, #00d2ff 100%);
-            min-height: 100vh;
-        }
-        body {
-            font-family: monospace;
-            color: #00d2ff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            position: relative;
-            background: transparent;
-            padding: 100px 20px 40px 20px;
-            box-sizing: border-box;
-        }
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('icon.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 250px;
-            opacity: 0.15;
-            z-index: -1;
-            pointer-events: none;
-        }
-        .top-left-nav {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-        .top-left-nav a {
-            color: #4a6984;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: 0.3s;
-            border: 1px solid #1e2d4a;
-            padding: 5px 10px;
-        }
-        .top-left-nav a:hover {
-            color: #00d2ff;
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-        }
-        .top-right-nav {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        .top-right-nav a {
-            color: #4a6984;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: 0.3s;
-            border: 1px solid #1e2d4a;
-            padding: 5px 10px;
-        }
-        .top-right-nav a:hover {
-            color: #00d2ff;
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-        }
-        h1 {
-            font-size: 3rem;
-            letter-spacing: -1px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
-            text-align: center;
-        }
-        #wiki-container {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            gap: 15px;
-            justify-content: center;
-        }
-        .wiki-entry {
-            border: 1px solid #1e2d4a;
-            background: rgba(0, 11, 71, 0.4);
-            border-radius: 4px;
-            transition: 0.3s;
-            overflow: hidden;
-            width: calc((100% - 30px) / 3);
-            box-sizing: border-box;
-            align-self: flex-start;
-        }
-        .wiki-entry:hover {
-            border-color: #00d2ff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
-        }
-        .wiki-header {
-            margin: 0;
-            padding: 15px 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-            background: rgba(0, 0, 0, 0.1);
-            gap: 15px;
-        }
-        .wiki-date {
-            color: #4a6984;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-        .wiki-title {
-            color: #00d2ff;
-            font-weight: bold;
-            flex-grow: 1;
-            text-align: left;
-        }
-        .wiki-trigger {
-            color: #4a6984;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-        .wiki-entry.active .wiki-trigger {
-            color: #00d2ff;
-        }
-        .wiki-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-            padding: 0 20px;
-        }
-        .wiki-entry.active .wiki-content {
-            max-height: 1000px;
-            padding: 15px 20px 20px 20px;
-            border-top: 1px dashed #1e2d4a;
-        }
-        ul {
-            margin: 0;
-            padding-left: 20px;
-            color: #3ca9d4;
-        }
-        li {
-            line-height: 1.6;
-            margin-bottom: 8px;
-        }
-        li:last-child {
-            margin-bottom: 0;
-        }
-        li::marker {
-            color: #00d2ff;
-        }
-        /* blank/spacer lines (from a " " entry in the json) render as a gap, no bullet */
-        li.wiki-spacer {
-            list-style: none;
-            margin: 0 0 8px 0;
-            padding: 0;
-            height: 0.6em;
-        }
-        li.wiki-spacer::marker {
-            content: none;
-        }
-        /* lines prefixed with @! render as plain text, no bullet */
-        li.wiki-nobullet {
-            list-style: none;
-        }
-        li.wiki-nobullet::marker {
-            content: none;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding-top: 160px;
-            }
-            .top-left-nav {
-                top: 15px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: calc(100% - 40px);
-                display: flex;
-                justify-content: center;
-            }
-            .top-left-nav a {
-                flex: 1;
-                text-align: center;
-            }
-            .top-right-nav {
-                top: 75px;
-                left: 20px;
-                right: 20px;
-                justify-content: center;
-            }
-            .top-right-nav a {
-                flex: 1;
-                text-align: center;
-            }
-            h1 {
-                font-size: 2.2rem;
-            }
-            #wiki-container {
-                max-width: 600px;
-            }
-            .wiki-entry {
-                width: 100%;
-            }
-            .wiki-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .wiki-trigger {
-                align-self: flex-end;
-                margin-top: -20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kyon linux — viki</title>
+<link rel="icon" type="image/x-icon" href="../icon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#02081f;--navy:#000b47;--cyan:#00d2ff;--ice:#7df9ff;--violet:#8b6cff;
+  --text:#f2f7ff;--dim:#5d7f9c;--panel:rgba(8,16,44,.62);--line:rgba(0,210,255,.26);
+  --font:'Jost','Century Gothic','Futura','Trebuchet MS',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(0,210,255,.14), transparent 60%),
+    radial-gradient(1000px 700px at 8% 110%, rgba(139,108,255,.13), transparent 60%),
+    linear-gradient(160deg,#02081f 0%,#000b47 48%,#002452 100%);
+}
+::selection{background:rgba(0,210,255,.35);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora i{position:absolute;border-radius:50%;filter:blur(76px);opacity:.34;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
+.a1{width:60vmax;height:60vmax;left:-22vmax;top:-22vmax;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 65%)}
+.a2{width:50vmax;height:50vmax;right:-16vmax;top:22%;background:radial-gradient(circle,rgba(139,108,255,.45),transparent 65%);animation-delay:-10s;animation-duration:34s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(7vw,5vh) scale(1.18)}}
+.topbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px)}
+.topbar a{color:var(--ice);text-decoration:none;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(0,210,255,.28);padding:7px 13px;border-radius:999px;background:rgba(8,16,44,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:.25s;white-space:nowrap}
+.topbar a:hover{background:rgba(0,210,255,.16);border-color:var(--cyan);transform:translateY(-1px)}
+.topbar a.donate{background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;border-color:transparent;font-weight:600}
+main.panel{position:relative;z-index:2;width:min(900px,calc(100% - 28px));margin:124px auto 40px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
+.winbar{padding:13px 18px;border-bottom:1px solid rgba(0,210,255,.12);background:rgba(2,8,31,.35)}
+.wintitle{font-weight:600;letter-spacing:.3em;text-transform:uppercase;font-size:.76rem;color:var(--ice);opacity:.9}
+.body{padding:clamp(24px,5vw,48px) clamp(18px,5vw,48px)}
+h1{
+  font-size:clamp(2rem,6vw,3.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(120deg,#fff,var(--ice) 60%,var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 20px rgba(0,210,255,.3));
+}
+.sub{color:var(--dim);margin:-8px 0 26px;font-size:.95rem}
+.wiki-search{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.wiki-search input{flex:1;min-width:200px;background:rgba(2,8,31,.6);border:1px solid rgba(0,210,255,.25);border-radius:999px;color:var(--text);font-family:var(--font);font-size:.95rem;padding:11px 18px;outline:none;transition:border-color .25s,box-shadow .25s}
+.wiki-search input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,210,255,.14)}
+.wiki-search input::placeholder{color:var(--dim)}
+.wiki-count{color:var(--dim);font-size:.8rem;letter-spacing:.06em;white-space:nowrap}
+.wiki-entry{border:1px solid rgba(0,210,255,.18);border-radius:14px;margin-bottom:14px;background:rgba(2,8,31,.45);overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.wiki-entry:hover{border-color:rgba(0,210,255,.45)}
+.wiki-entry.active{border-color:var(--cyan);box-shadow:0 0 26px rgba(0,210,255,.12)}
+.wiki-header{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;user-select:none;transition:background .3s}
+.wiki-header:hover{background:rgba(0,210,255,.05)}
+.wiki-title{font-weight:600;color:var(--ice);flex:1}
+.wiki-date{color:var(--dim);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+.wiki-trigger{color:var(--dim);font-size:.78rem;letter-spacing:.08em;flex-shrink:0;transition:.3s}
+.wiki-entry.active .wiki-trigger{color:var(--cyan)}
+.wiki-content{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,.7,.2,1)}
+.wiki-entry.active .wiki-content{max-height:2200px}
+.wiki-content ul{list-style:none;padding:2px 18px 18px;color:#bfe9ff}
+.wiki-content li{padding:6px 0 6px 20px;position:relative;line-height:1.65;font-size:.95rem;font-weight:400}
+.wiki-content li::before{content:"▹";position:absolute;left:0;color:var(--cyan)}
+.wiki-content li.wiki-spacer{list-style:none;padding:0;height:.6em}
+.wiki-content li.wiki-spacer::before{content:""}
+.wiki-content li.wiki-nobullet{list-style:none;padding-left:20px}
+.wiki-content li.wiki-nobullet::before{content:""}
+footer{position:relative;z-index:2;text-align:center;padding:16px 20px 44px;color:var(--dim);font-size:.82rem;letter-spacing:.08em}
+footer a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s}
+footer a:hover{color:var(--cyan)}
+@media (max-width:640px){
+  .topbar{top:10px;gap:6px}
+  .topbar a{font-size:.66rem;padding:6px 9px}
+  main.panel{margin-top:172px}
+  .wiki-header{flex-wrap:wrap;gap:6px}
+  .wiki-date{order:3}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
-    <div class="top-left-nav">
-        <a href="./index.html">anasayfa</a>
-    </div>
-    <div class="top-right-nav">
-        <a href="./gallery.html">galeri</a>
-        <a href="./releases.html">dev notları</a>
-    </div>
+<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i></div>
 
-    <h1>viki & sorulan sorular</h1>
+<nav class="topbar" aria-label="gezinme">
+  <a class="donate" href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ bağış</a>
+  <a href="./index.html">anasayfa</a>
+  <a href="./wiki.html">viki</a>
+  <a href="./gallery.html">galeri</a>
+  <a href="./credits.html">krediler</a>
+  <a href="./releases.html">dev notları</a>
+  <a href="../de/">🇩🇪</a>
+  <a href="../index.html">🇬🇧</a>
+</nav>
+
+<main class="panel">
+  <div class="winbar"><span class="wintitle">viki</span></div>
+  <div class="body">
+    <h1>viki &amp; sorulan sorular</h1>
+    <p class="sub">insanların bana sürekli sorduğu şeyler. açmak için bir karta dokun.</p>
+    <div class="wiki-search">
+      <input type="search" id="wikiSearch" placeholder="vikide ara… (örn. kernel, nvidia)" aria-label="vikide ara">
+      <span class="wiki-count" id="wikiCount"></span>
+    </div>
     <div id="wiki-container"></div>
+  </div>
+</main>
 
-    <script>
-        // minimal HTML escaper so raw text content doesn't get interpreted as markup
-        function escapeHtml(str) {
-            return str
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
+<footer>
+  <p>© 2026 kyon linux — <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ bağış</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+var entries = [];
+fetch('wiki.json')
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    var container = document.getElementById('wiki-container');
+    data.forEach(function(item){
+      var entryDiv = document.createElement('div');
+      entryDiv.className = 'wiki-entry';
+      var rawHeader = item.header || '';
+      var lines = item.paragraph || item.changes || [];
+      var listItems = lines.map(function(line){
+        if (line.trim() === '') return '<li class="wiki-spacer"></li>';
+        var content = line, noBullet = false;
+        if (/^\s*@!/.test(content)) { noBullet = true; content = content.replace(/^\s*@!\s*/,''); }
+        var withBreaks = escapeHtml(content).replace(/\\n|\n/g,'<br>');
+        return '<li class="' + (noBullet ? 'wiki-nobullet' : '') + '">' + withBreaks + '</li>';
+      }).join('');
+      entryDiv.innerHTML =
+        '<div class="wiki-header">' +
+          '<span class="wiki-title">' + escapeHtml(rawHeader) + '</span>' +
+          '<span class="wiki-date">' + escapeHtml(item.date) + '</span>' +
+          '<span class="wiki-trigger">[aç]</span>' +
+        '</div>' +
+        '<div class="wiki-content"><ul>' + listItems + '</ul></div>';
+      var header = entryDiv.querySelector('.wiki-header');
+      var trigger = entryDiv.querySelector('.wiki-trigger');
+      header.addEventListener('click', function(){
+        var active = entryDiv.classList.toggle('active');
+        trigger.textContent = active ? '[kapat]' : '[aç]';
+      });
+      container.appendChild(entryDiv);
+      entries.push({el: entryDiv, item: item});
+    });
+    /* search filter */
+    document.getElementById('wikiSearch').addEventListener('input', function(){
+      var q = this.value.trim().toLowerCase();
+      var shown = 0;
+      entries.forEach(function(en){
+        var hay = (en.item.header + ' ' + en.item.date + ' ' + (en.item.paragraph || []).join(' ')).toLowerCase();
+        var ok = !q || hay.indexOf(q) !== -1;
+        en.el.style.display = ok ? '' : 'none';
+        if (!ok && en.el.classList.contains('active')){
+          en.el.classList.remove('active');
+          var tg = en.el.querySelector('.wiki-trigger');
+          if (tg) tg.textContent = '[aç]';
         }
-
-        fetch('wiki.json')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('wiki-container');
-
-                data.forEach(item => {
-                    const entryDiv = document.createElement('div');
-                    entryDiv.className = 'wiki-entry';
-
-                    const rawHeader = item.header || '';
-                    const lines = item.paragraph || item.changes || [];
-
-                    const listItems = lines.map(line => {
-                        // a blank/whitespace-only line is treated as a spacer, not a bulleted item
-                        if (line.trim() === '') {
-                            return `<li class="wiki-spacer"></li>`;
-                        }
-
-                        // a line prefixed with @! drops its bullet and renders as plain text
-                        let content = line;
-                        let noBullet = false;
-                        if (content.trimStart().startsWith('@!')) {
-                            noBullet = true;
-                            content = content.trimStart().slice(2).trimStart();
-                        }
-
-                        // support \n inside a single line entry as a line break
-                        const withBreaks = escapeHtml(content).replace(/\\n|\n/g, '<br>');
-                        const cssClass = noBullet ? ' class="wiki-nobullet"' : '';
-                        return `<li${cssClass}>${withBreaks}</li>`;
-                    }).join('');
-
-                    entryDiv.innerHTML = `
-                        <div class="wiki-header">
-                            <span class="wiki-title">${rawHeader}</span>
-                            <span class="wiki-date">${item.date}</span>
-                            <span class="wiki-trigger">[open]</span>
-                        </div>
-                        <div class="wiki-content">
-                            <ul>${listItems}</ul>
-                        </div>
-                    `;
-
-                    const header = entryDiv.querySelector('.wiki-header');
-                    const trigger = entryDiv.querySelector('.wiki-trigger');
-
-                    header.addEventListener('click', () => {
-                        const isExpanded = entryDiv.classList.toggle('active');
-                        trigger.textContent = isExpanded ? '[close]' : '[open]';
-                    });
-
-                    container.appendChild(entryDiv);
-                });
-            })
-            .catch(err => console.error('error parsing external asset configuration', err));
-    </script>
+        if (ok) shown++;
+      });
+      document.getElementById('wikiCount').textContent = q ? shown + ' / ' + entries.length + ' kayıt' : '';
+    });
+  })
+  .catch(function(err){ console.error('viki yüklenirken hata', err); });
+})();
+</script>
 </body>
 </html>

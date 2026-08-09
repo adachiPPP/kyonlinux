@@ -11,6 +11,10 @@ Everything lives in a single file: **`index.html`** — home, music player with 
 - **music**: drop songs into `music/music1.mp3`, `music2.mp3`, … (up to 16). The song of the day is picked from the date, ⏮/⏯/⏭ buttons cycle through whatever exists, and missing files are skipped. If no songs are found, a generative ambient beat keeps the visualizer alive. Keyboard: `space` play/pause, `←`/`→` prev/next.
 - **visualizer**: cava-style spectrum bars + beat-reactive logo pulse (WebAudio AnalyserNode).
 - **theme**: Jost (Futura-style) via Google Fonts, snow particles, aurora background.
+- **donations**: fixed ♥ donations button in the top-right (GitHub sponsors link).
+- **gallery**: carousel with ‹ › arrows, dots and auto-advance.
+- **wiki**: live search bar that filters the accordions.
+- The Turkish (`tr/`) and German (`de/`) sites are restyled to match (same theme, top nav, carousel + wiki search).
 
 # people who helped me <3
 

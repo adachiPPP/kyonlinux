@@ -9,7 +9,7 @@
 <link rel="icon" type="image/x-icon" href="icon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#02081f;
@@ -38,14 +38,7 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
-/* faint techy grid */
-body::after{
-  content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(0,210,255,.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,210,255,.05) 1px,transparent 1px);
-  background-size:46px 46px;
-}
+/* no grid overlay here — humans don't live on graph paper */
 ::selection{background:rgba(0,210,255,.35);color:#fff}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
 ::-webkit-scrollbar{width:10px}
@@ -54,7 +47,7 @@ body::after{
 
 /* ---------- aurora ---------- */
 .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
+.aurora i{position:absolute;border-radius:50%;filter:blur(76px);opacity:.34;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
 .a1{width:62vmax;height:62vmax;left:-22vmax;top:-22vmax;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 65%)}
 .a2{width:52vmax;height:52vmax;right:-16vmax;top:22%;background:radial-gradient(circle,rgba(139,108,255,.45),transparent 65%);animation-delay:-8s;animation-duration:34s}
 .a3{width:46vmax;height:46vmax;left:28%;bottom:-26vmax;background:radial-gradient(circle,rgba(125,249,255,.3),transparent 65%);animation-delay:-16s;animation-duration:40s}
@@ -89,7 +82,10 @@ main{position:relative;z-index:2;padding:26px 16px 0}
 /* windows start hidden only when JS is alive (html gets the .anim class) */
 html.anim .window{opacity:0;transform:translateY(52px) scale(.985)}
 html.anim .window.in{opacity:1;transform:none}
-.window:hover{border-color:rgba(0,210,255,.55);box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 46px rgba(0,210,255,.14)}
+.window:hover{border-color:rgba(0,210,255,.5);box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 30px rgba(0,210,255,.1)}
+/* windows aren't all the same size — like real windows */
+#gallery,#wiki{max-width:1100px}
+#notes{max-width:820px}
 .winbar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(0,210,255,.12);background:rgba(2,8,31,.35)}
 .wintitle{flex:1;text-align:left;font-weight:600;letter-spacing:.3em;text-transform:uppercase;font-size:.78rem;color:var(--ice);opacity:.9}
 .winmeta{font-size:.72rem;color:var(--dim);letter-spacing:.1em;white-space:nowrap}
@@ -119,7 +115,7 @@ h1{
   animation:titleIn 1.2s cubic-bezier(.2,.7,.2,1) both;
 }
 @keyframes titleIn{from{opacity:0;letter-spacing:.28em;transform:translateY(20px) scale(.95)}to{opacity:1;letter-spacing:-.02em;transform:none}}
-.tagline{max-width:560px;color:rgba(242,247,255,.85);font-size:clamp(1rem,2.4vw,1.18rem);font-weight:300;letter-spacing:.03em}
+.tagline{max-width:560px;color:rgba(242,247,255,.85);font-size:clamp(1rem,2.4vw,1.18rem);font-weight:400;letter-spacing:.03em}
 .hero-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 .btn{
   display:inline-flex;align-items:center;gap:10px;justify-content:center;
@@ -145,6 +141,13 @@ h1{
 .langs a:hover{color:var(--cyan)}
 .scroll-hint{margin-top:6px;color:var(--dim);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;animation:hint 2s ease-in-out infinite}
 @keyframes hint{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(7px)}}
+.humannote{max-width:520px;color:var(--dim);font-size:.9rem;font-style:italic;font-weight:400}
+
+/* fixed top-right donations button */
+.donate-top{position:fixed;top:14px;right:16px;z-index:75;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;font-weight:600;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(0,210,255,.35);transition:transform .25s,box-shadow .25s}
+.donate-top:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,210,255,.55)}
+.donate-top:active{transform:scale(.96)}
+.donate-top .heart{display:inline-block;animation:heartbeat 1.4s ease-in-out infinite}
 
 /* ---------- ticker ---------- */
 .ticker{width:min(1020px,100%);margin:-60px auto 100px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(8,16,44,.55);backdrop-filter:blur(10px);position:relative;z-index:2}
@@ -172,20 +175,29 @@ h1{
 .ctrl:disabled{opacity:.35;pointer-events:none}
 .player-note{text-align:center;color:var(--dim);font-size:.85rem;margin-top:16px;letter-spacing:.06em}
 
-/* ---------- gallery ---------- */
-.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.g-item{position:relative;border:1px solid rgba(0,210,255,.2);border-radius:16px;overflow:hidden;background:rgba(2,8,31,.5);transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s;animation:gIn .7s cubic-bezier(.2,.7,.2,1) both}
-@keyframes gIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
-.g-item:hover{transform:translateY(-7px) scale(1.015);border-color:var(--cyan);box-shadow:0 24px 54px rgba(0,0,0,.5),0 0 32px rgba(0,210,255,.2)}
-.g-item img{width:100%;height:320px;object-fit:cover;display:block;transition:transform .7s ease}
-.g-item:hover img{transform:scale(1.07)}
-.g-item figcaption{position:absolute;inset:auto 0 0 0;padding:34px 18px 14px;background:linear-gradient(transparent,rgba(2,8,31,.88));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);opacity:0;transform:translateY(10px);transition:.35s}
-.g-item:hover figcaption{opacity:1;transform:none}
-.g-item:only-child{grid-column:1/-1}
-.g-item:only-child img{height:440px}
-.empty-note{grid-column:1/-1;text-align:center;color:var(--dim);padding:46px;border:1px dashed rgba(0,210,255,.3);border-radius:16px}
+/* ---------- gallery (carousel) ---------- */
+.carousel{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(0,210,255,.2);background:rgba(2,8,31,.5)}
+.carousel-viewport{overflow:hidden}
+.carousel-track{display:flex;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.g-slide{flex:0 0 100%;min-width:0;position:relative}
+.g-slide img{width:100%;height:420px;object-fit:cover;display:block}
+.g-slide figcaption{position:absolute;inset:auto 0 0 0;padding:42px 20px 14px;background:linear-gradient(transparent,rgba(2,8,31,.9));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice)}
+.carrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,210,255,.4);background:rgba(8,16,44,.78);color:var(--ice);font-size:1.5rem;cursor:pointer;display:grid;place-items:center;transition:.25s;z-index:3;backdrop-filter:blur(6px)}
+.carrow:hover{background:rgba(0,210,255,.25);box-shadow:0 0 18px rgba(0,210,255,.4)}
+.carrow:active{transform:translateY(-50%) scale(.92)}
+.carrow:disabled{opacity:.3;pointer-events:none}
+.carrow.prev{left:12px}.carrow.next{right:12px}
+.cdots{display:flex;justify-content:center;gap:8px;padding:12px 0 4px}
+.cdots button{width:8px;height:8px;border-radius:50%;border:none;background:rgba(0,210,255,.25);cursor:pointer;padding:0;transition:.25s}
+.cdots button.active{background:var(--cyan);transform:scale(1.4);box-shadow:0 0 10px var(--cyan)}
+.empty-note{text-align:center;color:var(--dim);padding:46px;border:1px dashed rgba(0,210,255,.3);border-radius:16px;margin:0}
 
-/* ---------- wiki ---------- */
+/* ---------- wiki (with search) ---------- */
+.wiki-search{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.wiki-search input{flex:1;min-width:220px;background:rgba(2,8,31,.6);border:1px solid rgba(0,210,255,.25);border-radius:999px;color:var(--text);font-family:var(--font);font-size:.95rem;padding:12px 20px;outline:none;transition:border-color .25s,box-shadow .25s}
+.wiki-search input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,210,255,.14)}
+.wiki-search input::placeholder{color:var(--dim)}
+.wiki-count{color:var(--dim);font-size:.8rem;letter-spacing:.06em;white-space:nowrap}
 .wiki-entry{border:1px solid rgba(0,210,255,.18);border-radius:14px;margin-bottom:16px;background:rgba(2,8,31,.45);overflow:hidden;transition:border-color .3s,box-shadow .3s}
 .wiki-entry:hover{border-color:rgba(0,210,255,.45)}
 .wiki-entry.active{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,210,255,.14)}
@@ -198,7 +210,7 @@ h1{
 .wiki-content{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,.7,.2,1)}
 .wiki-entry.active .wiki-content{max-height:2200px}
 .wiki-content ul{list-style:none;padding:2px 20px 20px;color:#bfe9ff}
-.wiki-content li{padding:6px 0 6px 20px;position:relative;line-height:1.65;font-size:.96rem;font-weight:300}
+.wiki-content li{padding:6px 0 6px 20px;position:relative;line-height:1.65;font-size:.96rem;font-weight:400}
 .wiki-content li::before{content:"▹";position:absolute;left:0;color:var(--cyan)}
 .wiki-content li.wiki-spacer{list-style:none;padding:0;height:.6em}
 .wiki-content li.wiki-spacer::before{content:""}
@@ -212,7 +224,7 @@ h1{
 .credit:hover{transform:translateY(-6px);border-color:rgba(0,210,255,.5);box-shadow:0 22px 48px rgba(0,0,0,.45)}
 .credit:hover::before{opacity:1}
 .credit h3{color:var(--ice);font-size:1.12rem;margin-bottom:12px;letter-spacing:.04em}
-.credit ul{list-style:none;color:#bfe9ff;font-size:.92rem;font-weight:300}
+.credit ul{list-style:none;color:#bfe9ff;font-size:.92rem;font-weight:400}
 .credit li{padding:4px 0 4px 22px;position:relative}
 .credit li::before{content:"✦";position:absolute;left:0;color:var(--cyan);font-size:.8em}
 
@@ -224,7 +236,7 @@ h1{
 .note::before{content:"";position:absolute;left:-25px;top:24px;width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px var(--cyan);transition:transform .3s}
 .note:hover::before{transform:scale(1.5)}
 .note time{color:var(--dim);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase}
-.note ul{list-style:none;margin-top:10px;color:#bfe9ff;font-size:.95rem;font-weight:300}
+.note ul{list-style:none;margin-top:10px;color:#bfe9ff;font-size:.95rem;font-weight:400}
 .note li{padding:4px 0 4px 22px;position:relative}
 .note li::before{content:"▹";position:absolute;left:0;color:var(--cyan)}
 
@@ -241,8 +253,8 @@ footer .backtop:active{transform:scale(.95)}
 @media (max-width:760px){
   #dotnav{display:none}
   .winmeta{display:none}
-  .gallery-grid{grid-template-columns:1fr}
-  .g-item:only-child img{height:300px}
+  .g-slide img{height:260px}
+  .donate-top{top:auto;bottom:14px;right:14px;padding:9px 15px;font-size:.72rem}
   #home .winbody{gap:16px}
   .logo-wrap{width:160px;height:160px}
   .logo-wrap img{width:140px;height:140px}
@@ -260,6 +272,7 @@ footer .backtop:active{transform:scale(.95)}
 <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
 <canvas id="snow" aria-hidden="true"></canvas>
 <div id="progress"><span id="progressBar"></span></div>
+<a class="donate-top" href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer"><span class="heart">♥</span> donations</a>
 <nav id="dotnav" aria-label="sections"></nav>
 
 <main>
@@ -273,11 +286,12 @@ footer .backtop:active{transform:scale(.95)}
       <div class="logo-wrap"><img id="logo" src="icon.png" alt="kyon linux logo" width="190" height="190"></div>
       <h1>kyon linux</h1>
       <p class="tagline">An independent arch-based distribution designed with a focus on user-friendly accessibility and refined aesthetics.</p>
+      <p class="humannote">yes, this is yet another linux distro website. made at 2am, one block of css at a time.</p>
       <div class="hero-actions">
         <a class="btn" href="#">download iso <small>(coming soon…)</small></a>
       </div>
       <div class="socials">
-        <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">sponsors</a>
+        <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">donations</a>
         <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a>
         <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a>
         <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a>
@@ -290,8 +304,8 @@ footer .backtop:active{transform:scale(.95)}
   <!-- ============ TICKER ============ -->
   <div class="ticker" aria-hidden="true">
     <div class="ticker-track">
-      <span>kyon linux <i>✦</i> arch-based <i>✦</i> accessible <i>✦</i> aesthetic <i>✦</i> open source <i>✦</i> free forever <i>✦</i> made with ♥ <i>✦</i></span>
-      <span>kyon linux <i>✦</i> arch-based <i>✦</i> accessible <i>✦</i> aesthetic <i>✦</i> open source <i>✦</i> free forever <i>✦</i> made with ♥ <i>✦</i></span>
+      <span>kyon linux <i>✦</i> arch-based <i>✦</i> no bloat (probably) <i>✦</i> ships when it's ready <i>✦</i> made by one guy <i>✦</i> i3 dotfiles included <i>✦</i> yes it's cyan <i>✦</i></span>
+      <span>kyon linux <i>✦</i> arch-based <i>✦</i> no bloat (probably) <i>✦</i> ships when it's ready <i>✦</i> made by one guy <i>✦</i> i3 dotfiles included <i>✦</i> yes it's cyan <i>✦</i></span>
     </div>
   </div>
 
@@ -333,8 +347,16 @@ footer .backtop:active{transform:scale(.95)}
     </div>
     <div class="winbody">
       <h2 class="section-title">gallery</h2>
-      <p class="section-sub">a look inside the kyon linux desktop.</p>
-      <div class="gallery-grid" id="galleryGrid"></div>
+      <p class="section-sub">a few screenshots so you know what you're getting into.</p>
+      <div class="carousel">
+        <div class="carousel-viewport">
+          <div class="carousel-track" id="galleryTrack"></div>
+        </div>
+        <button class="carrow prev" id="gPrev" aria-label="previous screenshot" disabled>‹</button>
+        <button class="carrow next" id="gNext" aria-label="next screenshot" disabled>›</button>
+        <div class="cdots" id="gDots"></div>
+      </div>
+      <p class="empty-note" id="galleryNote" style="display:none">no screenshots yet — check back soon</p>
     </div>
   </section>
 
@@ -346,7 +368,11 @@ footer .backtop:active{transform:scale(.95)}
     </div>
     <div class="winbody">
       <h2 class="section-title">wiki &amp; asked questions</h2>
-      <p class="section-sub">click an entry to expand it.</p>
+      <p class="section-sub">things people keep asking me. tap a card to open it.</p>
+      <div class="wiki-search">
+        <input type="search" id="wikiSearch" placeholder="search the wiki… (e.g. kernel, nvidia)" aria-label="search the wiki">
+        <span class="wiki-count" id="wikiCount"></span>
+      </div>
       <div id="wikiList"></div>
     </div>
   </section>
@@ -359,7 +385,7 @@ footer .backtop:active{transform:scale(.95)}
     </div>
     <div class="winbody">
       <h2 class="section-title">credits</h2>
-      <p class="section-sub">everyone who made kyon linux possible. &lt;3</p>
+      <p class="section-sub">the people who made this whole thing happen. thank you &lt;3</p>
       <div class="credits-grid" id="creditsGrid"></div>
     </div>
   </section>
@@ -372,15 +398,16 @@ footer .backtop:active{transform:scale(.95)}
     </div>
     <div class="winbody">
       <h2 class="section-title">developing notes</h2>
-      <p class="section-sub">the journey so far.</p>
+      <p class="section-sub">what's been happening lately. it's a lot.</p>
       <div class="notes" id="notesList"></div>
     </div>
   </section>
 </main>
 
 <footer>
-  <p>© 2026 kyon linux — made with <span class="heart">♥</span> and arch</p>
-  <p><a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">sponsors</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
+  <p>© 2026 kyon linux — made by hand, by one human and a couple of friends</p>
+  <p>no templates were harmed in the making of this website · last updated 2026-08-09</p>
+  <p><a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ donations</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://tiktok.com/@kyonlinux" target="_blank" rel="noopener noreferrer">tiktok</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
   <button class="backtop" id="backTop" type="button">↑ back to top</button>
 </footer>
 
@@ -511,6 +538,7 @@ function dayOfYear(){
 }
 
 /* ===================== renderers ===================== */
+var wikiEntries = [];
 function renderWiki(){
   var list = $('wikiList');
   WIKI_DATA.forEach(function(item){
@@ -538,7 +566,25 @@ function renderWiki(){
       trigger.textContent = active ? '[close]' : '[open]';
     });
     list.appendChild(entry);
+    wikiEntries.push(entry);
   });
+}
+
+function wikiFilter(){
+  var q = $('wikiSearch').value.trim().toLowerCase();
+  var shown = 0;
+  WIKI_DATA.forEach(function(item, i){
+    var hay = (item.header + ' ' + item.date + ' ' + (item.paragraph || []).join(' ')).toLowerCase();
+    var ok = !q || hay.indexOf(q) !== -1;
+    wikiEntries[i].style.display = ok ? '' : 'none';
+    if (!ok && wikiEntries[i].classList.contains('active')){
+      wikiEntries[i].classList.remove('active');
+      var tg = wikiEntries[i].querySelector('.wiki-trigger');
+      if (tg) tg.textContent = '[open]';
+    }
+    if (ok) shown++;
+  });
+  $('wikiCount').textContent = q ? shown + ' / ' + wikiEntries.length + ' entries' : '';
 }
 
 function renderCredits(){
@@ -563,25 +609,52 @@ function renderNotes(){
   });
 }
 
+var gallerySlides = [], galleryIdx = 0, galleryTimer = null;
 function renderGallery(){
-  var grid = $('galleryGrid');
+  var track = $('galleryTrack'), dots = $('gDots'), note = $('galleryNote');
   var pending = GALLERY_FILES.length, shown = 0;
-  function finish(){ if (--pending <= 0 && shown === 0){ grid.innerHTML = '<p class="empty-note">no screenshots available yet</p>'; } }
+  function finish(){ if (--pending <= 0 && shown === 0) note.style.display = 'block'; }
   GALLERY_FILES.forEach(function(src, i){
     var img = new Image();
     img.onload = function(){
+      shown++;
       var f = document.createElement('figure');
-      f.className = 'g-item';
-      f.style.animationDelay = (i * 0.12) + 's';
+      f.className = 'g-slide';
       f.innerHTML = '<img src="' + src + '" alt="kyon linux desktop preview ' + (i+1) + '" loading="lazy">' +
                     '<figcaption>kyon linux — preview ' + (i+1) + '</figcaption>';
-      grid.appendChild(f);
-      shown++;
+      track.appendChild(f);
+      gallerySlides.push(f);
+      var d = document.createElement('button');
+      d.setAttribute('aria-label', 'go to screenshot ' + gallerySlides.length);
+      d.addEventListener('click', function(){ goGallery(gallerySlides.indexOf(f)); });
+      dots.appendChild(d);
+      syncGallery();
+      maybeAutoGallery();
       finish();
     };
     img.onerror = finish;
     img.src = src;
   });
+}
+function goGallery(i){
+  if (!gallerySlides.length) return;
+  galleryIdx = (i + gallerySlides.length) % gallerySlides.length;
+  syncGallery();
+}
+function syncGallery(){
+  $('galleryTrack').style.transform = 'translateX(-' + (galleryIdx * 100) + '%)';
+  var btns = $('gDots').querySelectorAll('button');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', i === galleryIdx);
+  var multi = gallerySlides.length > 1;
+  $('gPrev').disabled = !multi;
+  $('gNext').disabled = !multi;
+}
+function maybeAutoGallery(){
+  if (gallerySlides.length < 2) return;
+  clearInterval(galleryTimer);
+  galleryTimer = setInterval(function(){
+    if (!document.hidden) goGallery(galleryIdx + 1);
+  }, 5000);
 }
 
 /* ===================== dot nav + scroll UI ===================== */
@@ -909,7 +982,7 @@ function scheduleLoop(){
 /* ===================== visualizer + beat + master loop ===================== */
 var vizCanvas = $('viz'), vctx = vizCanvas.getContext('2d');
 var BARS = 64, bars = [], peaks = [];
-var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, bassEma = 55;
+var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, bassEma = 55, frameN = 0;
 var logo = $('logo');
 
 function sizeViz(){
@@ -961,13 +1034,17 @@ function loop(ts){
   var target = 1 + smoothPulse * 0.5 + (ctx ? bass / 1500 : 0);
   logoScale += (target - logoScale) * 0.3;
   logo.style.transform = 'scale(' + logoScale.toFixed(3) + ')';
-  document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
+  /* update the CSS --beat var every other frame: cheaper than every frame */
+  if ((++frameN & 1) === 0) document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
 
   /* ---- cava-style bars ---- */
   /* context is scaled by devicePixelRatio, so draw in CSS pixels */
   var w = vizCanvas.clientWidth, h = vizCanvas.clientHeight;
   vctx.clearRect(0, 0, w, h);
   var barW = w / BARS, gap = Math.max(1, barW * 0.3);
+  /* one glow setting per frame instead of per bar — much cheaper */
+  vctx.shadowColor = 'hsla(200,95%,65%,.8)';
+  vctx.shadowBlur = 4 + smoothPulse * 18;
   for (var i = 0; i < BARS; i++){
     var t = 0;
     if (live){
@@ -989,11 +1066,9 @@ function loop(ts){
     var x = i * barW + gap / 2, bw = barW - gap;
     var hue = 190 + bars[i] * 55;
     vctx.fillStyle = 'hsla(' + hue + ',95%,' + (52 + bars[i] * 18) + '%,.92)';
-    vctx.shadowColor = 'hsla(' + hue + ',95%,65%,.85)';
-    vctx.shadowBlur = 5 + bars[i] * 16;
     roundRect(x, h - bh, bw, bh, Math.min(6, bw / 2));
     vctx.fill();
-    vctx.shadowBlur = 0;
+    vctx.shadowBlur = 0;   /* peak caps: no glow */
     vctx.fillStyle = 'rgba(242,247,255,.95)';
     vctx.fillRect(x, h - peaks[i] * (h - 10) - 2, bw, 2);
   }
@@ -1016,6 +1091,9 @@ playBtn.addEventListener('click', playPause);
 prevBtn.addEventListener('click', function(){ cycle(-1); });
 nextBtn.addEventListener('click', function(){ cycle(1); });
 vizCanvas.addEventListener('click', playPause);
+$('gPrev').addEventListener('click', function(){ maybeAutoGallery(); goGallery(galleryIdx - 1); });
+$('gNext').addEventListener('click', function(){ maybeAutoGallery(); goGallery(galleryIdx + 1); });
+$('wikiSearch').addEventListener('input', wikiFilter);
 
 /* autoplay fallback: browsers block audio until a user gesture, so the very
    first interaction anywhere on the page (that isn't a player control, which

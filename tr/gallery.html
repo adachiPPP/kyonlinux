@@ -1,123 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeri - Kyon Linux</title>
-    <style>
-        html {
-            background: linear-gradient(135deg, #000b47 0%, #00d2ff 100%);
-        }
-        body {
-            font-family: monospace;
-            color: #00d2ff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 100px 20px 40px 20px;
-            box-sizing: border-box;
-            position: relative;
-            background: transparent;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('icon.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 250px;
-            opacity: 0.30;
-            z-index: -1;
-            pointer-events: none;
-        }
-        .home-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-        .home-btn a {
-            color: #4a6984;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: 0.3s;
-            border: 1px solid #1e2d4a;
-            padding: 5px 10px;
-        }
-        .home-btn a:hover {
-            color: #00d2ff;
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
-        }
-        h1 {
-            font-size: 3rem;
-            letter-spacing: -2px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
-            text-transform: uppercase;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 1440px;
-            width: 100%;
-            justify-content: center;
-        }
-        .gallery-item {
-            border: 1px solid #1e2d4a;
-            background: rgba(0, 11, 71, 0.6);
-            padding: 5px;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .gallery-item:hover {
-            border-color: #00d2ff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
-        }
-        .gallery-item img {
-            width: 700px;
-            height: 360px;
-            object-fit: cover;
-            display: block;
-        }
-        /* fallback styling for small viewports so images don't overflow layout boundaries */
-        @media (max-width: 1460px) {
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                max-width: 720px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>galeri — kyon linux</title>
+<link rel="icon" type="image/x-icon" href="../icon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#02081f;--navy:#000b47;--cyan:#00d2ff;--ice:#7df9ff;--violet:#8b6cff;
+  --text:#f2f7ff;--dim:#5d7f9c;--panel:rgba(8,16,44,.62);--line:rgba(0,210,255,.26);
+  --font:'Jost','Century Gothic','Futura','Trebuchet MS',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(0,210,255,.14), transparent 60%),
+    radial-gradient(1000px 700px at 8% 110%, rgba(139,108,255,.13), transparent 60%),
+    linear-gradient(160deg,#02081f 0%,#000b47 48%,#002452 100%);
+}
+::selection{background:rgba(0,210,255,.35);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora i{position:absolute;border-radius:50%;filter:blur(76px);opacity:.34;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
+.a1{width:60vmax;height:60vmax;left:-22vmax;top:-22vmax;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 65%)}
+.a2{width:50vmax;height:50vmax;right:-16vmax;top:22%;background:radial-gradient(circle,rgba(139,108,255,.45),transparent 65%);animation-delay:-10s;animation-duration:34s}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(7vw,5vh) scale(1.18)}}
+.topbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px)}
+.topbar a{color:var(--ice);text-decoration:none;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(0,210,255,.28);padding:7px 13px;border-radius:999px;background:rgba(8,16,44,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:.25s;white-space:nowrap}
+.topbar a:hover{background:rgba(0,210,255,.16);border-color:var(--cyan);transform:translateY(-1px)}
+.topbar a.donate{background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;border-color:transparent;font-weight:600}
+main.panel{position:relative;z-index:2;width:min(1080px,calc(100% - 28px));margin:124px auto 40px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
+.winbar{padding:13px 18px;border-bottom:1px solid rgba(0,210,255,.12);background:rgba(2,8,31,.35)}
+.wintitle{font-weight:600;letter-spacing:.3em;text-transform:uppercase;font-size:.76rem;color:var(--ice);opacity:.9}
+.body{padding:clamp(24px,5vw,48px) clamp(18px,5vw,48px)}
+h1{
+  font-size:clamp(2rem,6vw,3.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:20px;
+  background:linear-gradient(120deg,#fff,var(--ice) 60%,var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 20px rgba(0,210,255,.3));
+}
+.sub{color:var(--dim);margin:-8px 0 26px;font-size:.95rem}
+.carousel{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(0,210,255,.2);background:rgba(2,8,31,.5)}
+.carousel-viewport{overflow:hidden}
+.carousel-track{display:flex;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.g-slide{flex:0 0 100%;min-width:0;position:relative}
+.g-slide img{width:100%;height:440px;object-fit:cover;display:block}
+.g-slide figcaption{position:absolute;inset:auto 0 0 0;padding:42px 20px 14px;background:linear-gradient(transparent,rgba(2,8,31,.9));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice)}
+.carrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,210,255,.4);background:rgba(8,16,44,.78);color:var(--ice);font-size:1.5rem;cursor:pointer;display:grid;place-items:center;transition:.25s;z-index:3;backdrop-filter:blur(6px)}
+.carrow:hover{background:rgba(0,210,255,.25);box-shadow:0 0 18px rgba(0,210,255,.4)}
+.carrow:active{transform:translateY(-50%) scale(.92)}
+.carrow:disabled{opacity:.3;pointer-events:none}
+.carrow.prev{left:12px}.carrow.next{right:12px}
+.cdots{display:flex;justify-content:center;gap:8px;padding:12px 0 4px}
+.cdots button{width:8px;height:8px;border-radius:50%;border:none;background:rgba(0,210,255,.25);cursor:pointer;padding:0;transition:.25s}
+.cdots button.active{background:var(--cyan);transform:scale(1.4);box-shadow:0 0 10px var(--cyan)}
+.empty-note{text-align:center;color:var(--dim);padding:46px;border:1px dashed rgba(0,210,255,.3);border-radius:16px;margin-top:16px}
+footer{position:relative;z-index:2;text-align:center;padding:16px 20px 44px;color:var(--dim);font-size:.82rem;letter-spacing:.08em}
+footer a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s}
+footer a:hover{color:var(--cyan)}
+@media (max-width:640px){
+  .topbar{top:10px;gap:6px}
+  .topbar a{font-size:.66rem;padding:6px 9px}
+  main.panel{margin-top:172px}
+  .g-slide img{height:260px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
-    <div class="home-btn">
-        <a href="./">Geri</a>
-    </div>
+<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i></div>
 
+<nav class="topbar" aria-label="gezinme">
+  <a class="donate" href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ bağış</a>
+  <a href="./index.html">anasayfa</a>
+  <a href="./wiki.html">viki</a>
+  <a href="./gallery.html">galeri</a>
+  <a href="./credits.html">krediler</a>
+  <a href="./releases.html">dev notları</a>
+  <a href="../de/">🇩🇪</a>
+  <a href="../index.html">🇬🇧</a>
+</nav>
+
+<main class="panel">
+  <div class="winbar"><span class="wintitle">galeri</span></div>
+  <div class="body">
     <h1>galeri</h1>
-
-    <div class="gallery-grid">
-        <div class="gallery-item">
-            <img src="../pic1.png" alt="kyon linux desktop preview 1">
-        </div>
-        <div class="gallery-item">
-            <img src="../pic2.png" alt="kyon linux desktop preview 2">
-        </div>
-        <div class="gallery-item">
-            <img src="../pic3.png" alt="kyon linux desktop preview 3">
-        </div>
-        <div class="gallery-item">
-            <img src="../pic4.png" alt="kyon linux desktop preview 4">
-        </div>
+    <p class="sub">neyle karşılaşacağınızı bilesiniz diye birkaç ekran görüntüsü.</p>
+    <div class="carousel">
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="galleryTrack"></div>
+      </div>
+      <button class="carrow prev" id="gPrev" aria-label="önceki ekran görüntüsü" disabled>‹</button>
+      <button class="carrow next" id="gNext" aria-label="sonraki ekran görüntüsü" disabled>›</button>
+      <div class="cdots" id="gDots"></div>
     </div>
+    <p class="empty-note" id="galleryNote" style="display:none">henüz ekran görüntüsü yok — birazdan tekrar bak</p>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 kyon linux — <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ bağış</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var FILES = ['../pic1.png','../pic2.png','../pic3.png','../pic4.png'];
+var slides = [], idx = 0, timer = null;
+var track = document.getElementById('galleryTrack'), dots = document.getElementById('gDots'),
+    note = document.getElementById('galleryNote'), prev = document.getElementById('gPrev'),
+    next = document.getElementById('gNext');
+var pending = FILES.length, shown = 0;
+function finish(){ if (--pending <= 0 && shown === 0) note.style.display = 'block'; }
+FILES.forEach(function(src, i){
+  var img = new Image();
+  img.onload = function(){
+    shown++;
+    var f = document.createElement('figure');
+    f.className = 'g-slide';
+    f.innerHTML = '<img src="' + src + '" alt="kyon linux masaüstü önizleme ' + (i+1) + '" loading="lazy">' +
+                  '<figcaption>kyon linux — önizleme ' + (i+1) + '</figcaption>';
+    track.appendChild(f);
+    slides.push(f);
+    var d = document.createElement('button');
+    d.setAttribute('aria-label', 'ekran görüntüsü ' + slides.length);
+    d.addEventListener('click', function(){ go(slides.indexOf(f)); });
+    dots.appendChild(d);
+    sync();
+    auto();
+    finish();
+  };
+  img.onerror = finish;
+  img.src = src;
+});
+function go(i){
+  if (!slides.length) return;
+  idx = (i + slides.length) % slides.length;
+  sync();
+}
+function sync(){
+  track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+  var btns = dots.querySelectorAll('button');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', i === idx);
+  var multi = slides.length > 1;
+  prev.disabled = !multi;
+  next.disabled = !multi;
+}
+function auto(){
+  if (slides.length < 2) return;
+  clearInterval(timer);
+  timer = setInterval(function(){ if (!document.hidden) go(idx + 1); }, 5000);
+}
+prev.addEventListener('click', function(){ auto(); go(idx - 1); });
+next.addEventListener('click', function(){ auto(); go(idx + 1); });
+})();
+</script>
 </body>
 </html>
