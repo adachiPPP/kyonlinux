@@ -180,8 +180,8 @@ h1{
 .carousel{position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(0,210,255,.2);background:rgba(2,8,31,.5)}
 .carousel-viewport{overflow:hidden}
 .carousel-track{display:flex;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-.g-slide{flex:0 0 100%;min-width:0;position:relative}
-.g-slide img{width:100%;height:420px;object-fit:cover;display:block}
+.g-slide{flex:0 0 100%;min-width:0;position:relative;background:rgba(2,8,31,.45)}
+.g-slide img{width:100%;height:420px;object-fit:contain;display:block}
 .g-slide figcaption{position:absolute;inset:auto 0 0 0;padding:42px 20px 14px;background:linear-gradient(transparent,rgba(2,8,31,.9));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice)}
 .carrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,210,255,.4);background:rgba(8,16,44,.78);color:var(--ice);font-size:1.5rem;cursor:pointer;display:grid;place-items:center;transition:.25s;z-index:3;backdrop-filter:blur(6px)}
 .carrow:hover{background:rgba(0,210,255,.25);box-shadow:0 0 18px rgba(0,210,255,.4)}
@@ -501,6 +501,13 @@ var CREDITS_DATA = [
 
 var NOTES_DATA = [
   {
+    "date": "26-08-09",
+    "changes": [
+      "holy update to the website",
+      "calamares is finished it has a lot of bugs at the bootloader part but im trying my best to fix them all"
+    ]
+  },
+  {
     "date": "26-07-18",
     "changes": [
       "distro will be released soon some small adjustments and it will be released as a public beta",
@@ -615,13 +622,22 @@ function renderCredits(){
 
 function renderNotes(){
   var list = $('notesList');
-  NOTES_DATA.forEach(function(n){
-    var d = document.createElement('div');
-    d.className = 'note';
-    var lis = (n.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
-    d.innerHTML = '<time>' + esc(n.date) + '</time><ul>' + lis + '</ul>';
-    list.appendChild(d);
-  });
+  function draw(data){
+    list.innerHTML = '';
+    data.forEach(function(n){
+      var d = document.createElement('div');
+      d.className = 'note';
+      var lis = (n.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
+      d.innerHTML = '<time>' + esc(n.date) + '</time><ul>' + lis + '</ul>';
+      list.appendChild(d);
+    });
+  }
+  /* release notes come from notes.json so you can edit the file freely;
+     if it can't be fetched (e.g. file://), fall back to the inlined copy */
+  fetch('notes.json')
+    .then(function(r){ if (!r.ok) throw new Error('no file'); return r.json(); })
+    .then(draw)
+    .catch(function(e){ console.warn('notes.json not loaded, using inlined copy:', e); draw(NOTES_DATA); });
 }
 
 var gallerySlides = [], galleryIdx = 0, galleryTimer = null;
