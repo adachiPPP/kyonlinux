@@ -1,5 +1,13 @@
 [
   {
+    "date": "2026-08-10",
+    "header": "which DE/WM does kyon use?",
+    "paragraph": [
+      "kyon comes with multiple DE options such as KDE Plasma, Hyprland with DMS, Niri with DMS, LXQT, i3, GNOME and so on",
+      "im planning to add more DE/WMs in the future too"
+    ]
+  },
+  {
     "date": "2026-07-17",
     "header": "how can i get cachy's kernel and drivers?",
     "paragraph": [
