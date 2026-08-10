@@ -1129,7 +1129,7 @@ function scheduleLoop(){
 /* ===================== visualizer + beat + master loop ===================== */
 var vizCanvas = $('viz'), vctx = vizCanvas.getContext('2d');
 var BARS = 64, bars = [], peaks = [];
-var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, bassEma = 55, frameN = 0;
+var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, logoRot = 0, bassEma = 55, frameN = 0;
 var logo = $('logo');
 
 function sizeViz(){
@@ -1183,10 +1183,11 @@ function loop(ts){
   var beat = smoothPulse * 0.8 + (live ? bass / 750 : 0);
   var target = 1 + Math.min(beat, 1.15);
   logoScale += (target - logoScale) * 0.45;
-  var wob = (logoScale - 1) * 14;   /* subtle beat-driven tilt */
-  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ') rotate(' + (Math.sin(ts * 0.012) * wob).toFixed(2) + 'deg)';
-  /* update the CSS --beat var every frame so the glow follows the beat */
-  document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
+  var wob = (logoScale - 1) * 7;   /* beat-driven tilt, kept smooth */
+  logoRot += (Math.sin(ts * 0.012) * wob - logoRot) * 0.18;
+  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ') rotate(' + logoRot.toFixed(2) + 'deg)';
+  /* border glow follows the beat too, throttled every other frame to keep repaints cheap */
+  if ((++frameN & 1) === 0) document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
 
   /* ---- cava-style bars ---- */
   /* context is scaled by devicePixelRatio, so draw in CSS pixels */
