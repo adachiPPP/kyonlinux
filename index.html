@@ -1171,27 +1171,26 @@ function loop(ts){
   if (live){
     if (!freq) freq = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(freq);
-    /* one energy level per frame: bass bins count most, mids add continuity */
-    var s = 0, w = 0;
-    for (var b = 2; b < 60; b++){
-      var wt = b < 16 ? 1.6 : 0.5;
-      s += freq[b] * wt;
-      w += wt;
-    }
-    level = s / w / 255;
-    bassEma = bassEma * 0.93 + level * 0.07;
-    if (level > 0.30 && level > bassEma * 1.25) pulse = 1;
+    /* spiky bass-peak signal + a little mid energy for continuity —
+       the same ingredient that makes the bars bounce, so the logo
+       rides the exact same wave */
+    var peak = 0;
+    for (var b = 2; b < 14; b++) if (freq[b] > peak) peak = freq[b];
+    var midSum = 0;
+    for (var b2 = 14; b2 < 50; b2++) midSum += freq[b2];
+    level = 0.7 * (peak / 255) + 0.3 * (midSum / 36 / 255);
+    bassEma = bassEma * 0.97 + level * 0.03;   /* very slow floor — self-calibrating */
+    if (level > 0.30 && level > bassEma * 1.3) pulse = 1;
   }
   pulse *= 0.88;
   smoothPulse += (pulse - smoothPulse) * 0.25;
 
-  /* ---- logo pumps up and down with the music, like the visualizer bars ----
-     the scale tracks loudness *relative to the running average*, so it swells
-     on beats and settles back between them — never pinned at max, no matter
-     how loud the song is */
-  var rel = Math.max(0, (level - bassEma) / (bassEma + 0.03));
-  var target = 1 + Math.min(rel * 0.6, 0.5);
-  logoScale += (target - logoScale) * (target > logoScale ? 0.5 : 0.14);
+  /* ---- logo pumps with the beat, like the visualizer bars ----
+     scale = how far the current level is above the song's quiet floor,
+     so every beat spikes up and settles back — visible at any volume */
+  var punch = Math.max(0, level - bassEma) / (bassEma + 0.05);
+  var target = 1 + Math.min(punch * 0.85, 0.85);
+  logoScale += (target - logoScale) * (target > logoScale ? 0.7 : 0.25);
   logo.style.transform = 'scale(' + logoScale.toFixed(3) + ')';
   /* border glow follows the beat too, throttled every other frame to keep repaints cheap */
   if ((++frameN & 1) === 0) document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
