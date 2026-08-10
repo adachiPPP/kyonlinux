@@ -6,8 +6,8 @@ support me on https://github.com/sponsors/adachiPPP (please 3;)
 
 # people who helped me <3
 
-SmyczyKox: tested the website a lot and recommended (by bothering me a lot) some extra things (day 1 guy) <3 \n
-waffle: made an ascii logo <3\n
+SmyczyKox: tested the website a lot and recommended (by bothering me a lot) some extra things (day 1 guy) <3
+waffle: made an ascii logo <3
 imme: helped to fix the iso
 
 #supporters
