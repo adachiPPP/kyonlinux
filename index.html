@@ -1129,7 +1129,7 @@ function scheduleLoop(){
 /* ===================== visualizer + beat + master loop ===================== */
 var vizCanvas = $('viz'), vctx = vizCanvas.getContext('2d');
 var BARS = 64, bars = [], peaks = [];
-var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, logoRot = 0, bassEma = 55, frameN = 0;
+var freq = null, pulse = 0, smoothPulse = 0, logoScale = 1, bassEma = 0.15, frameN = 0;
 var logo = $('logo');
 
 function sizeViz(){
@@ -1167,25 +1167,30 @@ function loop(ts){
 
   /* ---- audio analysis ---- */
   var live = !!(ctx && analyser && playing);
-  var bass = 0;
+  var level = 0;
   if (live){
     if (!freq) freq = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(freq);
-    for (var b = 2; b <= 14; b++) bass += freq[b];
-    bass /= 13;
-    bassEma = bassEma * 0.9 + bass * 0.1;
-    if (bass > 88 && bass > bassEma * 1.22) pulse = 1;
+    /* one energy level per frame: bass bins count most, mids add continuity */
+    var s = 0, w = 0;
+    for (var b = 2; b < 60; b++){
+      var wt = b < 16 ? 1.6 : 0.5;
+      s += freq[b] * wt;
+      w += wt;
+    }
+    level = s / w / 255;
+    bassEma = bassEma * 0.9 + level * 0.1;
+    if (level > 0.30 && level > bassEma * 1.25) pulse = 1;
   }
   pulse *= 0.88;
   smoothPulse += (pulse - smoothPulse) * 0.25;
 
-  /* ---- beat-reactive logo (extra sensitive) ---- */
-  var beat = smoothPulse * 0.8 + (live ? bass / 750 : 0);
-  var target = 1 + Math.min(beat, 1.15);
-  logoScale += (target - logoScale) * 0.45;
-  var wob = (logoScale - 1) * 7;   /* beat-driven tilt, kept smooth */
-  logoRot += (Math.sin(ts * 0.012) * wob - logoRot) * 0.18;
-  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ') rotate(' + logoRot.toFixed(2) + 'deg)';
+  /* ---- logo pumps up and down with the music, like the visualizer bars ----
+     scale follows the live audio level: fast attack on the way up,
+     gentle release on the way down, so it breathes with every beat */
+  var target = 1 + Math.min(level * 1.2, 0.6);
+  logoScale += (target - logoScale) * (target > logoScale ? 0.65 : 0.18);
+  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ')';
   /* border glow follows the beat too, throttled every other frame to keep repaints cheap */
   if ((++frameN & 1) === 0) document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
 
