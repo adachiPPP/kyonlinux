@@ -1179,17 +1179,19 @@ function loop(ts){
       w += wt;
     }
     level = s / w / 255;
-    bassEma = bassEma * 0.9 + level * 0.1;
+    bassEma = bassEma * 0.93 + level * 0.07;
     if (level > 0.30 && level > bassEma * 1.25) pulse = 1;
   }
   pulse *= 0.88;
   smoothPulse += (pulse - smoothPulse) * 0.25;
 
   /* ---- logo pumps up and down with the music, like the visualizer bars ----
-     scale follows the live audio level: fast attack on the way up,
-     gentle release on the way down, so it breathes with every beat */
-  var target = 1 + Math.min(level * 1.2, 0.6);
-  logoScale += (target - logoScale) * (target > logoScale ? 0.65 : 0.18);
+     the scale tracks loudness *relative to the running average*, so it swells
+     on beats and settles back between them — never pinned at max, no matter
+     how loud the song is */
+  var rel = Math.max(0, (level - bassEma) / (bassEma + 0.03));
+  var target = 1 + Math.min(rel * 0.6, 0.5);
+  logoScale += (target - logoScale) * (target > logoScale ? 0.5 : 0.14);
   logo.style.transform = 'scale(' + logoScale.toFixed(3) + ')';
   /* border glow follows the beat too, throttled every other frame to keep repaints cheap */
   if ((++frameN & 1) === 0) document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
