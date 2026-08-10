@@ -105,7 +105,7 @@ h2.section-title{
 .logo-wrap{width:220px;height:220px;display:grid;place-items:center;animation:breathe 3.6s ease-in-out infinite}
 .logo-wrap img{width:190px;height:190px;border-radius:28px;object-fit:cover;
   box-shadow:0 0 40px rgba(0,210,255,.35),0 0 120px rgba(0,210,255,.16);
-  transition:transform .1s linear;will-change:transform}
+  will-change:transform}
 @keyframes breathe{0%,100%{filter:drop-shadow(0 0 16px rgba(0,210,255,.35))}50%{filter:drop-shadow(0 0 36px rgba(125,249,255,.7))}}
 h1{
   font-size:clamp(3rem,10vw,5.6rem);font-weight:700;letter-spacing:-.02em;line-height:1;
@@ -181,8 +181,9 @@ h1{
 .carousel-viewport{overflow:hidden}
 .carousel-track{display:flex;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
 .g-slide{flex:0 0 100%;min-width:0;position:relative;background:rgba(2,8,31,.45)}
-.g-slide img{width:100%;height:420px;object-fit:contain;display:block}
-.g-slide figcaption{position:absolute;inset:auto 0 0 0;padding:42px 20px 14px;background:linear-gradient(transparent,rgba(2,8,31,.9));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice)}
+.g-blur{position:absolute;inset:-14px;background-size:cover;background-position:center;filter:blur(36px) saturate(1.25);transform:scale(1.14);opacity:.85;z-index:0;pointer-events:none}
+.g-slide img{width:100%;height:420px;object-fit:contain;display:block;position:relative;z-index:1}
+.g-slide figcaption{position:absolute;inset:auto 0 0 0;padding:42px 20px 14px;background:linear-gradient(transparent,rgba(2,8,31,.9));font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ice);z-index:2}
 .carrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid rgba(0,210,255,.4);background:rgba(8,16,44,.78);color:var(--ice);font-size:1.5rem;cursor:pointer;display:grid;place-items:center;transition:.25s;z-index:3;backdrop-filter:blur(6px)}
 .carrow:hover{background:rgba(0,210,255,.25);box-shadow:0 0 18px rgba(0,210,255,.4)}
 .carrow:active{transform:translateY(-50%) scale(.92)}
@@ -651,7 +652,8 @@ function renderGallery(){
       shown++;
       var f = document.createElement('figure');
       f.className = 'g-slide';
-      f.innerHTML = '<img src="' + src + '" alt="kyon linux desktop preview ' + (i+1) + '" loading="lazy">' +
+      f.innerHTML = '<div class="g-blur" style="background-image:url(\'' + src + '\')"></div>' +
+                    '<img src="' + src + '" alt="kyon linux desktop preview ' + (i+1) + '" loading="lazy">' +
                     '<figcaption>kyon linux — preview ' + (i+1) + '</figcaption>';
       track.appendChild(f);
       gallerySlides.push(f);
@@ -1177,12 +1179,14 @@ function loop(ts){
   pulse *= 0.88;
   smoothPulse += (pulse - smoothPulse) * 0.25;
 
-  /* ---- beat-reactive logo ---- */
-  var target = 1 + smoothPulse * 0.5 + (ctx ? bass / 1500 : 0);
-  logoScale += (target - logoScale) * 0.3;
-  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ')';
-  /* update the CSS --beat var every other frame: cheaper than every frame */
-  if ((++frameN & 1) === 0) document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
+  /* ---- beat-reactive logo (extra sensitive) ---- */
+  var beat = smoothPulse * 0.8 + (live ? bass / 750 : 0);
+  var target = 1 + Math.min(beat, 1.15);
+  logoScale += (target - logoScale) * 0.45;
+  var wob = (logoScale - 1) * 14;   /* subtle beat-driven tilt */
+  logo.style.transform = 'scale(' + logoScale.toFixed(3) + ') rotate(' + (Math.sin(ts * 0.012) * wob).toFixed(2) + 'deg)';
+  /* update the CSS --beat var every frame so the glow follows the beat */
+  document.documentElement.style.setProperty('--beat', smoothPulse.toFixed(3));
 
   /* ---- cava-style bars ---- */
   /* context is scaled by devicePixelRatio, so draw in CSS pixels */
