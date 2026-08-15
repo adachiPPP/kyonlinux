@@ -1,5 +1,19 @@
 [
   {
+    "date": "2026-08-15",
+    "header": "what is kyonlinux's speciality?",
+    "paragraph": [
+      "kyonlinux isn't just bare arch. kyon comes with its own package manager called nya",
+      "nya has a lot of features such as,",
+      "@! aur malware scanning",
+      "@! nixpkgs searching",
+      "@! installing from flatpak",
+      "@! and obviously, installing from pacman repos",
+      "nya isnt just pacman but wrapped, its a package manager made from scratch that cares about the users",
+      "and last of all it uses pacman's db.lock because if the 2 package managers ran at the same time good things wont happen 3:"
+    ]
+  },
+  {
     "date": "2026-08-10",
     "header": "which DE/WM does kyon use?",
     "paragraph": [
