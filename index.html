@@ -70,29 +70,19 @@ infinite alternate}
 #dotnav a.active{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 14px var(--cyan);transform:scale(1.4)}
 
 /* ---------- windows ---------- */
-main{position:relative;z-index:2;padding:26px 16px 0}
+main{position:relative;z-index:2}
 .window{
-  width:min(1020px,100%);margin:0 auto 100px;
+  width:100%;margin:0;
   background:var(--panel);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border:1px solid var(--line);border-radius:22px;
-  box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);
-  overflow:hidden;position:relative;
-  transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s;
+  border:0;position:relative;
+  transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);
 }
-/* windows start hidden only when JS is alive (html gets the .anim class) */
+.window + .window{border-top:1px solid var(--line)}
+/* sections start hidden only when JS is alive (html gets the .anim class) */
 html.anim .window{opacity:0;transform:translateY(52px) scale(.985)}
 html.anim .window.in{opacity:1;transform:none}
-.window:hover{border-color:rgba(0,210,255,.5);box-shadow:0 30px 90px rgba(0,0,0,.5),0 0 30px rgba(0,210,255,.1)}
-/* windows aren't all the same size — like real windows */
-#gallery,#wiki{max-width:1100px}
-#notes{max-width:820px}
-.winbar{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(0,210,255,.12);background:rgba(2,8,31,.35)}
-.wintitle{flex:1;text-align:left;font-weight:600;letter-spacing:.3em;text-transform:uppercase;font-size:.78rem;color:var(--ice);opacity:.9}
-.winmeta{font-size:.72rem;color:var(--dim);letter-spacing:.1em;white-space:nowrap}
-.winmeta a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s;margin:0 2px}
-.winmeta a:hover{color:var(--cyan)}
-.winbody{padding:clamp(24px,5vw,56px) clamp(18px,5vw,60px)}
+.winbody{padding:clamp(28px,6vw,88px) clamp(20px,5vw,72px)}
 h2.section-title{
   font-size:clamp(1.6rem,4vw,2.3rem);font-weight:600;letter-spacing:.02em;margin-bottom:26px;
   background:linear-gradient(120deg,#fff,var(--ice) 60%,var(--cyan));
@@ -101,8 +91,8 @@ h2.section-title{
 .section-sub{color:var(--dim);margin:-16px 0 30px;font-size:.95rem;letter-spacing:.04em}
 
 /* ---------- home ---------- */
-#home{min-height:calc(100vh - 40px)}
-#home .winbody{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:calc(100vh - 120px);gap:22px;padding-bottom:40px}
+#home{min-height:100vh}
+#home .winbody{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:100vh;gap:22px}
 .logo-wrap{width:220px;height:220px;display:grid;place-items:center;animation:breathe 3.6s ease-in-out infinite}
 .logo-wrap img{width:190px;height:190px;border-radius:28px;object-fit:cover;
   box-shadow:0 0 40px rgba(0,210,255,.35),0 0 120px rgba(0,210,255,.16);
@@ -152,14 +142,14 @@ h1{
 .donate-top .heart{display:inline-block;animation:heartbeat 1.4s ease-in-out infinite}
 
 /* ---------- ticker ---------- */
-.ticker{width:min(1020px,100%);margin:-60px auto 100px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(8,16,44,.55);backdrop-filter:blur(10px);position:relative;z-index:2}
+.ticker{width:100%;margin:0;border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;overflow:hidden;background:rgba(8,16,44,.55);backdrop-filter:blur(10px);position:relative;z-index:2}
 .ticker-track{display:flex;gap:3.2rem;white-space:nowrap;width:max-content;animation:marquee 24s linear infinite;padding:13px 0;font-weight:500;letter-spacing:.22em;text-transform:uppercase;font-size:.74rem;color:rgba(242,247,255,.72)}
 .ticker-track span{display:flex;align-items:center;gap:3.2rem}
 .ticker-track i{color:var(--cyan);font-style:normal}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ---------- player ---------- */
-#player{border-color:rgba(0,210,255,calc(.26 + var(--beat)*.5));box-shadow:0 24px 70px rgba(0,0,0,.45),0 0 calc(10px + var(--beat)*46px) rgba(0,210,255,calc(.05 + var(--beat)*.25))}
+#player{background:rgba(8,16,44,calc(.55 + var(--beat)*.22));box-shadow:inset 0 0 calc(24px + var(--beat)*70px) rgba(0,210,255,calc(.04 + var(--beat)*.16))}
 #viz{width:100%;height:230px;display:block;border-radius:16px;background:rgba(2,8,31,.68);border:1px solid rgba(0,210,255,.16);cursor:pointer;transition:border-color .3s}
 #viz:hover{border-color:rgba(0,210,255,.5)}
 .track-meta{display:flex;justify-content:space-between;align-items:center;margin-top:20px;flex-wrap:wrap;gap:12px}
@@ -255,7 +245,6 @@ footer .backtop:active{transform:scale(.95)}
 /* ---------- responsive ---------- */
 @media (max-width:760px){
   #dotnav{display:none}
-  .winmeta{display:none}
   .g-slide img{height:260px}
   .donate-top{top:auto;bottom:14px;right:14px;padding:9px 15px;font-size:.72rem}
   #home .winbody{gap:16px}
@@ -281,10 +270,6 @@ footer .backtop:active{transform:scale(.95)}
 <main>
   <!-- ============ HOME ============ -->
   <section class="window" id="home" data-tip="home">
-    <div class="winbar">
-      <span class="wintitle">kyon linux</span>
-      <span class="winmeta">en · <a href="tr/">tr</a> · <a href="de/">de</a></span>
-    </div>
     <div class="winbody">
       <div class="logo-wrap"><img id="logo" src="icon.png" alt="kyon linux logo" width="190" height="190"></div>
       <h1>kyon linux</h1>
@@ -314,11 +299,9 @@ footer .backtop:active{transform:scale(.95)}
 
   <!-- ============ MUSIC / VISUALIZER ============ -->
   <section class="window" id="player" data-tip="music">
-    <div class="winbar">
-      <span class="wintitle">music</span>
-      <span class="winmeta">visualizer</span>
-    </div>
     <div class="winbody">
+      <h2 class="section-title">music</h2>
+      <p class="section-sub">visualizer</p>
       <canvas id="viz" height="230" aria-label="audio spectrum visualizer"></canvas>
       <div class="track-meta">
         <div>
@@ -344,10 +327,6 @@ footer .backtop:active{transform:scale(.95)}
 
   <!-- ============ GALLERY ============ -->
   <section class="window" id="gallery" data-tip="gallery">
-    <div class="winbar">
-      <span class="wintitle">gallery</span>
-      <span class="winmeta">screenshots</span>
-    </div>
     <div class="winbody">
       <h2 class="section-title">gallery</h2>
       <p class="section-sub">a few screenshots so you know what you're getting into.</p>
@@ -365,10 +344,6 @@ footer .backtop:active{transform:scale(.95)}
 
   <!-- ============ WIKI ============ -->
   <section class="window" id="wiki" data-tip="wiki">
-    <div class="winbar">
-      <span class="wintitle">wiki</span>
-      <span class="winmeta">asked questions</span>
-    </div>
     <div class="winbody">
       <h2 class="section-title">wiki &amp; asked questions</h2>
       <p class="section-sub">things people keep asking me. tap a card to open it.</p>
@@ -382,10 +357,6 @@ footer .backtop:active{transform:scale(.95)}
 
   <!-- ============ CREDITS ============ -->
   <section class="window" id="credits" data-tip="credits">
-    <div class="winbar">
-      <span class="wintitle">credits</span>
-      <span class="winmeta">people who helped</span>
-    </div>
     <div class="winbody">
       <h2 class="section-title">credits</h2>
       <p class="section-sub">the people who made this whole thing happen. thank you &lt;3</p>
@@ -395,10 +366,6 @@ footer .backtop:active{transform:scale(.95)}
 
   <!-- ============ DEV NOTES ============ -->
   <section class="window" id="notes" data-tip="dev notes">
-    <div class="winbar">
-      <span class="wintitle">dev notes</span>
-      <span class="winmeta">changelog</span>
-    </div>
     <div class="winbody">
       <h2 class="section-title">developing notes</h2>
       <p class="section-sub">what's been happening lately. it's a lot.</p>

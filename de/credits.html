@@ -30,14 +30,12 @@ body{
 .a1{width:60vmax;height:60vmax;left:-22vmax;top:-22vmax;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 65%)}
 .a2{width:50vmax;height:50vmax;right:-16vmax;top:22%;background:radial-gradient(circle,rgba(139,108,255,.45),transparent 65%);animation-delay:-10s;animation-duration:34s}
 @keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(7vw,5vh) scale(1.18)}}
-.topbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px)}
-.topbar a{color:var(--ice);text-decoration:none;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(0,210,255,.28);padding:7px 13px;border-radius:999px;background:rgba(8,16,44,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:.25s;white-space:nowrap}
-.topbar a:hover{background:rgba(0,210,255,.16);border-color:var(--cyan);transform:translateY(-1px)}
-.topbar a.donate{background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;border-color:transparent;font-weight:600}
-main.panel{position:relative;z-index:2;width:min(880px,calc(100% - 28px));margin:124px auto 40px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
-.winbar{padding:13px 18px;border-bottom:1px solid rgba(0,210,255,.12);background:rgba(2,8,31,.35)}
-.wintitle{font-weight:600;letter-spacing:.3em;text-transform:uppercase;font-size:.76rem;color:var(--ice);opacity:.9}
-.body{padding:clamp(24px,5vw,48px) clamp(18px,5vw,48px)}
+.topbar{position:relative;z-index:50;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;padding:16px 20px;border-bottom:1px solid rgba(0,210,255,.14);background:rgba(2,8,31,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.topbar a{color:var(--ice);text-decoration:none;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;white-space:nowrap}
+.topbar a:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
+.topbar a.donate{background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;border:none;font-weight:600;padding:8px 18px;border-radius:999px}
+main.panel{position:relative;z-index:2;width:100%;margin:0;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:0;border-radius:0;box-shadow:none;overflow:hidden}
+.body{padding:clamp(28px,6vw,72px) clamp(20px,5vw,64px)}
 h1{
   font-size:clamp(2rem,6vw,3.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:20px;
   background:linear-gradient(120deg,#fff,var(--ice) 60%,var(--cyan));
@@ -56,9 +54,8 @@ footer{position:relative;z-index:2;text-align:center;padding:16px 20px 44px;colo
 footer a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s}
 footer a:hover{color:var(--cyan)}
 @media (max-width:640px){
-  .topbar{top:10px;gap:6px}
-  .topbar a{font-size:.66rem;padding:6px 9px}
-  main.panel{margin-top:172px}
+  .topbar{gap:12px;padding:12px 14px}
+  .topbar a{font-size:.66rem}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
@@ -78,7 +75,6 @@ footer a:hover{color:var(--cyan)}
 </nav>
 
 <main class="panel">
-  <div class="winbar"><span class="wintitle">mitwirkende</span></div>
   <div class="body">
     <h1>mitwirkende</h1>
     <p class="sub">die leute, die das alles möglich gemacht haben. danke &lt;3</p>
