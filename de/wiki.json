@@ -1,5 +1,27 @@
 [
   {
+    "date": "2026-08-15",
+    "header": "Was ist kyonlinux' Besonderheit?",
+    "paragraph": [
+      "kyonlinux ist nicht nur nacktes Arch. kyon kommt mit seinem eigenen Paketmanager namens nya",
+      "nya hat viele Funktionen wie:",
+      "@!     AUR-Malware-Scanning",
+      "@!     nixpkgs-Suche",
+      "@!     Installation von Flatpak",
+      "@!     und natürlich Installation aus Pacman-Repositories",
+      "nya ist nicht nur pacman verpackt, sondern ein Paketmanager, der von Grund auf gemacht wurde und sich um die Benutzer kümmert",
+      "und zu guter Letzt verwendet er pacman's db.lock, denn wenn beide Paketmanager gleichzeitig laufen, passieren keine guten Dinge 3:"
+    ]
+  },
+  {
+    "date": "2026-08-10",
+    "header": "Welche DE/WM verwendet kyon?",
+    "paragraph": [
+      "kyon kommt mit mehreren DE-Optionen wie KDE Plasma, Hyprland mit DMS, Niri mit DMS, LXQT, i3, GNOME und so weiter",
+      "ich plane, in Zukunft weitere DE/WMs hinzuzufügen"
+    ]
+  },
+  {
     "date": "2026-07-17",
     "header": "Wie bekomme ich Cachys Kernel und Treiber?",
     "paragraph": [

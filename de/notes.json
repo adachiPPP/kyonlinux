@@ -1,5 +1,18 @@
 [
   {
+    "date": "26-08-15",
+    "changes": [
+      "nya Paketmanager ist fertig und veröffentlicht worden — das ist ein riesiges Update für kyon! Und es hat auch einen AUR-Malware-Scanner, sodass du AUR-Pakete frei verwenden kannst :3"
+    ]
+  },
+  {
+    "date": "26-08-09",
+    "changes": [
+      "heiliges Update für die Website",
+      "calamares ist fertig, hat aber viele Bugs im Bootloader-Bereich — ich versuche aber mein Bestes, sie alle zu fixen"
+    ]
+  },
+  {
     "date": "26-07-18",
     "changes": [
       "distro erscheint bald — nach ein paar kleinen Anpassungen kommt sie als öffentliche Beta",

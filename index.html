@@ -54,7 +54,7 @@ infinite alternate}
 @keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(7vw,5vh) scale(1.18)}}
 
 /* ---------- nyan background ---------- */
-#nyanBg{position:fixed;left:0;top:50%;transform:translateY(-50%);width:50vw;height:auto;max-height:80vh;object-fit:contain;opacity:0.5;z-index:1;pointer-events:none}
+#nyanBg{position:fixed;left:0;top:50%;transform:translateY(-50%);width:50vw;height:auto;object-fit:contain;opacity:0.5;z-index:1;pointer-events:none}
 
 /* ---------- background visualizer ---------- */
 #vizBg{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:1;pointer-events:none;opacity:0.55}
@@ -1135,6 +1135,7 @@ player.addEventListener('error', function(){
   cycle(1);
 });
 player.addEventListener('playing', function(){ skipFails = 0; });
+player.addEventListener('ended', function(){ if (tracks.length > 1) cycle(1); });
 
 $('gPrev').addEventListener('click', function(){ maybeAutoGallery(); goGallery(galleryIdx - 1); });
 $('gNext').addEventListener('click', function(){ maybeAutoGallery(); goGallery(galleryIdx + 1); });

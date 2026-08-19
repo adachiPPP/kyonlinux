@@ -4,102 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>dev notları — kyon linux</title>
-<link rel="icon" type="image/x-icon" href="../icon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#02081f;--navy:#000b47;--cyan:#00d2ff;--ice:#7df9ff;--violet:#8b6cff;
-  --text:#f2f7ff;--dim:#5d7f9c;--panel:rgba(8,16,44,.62);--line:rgba(0,210,255,.26);
-  --font:'Jost','Century Gothic','Futura','Trebuchet MS',system-ui,sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6;
-  background:
-    radial-gradient(1200px 800px at 80% -10%, rgba(0,210,255,.14), transparent 60%),
-    radial-gradient(1000px 700px at 8% 110%, rgba(139,108,255,.13), transparent 60%),
-    linear-gradient(160deg,#02081f 0%,#000b47 48%,#002452 100%);
-}
-::selection{background:rgba(0,210,255,.35);color:#fff}
-:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
-.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.aurora i{position:absolute;border-radius:50%;filter:blur(76px);opacity:.34;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
-.a1{width:60vmax;height:60vmax;left:-22vmax;top:-22vmax;background:radial-gradient(circle,rgba(0,210,255,.5),transparent 65%)}
-.a2{width:50vmax;height:50vmax;right:-16vmax;top:22%;background:radial-gradient(circle,rgba(139,108,255,.45),transparent 65%);animation-delay:-10s;animation-duration:34s}
-@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(7vw,5vh) scale(1.18)}}
-.topbar{position:relative;z-index:50;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;padding:16px 20px;border-bottom:1px solid rgba(0,210,255,.14);background:rgba(2,8,31,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.topbar a{color:var(--ice);text-decoration:none;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;white-space:nowrap}
-.topbar a:hover{color:var(--cyan);border-bottom-color:var(--cyan)}
-.topbar a.donate{background:linear-gradient(135deg,#7df9ff,#00d2ff);color:#03122e;border:none;font-weight:600;padding:8px 18px;border-radius:999px}
-main.panel{position:relative;z-index:2;width:100%;margin:0;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:0;border-radius:0;box-shadow:none;overflow:hidden}
-.body{padding:clamp(28px,6vw,72px) clamp(20px,5vw,64px)}
-h1{
-  font-size:clamp(2rem,6vw,3.1rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:20px;
-  background:linear-gradient(120deg,#fff,var(--ice) 60%,var(--cyan));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 20px rgba(0,210,255,.3));
-}
-.sub{color:var(--dim);margin:-8px 0 26px;font-size:.95rem}
-#releases-container{display:flex;flex-direction:column;gap:16px}
-.release{border:1px solid rgba(0,210,255,.18);border-radius:14px;padding:20px 22px;background:rgba(2,8,31,.45);transition:transform .3s,border-color .3s,box-shadow .3s}
-.release:hover{transform:translateX(6px);border-color:rgba(0,210,255,.5);box-shadow:0 16px 38px rgba(0,0,0,.4)}
-.release h2{margin:0 0 12px;color:var(--ice);font-size:1.15rem;font-weight:600;letter-spacing:.04em;border-bottom:1px dashed rgba(0,210,255,.25);padding-bottom:10px}
-.release ul{list-style:none;color:#bfe9ff;font-size:.94rem;font-weight:400}
-.release li{padding:4px 0 4px 22px;position:relative}
-.release li::before{content:"▹";position:absolute;left:0;color:var(--cyan)}
-footer{position:relative;z-index:2;text-align:center;padding:16px 20px 44px;color:var(--dim);font-size:.82rem;letter-spacing:.08em}
-footer a{color:var(--ice);text-decoration:none;border-bottom:1px dashed rgba(0,210,255,.4);transition:.25s}
-footer a:hover{color:var(--cyan)}
-@media (max-width:640px){
-  .topbar{gap:12px;padding:12px 14px}
-  .topbar a{font-size:.66rem}
-}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style>
+<meta http-equiv="refresh" content="0; url=./index.html#notes">
+<script>location.replace('./index.html#notes');</script>
 </head>
 <body>
-<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i></div>
-
-<nav class="topbar" aria-label="gezinme">
-  <a class="donate" href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ bağış</a>
-  <a href="./index.html">anasayfa</a>
-  <a href="./wiki.html">viki</a>
-  <a href="./gallery.html">galeri</a>
-  <a href="./credits.html">krediler</a>
-  <a href="./releases.html">dev notları</a>
-  <a href="../de/">🇩🇪</a>
-  <a href="../index.html">🇬🇧</a>
-</nav>
-
-<main class="panel">
-  <div class="body">
-    <h1>dev notları</h1>
-    <p class="sub">son zamanlarda neler oluyor. epey var.</p>
-    <div id="releases-container"></div>
-  </div>
-</main>
-
-<footer>
-  <p>© 2026 kyon linux — <a href="https://github.com/sponsors/adachiPPP" target="_blank" rel="noopener noreferrer">♥ bağış</a> · <a href="https://instagram.com/kyonlinux" target="_blank" rel="noopener noreferrer">instagram</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank" rel="noopener noreferrer">discord</a></p>
-</footer>
-
-<script>
-fetch('notes.json')
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    var container = document.getElementById('releases-container');
-    data.forEach(function(item){
-      var div = document.createElement('div');
-      div.className = 'release';
-      var listItems = item.changes.map(function(change){ return '<li>' + change + '</li>'; }).join('');
-      div.innerHTML = '<h2>' + item.date + '</h2><ul>' + listItems + '</ul>';
-      container.appendChild(div);
-    });
-  })
-  .catch(function(err){ console.error('notlar yüklenirken hata', err); });
-</script>
+<p>Bu sayfa birleşik kyon linux sitesine taşındı: <a href="./index.html#notes">geliştirici notlarına git</a></p>
 </body>
 </html>

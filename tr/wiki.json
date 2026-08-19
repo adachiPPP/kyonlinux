@@ -1,5 +1,27 @@
 [
   {
+    "date": "2026-08-15",
+    "header": "kyonlinux'un özel yanı ne?",
+    "paragraph": [
+      "kyonlinux sadece çıplak arch değil. kyon kendi paket yöneticisi olan nya ile birlikte geliyor",
+      "nya birçok özelliğe sahip, örneğin:",
+      "@!     AUR kötü amaçlı yazılım tarama",
+      "@!     nixpkgs arama",
+      "@!     flatpak'tan yükleme",
+      "@!     ve elbette pacman depolarından yükleme",
+      "nya sadece sarılmış pacman değil, sıfırdan yapılmış ve kullanıcılara önem veren bir paket yöneticisi",
+      "ve son olarak pacman'ın db.lock'unu kullanıyor, çünkü iki paket yöneticisi aynı anda çalışırsa iyi şeyler olmaz 3:"
+    ]
+  },
+  {
+    "date": "2026-08-10",
+    "header": "kyon hangi DE/WM'yi kullanıyor?",
+    "paragraph": [
+      "kyon KDE Plasma, Hyprland ile DMS, Niri ile DMS, LXQT, i3, GNOME ve daha fazlası gibi birçok DE seçeneği ile birlikte geliyor",
+      "gelecekte daha fazla DE/WM eklemeyi planlıyorum"
+    ]
+  },
+  {
     "date": "2026-07-17",
     "header": "cachy kernelini ve driverlarını nasıl alabilirim?",
     "paragraph": [
@@ -7,7 +29,7 @@
       "eğer nvidia kullanıyorsanız, indirme kısmında seçilebilir olan dkms driverlarını kullanabilirsiniz veya *sadece* cachy kernelini kullanacaksanız, linux-cachyos-nvidia-open driverini kullanıp dkms'i silebilirsiniz",
       "dkmsten kurtulup sadece cachy kernelini kullanacaksanız, şunu çalıştırın: sudo pacman -S linux-cachyos-nvidia-open",
       "normal kerneli silmek için: sudo pacman -R linux",
-      "açıkçası normal kernelden kurtulmanızı önermem o yüzden normal kerneli saklayıp orada da nvidia driverlarını kullanmak istiyorsanız şunu çalıştırın: sudo pacman -S nvidia-open" 
+      "açıkçası normal kernelden kurtulmanızı önermem o yüzden normal kerneli saklayıp orada da nvidia driverlarını kullanmak istiyorsanız şunu çalıştırın: sudo pacman -S nvidia-open"
     ]
   },
   {

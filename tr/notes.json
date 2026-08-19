@@ -1,5 +1,18 @@
 [
   {
+    "date": "26-08-15",
+    "changes": [
+      "nya paket yöneticisi tamamlandı ve yayınlandı — bu kyon için büyük bir güncelleme! Ayrıca AUR kötü amaçlı yazılım tarayıcısı da var, böylece AUR paketlerini özgürce kullanabilirsiniz :3"
+    ]
+  },
+  {
+    "date": "26-08-09",
+    "changes": [
+      "siteye büyük güncelleme",
+      "calamares tamamlandı ama önyükleyici kısmında çok fazla hatası var, hepsini düzeltmeye çalışıyorum"
+    ]
+  },
+  {
     "date": "26-07-18",
     "changes": [
       "distro yakında kullanıma sunulacak birkaç küçük ayarlamadan sonra public beta olarak yayınlancak",
