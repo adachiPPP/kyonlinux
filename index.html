@@ -84,8 +84,9 @@ main{position:relative;z-index:2}
   transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);
 }
 .window + .window{border-top:1px solid var(--line)}
-html.anim .window{opacity:0;transform:translateY(52px) scale(.985)}
+html.anim .window{opacity:0;transform:translateY(52px) scale(.985);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
 html.anim .window.in{opacity:1;transform:none}
+<<<<<<< HEAD
 html.anim .window .section-title,
 html.anim .window .section-sub,
 html.anim .window .wiki-search,
@@ -116,6 +117,36 @@ html.anim .window.in .note:nth-child(3){transition-delay:.22s}
 html.anim .window.in .note:nth-child(4){transition-delay:.30s}
 html.anim .window.in .note:nth-child(5){transition-delay:.38s}
 html.anim .window.in .note{opacity:1;transform:none}
+=======
+
+/* ---------- new animations ---------- */
+@keyframes creditCardIn{0%{opacity:0;transform:translateY(28px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.credit.animate-in{animation:creditCardIn .55s cubic-bezier(.2,.7,.2,1) both}
+@keyframes titleSlide{0%{opacity:0;transform:translateX(-18px)}100%{opacity:1;transform:translateX(0)}}
+.window.in .section-title{animation:titleSlide .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes subtitleFade{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+.window.in .section-sub{animation:subtitleFade .6s .15s cubic-bezier(.2,.7,.2,1) both}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(0,210,255,.08)}50%{box-shadow:0 0 40px rgba(0,210,255,.18)}}
+.window.in#credits .winbody{animation:glowPulse 4s ease-in-out infinite}
+@keyframes noteAppear{0%{opacity:0;transform:translateX(-14px)}100%{opacity:1;transform:translateX(0)}}
+.window.in .note{animation:noteAppear .5s cubic-bezier(.2,.7,.2,1) both}
+.window.in .note:nth-child(2){animation-delay:.1s}
+.window.in .note:nth-child(3){animation-delay:.2s}
+.window.in .note:nth-child(4){animation-delay:.3s}
+.window.in .note:nth-child(5){animation-delay:.4s}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.credit::after{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent 0%,rgba(0,210,255,.06) 50%,transparent 100%);background-size:200% 100%;opacity:0;transition:opacity .35s;pointer-events:none}
+.credit:hover::after{opacity:1;animation:shimmer 1.8s ease-in-out infinite}
+@keyframes floatIn{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+.window.in .credit li{animation:floatIn .4s cubic-bezier(.2,.7,.2,1) both}
+.window.in .credit li:nth-child(1){animation-delay:.05s}
+.window.in .credit li:nth-child(2){animation-delay:.1s}
+.window.in .credit li:nth-child(3){animation-delay:.15s}
+.window.in .credit li:nth-child(4){animation-delay:.2s}
+@keyframes borderGlow{0%,100%{border-color:rgba(0,210,255,.18)}50%{border-color:rgba(0,210,255,.4)}}
+.window.in .credit:nth-child(odd){animation:borderGlow 5s ease-in-out infinite}
+.window.in .credit:nth-child(even){animation:borderGlow 5s 2.5s ease-in-out infinite}
+>>>>>>> 781604f (credits decided to hate me)
 .winbody{padding:clamp(28px,6vw,88px) clamp(20px,5vw,72px)}
 h2.section-title{
   font-size:clamp(1.6rem,4vw,2.3rem);font-weight:600;letter-spacing:.02em;margin-bottom:26px;
@@ -540,12 +571,18 @@ function renderCredits(){
   var grid = $('creditsGrid');
   function draw(data){
     grid.innerHTML = '';
-    data.forEach(function(p){
+    data.forEach(function(p, i){
       var d = document.createElement('div');
       d.className = 'credit';
+      d.style.animationDelay = (i * 0.1) + 's';
       var lis = (p.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
       d.innerHTML = '<h3>' + esc(p.ppl) + '</h3><ul>' + lis + '</ul>';
       grid.appendChild(d);
+    });
+    /* trigger staggered card entrance */
+    requestAnimationFrame(function(){
+      var cards = grid.querySelectorAll('.credit');
+      for (var i = 0; i < cards.length; i++) cards[i].classList.add('animate-in');
     });
   }
   fetch('credits.json')
@@ -558,9 +595,10 @@ function renderNotes(){
   var list = $('notesList');
   function draw(data){
     list.innerHTML = '';
-    data.forEach(function(n){
+    data.forEach(function(n, i){
       var d = document.createElement('div');
       d.className = 'note';
+      d.style.animationDelay = (i * 0.08) + 's';
       var lis = (n.changes || []).map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('');
       d.innerHTML = '<time>' + esc(n.date) + '</time><ul>' + lis + '</ul>';
       list.appendChild(d);
@@ -687,6 +725,20 @@ var io = new IntersectionObserver(function(entries){
   });
 }, {threshold:0.12});
 [].slice.call(document.querySelectorAll('.window')).forEach(function(w){ io.observe(w); });
+/* fix: if page loaded with a hash, reveal that section immediately */
+if (location.hash){
+  var target = document.querySelector(location.hash);
+  if (target && target.classList.contains('window')){
+    target.classList.add('in'); io.unobserve(target);
+  }
+}
+/* fix: also reveal any section already in viewport on load */
+[].slice.call(document.querySelectorAll('.window:not(.in)')).forEach(function(w){
+  var r = w.getBoundingClientRect();
+  if (r.top < window.innerHeight && r.bottom > 0){
+    w.classList.add('in'); io.unobserve(w);
+  }
+});
 $('backTop').addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
 
 /* ===================== snow ===================== */

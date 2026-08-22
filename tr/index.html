@@ -316,6 +316,8 @@ window.addEventListener('scroll',function(){if(!scrollTicking){scrollTicking=tru
 window.addEventListener('resize',function(){sizeSnow();sizeVizBg();updateScrollUI()},{passive:true});
 var io=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{threshold:.12});
 [].slice.call(document.querySelectorAll('.window')).forEach(function(w){io.observe(w)});
+if(location.hash){var target=document.querySelector(location.hash);if(target&&target.classList.contains('window')){target.classList.add('in');io.unobserve(target)}}
+[].slice.call(document.querySelectorAll('.window:not(.in)')).forEach(function(w){var r=w.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0){w.classList.add('in');io.unobserve(w)}});
 $('backTop').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
 
 var snowCanvas=$('snow'),sctx=snowCanvas.getContext('2d'),flakes=[],mouseX=-999,mouseY=-999,trail=[];
