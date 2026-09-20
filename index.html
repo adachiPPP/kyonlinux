@@ -115,6 +115,14 @@ nav a.active{color:#4aa8d8}
   border-color:#4aa8d8;
 }
 .btn.primary:hover{background:#3a98c8}
+.iso-dropdown{position:relative;display:inline-flex}
+.iso-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:240px;background:#0f2438;border:1px solid rgba(74,168,216,.25);border-radius:6px;padding:6px 0;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.iso-dropdown:hover .dropdown-menu,.iso-dropdown.open .dropdown-menu{display:block}
+.iso-dropdown .dropdown-menu a{display:block;padding:10px 16px;color:#c8d6e5;text-decoration:none;font-size:.85rem;font-weight:500;transition:background .15s}
+.iso-dropdown .dropdown-menu a:hover{background:rgba(74,168,216,.12);color:#e8f4f8}
+.iso-dropdown .dropdown-menu a.disabled{color:#3a5a6e;pointer-events:none}
+.iso-dropdown .dropdown-menu a .label{display:block}
+.iso-dropdown .dropdown-menu a .sub{display:block;font-size:.75rem;color:#5a7a8e;margin-top:2px;font-weight:400}
 .socials{display:flex;gap:1rem;flex-wrap:wrap}
 .socials a{
   color:#6a8a9e;text-decoration:none;font-size:.85rem;
@@ -343,7 +351,13 @@ footer a:hover{color:#4aa8d8}
     <h1>kyon linux</h1>
     <p class="tagline">an independent arch-based custom distribution with a custom package manager (nya) made from scratch designed with a focus on user-friendly accessibility and refined aesthetics.</p>
     <div class="hero-actions">
-      <a class="btn primary" href="https://mega.nz/file/anhlwS5K#j-A3PgLy72AjqL6j1c5AoC7EUKydw11Yu6SSgSu-aNk">Download ISO</a>
+      <div class="iso-dropdown">
+        <a class="btn primary" href="#" onclick="this.parentElement.classList.toggle('open');return false">Download ISO ▾</a>
+        <div class="dropdown-menu">
+          <a href="https://mega.nz/file/uy4jFI7Q#yjJMRo2CsuKHkmXIFzIwAVCl2GZpVpCQ3wQUGspaEkk"><span class="label">systemd (recommended)</span></a>
+          <a class="disabled" href="#"><span class="label">dinit (coming soon!)</span></a>
+        </div>
+      </div>
       <a class="btn" href="https://github.com/sponsors/adachiPPP" target="_blank">Donate</a>
     </div>
     <div class="socials">
@@ -439,6 +453,13 @@ footer a:hover{color:#4aa8d8}
 </footer>
 
 <audio id="audio" preload="none"></audio>
+
+<script>
+document.addEventListener('click',function(e){
+  var d=e.target.closest('.iso-dropdown');
+  document.querySelectorAll('.iso-dropdown.open').forEach(function(el){if(el!==d)el.classList.remove('open')});
+});
+</script>
 
 <script>
 (function(){
