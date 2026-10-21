@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -173,36 +174,6 @@ section .subtitle{
 .ticker-track i{color:#4aa8d8;font-style:normal}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-.player{
-  background:rgba(15,36,56,.4);
-  border:1px solid rgba(74,168,216,.1);
-  border-radius:8px;
-  padding:2rem;
-}
-.track-info{margin-bottom:1.5rem}
-.track-info .name{font-weight:600;color:#e8f4f8;font-size:1.1rem}
-.track-info .meta{color:#5a7a8e;font-size:.85rem;margin-top:.25rem}
-.controls{display:flex;align-items:center;gap:1rem;justify-content:center}
-.ctrl{
-  border:1px solid rgba(74,168,216,.3);
-  background:rgba(74,168,216,.08);
-  color:#8faabe;width:48px;height:48px;
-  border-radius:50%;cursor:pointer;
-  display:grid;place-items:center;
-  transition:all .2s;
-}
-.ctrl:hover{background:rgba(74,168,216,.2);color:#e8f4f8}
-.ctrl.play{
-  width:64px;height:64px;
-  background:#4aa8d8;color:#0c1a2a;
-  border-color:#4aa8d8;
-}
-.ctrl.play:hover{background:#3a98c8}
-.ctrl svg{width:20px;height:20px;fill:currentColor}
-.ctrl.play svg{width:24px;height:24px}
-.ctrl:disabled{opacity:.3;pointer-events:none}
-.player-note{text-align:center;color:#5a7a8e;font-size:.8rem;margin-top:1rem}
-
 .gallery-carousel{position:relative;overflow:hidden;border-radius:8px;border:1px solid rgba(74,168,216,.1)}
 .gallery-track{display:flex;transition:transform .4s ease}
 .gallery-slide{flex:0 0 100%;position:relative}
@@ -335,7 +306,6 @@ footer a:hover{color:#4aa8d8}
     <a href="https://github.com/adachiPPP/nya" target="_blank">nya</a>
     <a href="https://www.reddit.com/r/kyonlinux/" target="_blank">reddit</a>
     <a href="#home">Hakkında</a>
-    <a href="#player">Müzik</a>
     <a href="#gallery">Galeri</a>
     <a href="#wiki">Viki</a>
     <a href="#credits">Katkılar</a>
@@ -358,7 +328,7 @@ footer a:hover{color:#4aa8d8}
           <a class="disabled" href="#"><span class="label">dinit (yakında!)</span></a>
         </div>
       </div>
-      <a class="btn" href="https://github.com/sponsors/adachiPPP" target="_blank">Bağış Yap</a>
+      <a class="btn" href="https://github.com/sponsors/adachiPPP" target="_blank">Destekle ❤️</a>
     </div>
     <div class="socials">
       <a href="https://instagram.com/kyonlinux" target="_blank">Instagram</a>
@@ -380,32 +350,6 @@ footer a:hover{color:#4aa8d8}
     <span>kyon linux <i>·</i> arch tabanlı <i>·</i> bloat yok <i>·</i> özenle yapıldı <i>·</i> özel paket yöneticisi <i>·</i> erişilebilir <i>·</i></span>
   </div>
 </div>
-
-<section id="player">
-  <h2>müzik</h2>
-  <p class="subtitle">yolculuğunuz için ambiyans sesleri</p>
-  <div class="player">
-    <div class="track-info">
-      <div class="name" id="trackName">yükleniyor…</div>
-      <div class="meta" id="trackSub">şarkılar algılanıyor</div>
-      <div class="meta" id="trackDate" style="margin-top:.25rem"></div>
-    </div>
-    <div class="controls">
-      <button class="ctrl" id="prevBtn" aria-label="önceki" disabled>
-        <svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
-      </button>
-      <button class="ctrl play" id="playBtn" aria-label="çal" disabled>
-        <svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>
-      </button>
-      <button class="ctrl" id="nextBtn" aria-label="sonraki" disabled>
-        <svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg>
-      </button>
-    </div>
-    <p class="player-note" id="playerNote">çalmaya başlamak için oynat'a basın</p>
-  </div>
-</section>
-
-<hr class="divider">
 
 <section id="gallery">
   <h2>galeri</h2>
@@ -452,15 +396,6 @@ footer a:hover{color:#4aa8d8}
   <p><a href="https://github.com/sponsors/adachiPPP" target="_blank">bağış</a> · <a href="https://instagram.com/kyonlinux" target="_blank">instagram</a> · <a href="https://tiktok.com/@kyonlinux" target="_blank">tiktok</a> · <a href="https://discord.gg/8uKbHbBR5R" target="_blank">discord</a></p>
 </footer>
 
-<audio id="audio" preload="none"></audio>
-
-<script>
-document.addEventListener('click',function(e){
-  var d=e.target.closest('.iso-dropdown');
-  document.querySelectorAll('.iso-dropdown.open').forEach(function(el){if(el!==d)el.classList.remove('open')});
-});
-</script>
-
 <script>
 (function(){
 'use strict';
@@ -485,58 +420,15 @@ var gallerySlides=[],galleryIdx=0,galleryTimer=null;
 function renderGallery(){var track=$('galleryTrack'),dots=$('gDots');var pending=GALLERY_FILES.length,shown=0;function finish(){if(--pending<=0&&!shown)track.parentElement.style.display='none'}GALLERY_FILES.forEach(function(src,i){var img=new Image();img.onload=function(){shown++;var f=document.createElement('div');f.className='gallery-slide';f.innerHTML='<img src="'+src+'" alt="önizleme '+(i+1)+'" loading="lazy">';track.appendChild(f);gallerySlides.push(f);var d=document.createElement('button');d.setAttribute('aria-label','slayt '+(gallerySlides.length));d.addEventListener('click',function(){goGallery(gallerySlides.indexOf(f))});dots.appendChild(d);syncGallery();maybeAutoGallery();finish()};img.onerror=finish;img.src=src})}
 function goGallery(i){if(!gallerySlides.length)return;galleryIdx=(i+gallerySlides.length)%gallerySlides.length;syncGallery()}
 function syncGallery(){$('galleryTrack').style.transform='translateX(-'+(galleryIdx*100)+'%)';var btns=$('gDots').querySelectorAll('button');for(var i=0;i<btns.length;i++)btns[i].classList.toggle('active',i===galleryIdx);var multi=gallerySlides.length>1;$('gPrev').disabled=!multi;$('gNext').disabled=!multi}
-function maybeAutoGallery(){if(gallerySlides.length<2)return;clearInterval(galleryTimer);galleryTimer=setInterval(function(){if(!document.hidden)goGallery(galleryIdx+1)},5000)}
-
-var TRACK_MAX=16,TRACK_EXT='mp3';
-var player=$('audio'),ctx=null,analyser=null,master=null,mediaSrc=null,srcConnected=false;
-var tracks=[],current=-1,probeDone=false,wantPlay=false;
-var playing=false,userStarted=false,synth=null,noiseBuf=null;
-var playBtn=$('playBtn'),prevBtn=$('prevBtn'),nextBtn=$('nextBtn');
-
-function probeRange(range,timeoutMs){return Promise.all(range.map(function(n){return new Promise(function(resolve){var a=new Audio(),done=false;function ok(v){if(done)return;done=true;a.removeAttribute('src');a.load();resolve(v)}a.addEventListener('error',function(){ok(false)});a.addEventListener('loadedmetadata',function(){ok(true)});a.preload='metadata';a.src='../music/music'+n+'.'+TRACK_EXT;a.load();setTimeout(function(){ok(a.readyState>0)},timeoutMs)}))})}
-function probeTracks(){var results=new Array(TRACK_MAX).fill(false),idx=0,CONC=6;function nextBatch(){var batch=[];while(batch.length<CONC&&idx<TRACK_MAX)batch.push(++idx);if(batch.length===0)return Promise.resolve();return probeRange(batch,4000).then(function(oks){for(var i=0;i<batch.length;i++)results[batch[i]-1]=oks[i];return nextBatch()})}return nextBatch().then(function(){return results})}
-function ensureCtx(){if(!ctx){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;ctx=new AC();analyser=ctx.createAnalyser();analyser.fftSize=512;analyser.smoothingTimeConstant=.82;master=ctx.createGain();master.gain.value=.9;analyser.connect(master);master.connect(ctx.destination)}if(ctx.state==='suspended')ctx.resume().catch(function(){});return true}
-function connectSource(){if(srcConnected)return;mediaSrc=ctx.createMediaElementSource(player);mediaSrc.connect(analyser);srcConnected=true}
-
-var ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>';
-var ICON_PAUSE='<svg viewBox="0 0 24 24"><path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z"/></svg>';
-function setPlaying(p){playing=p;playBtn.innerHTML=p?ICON_PAUSE:ICON_PLAY;playBtn.setAttribute('aria-label',p?'duraklat':'çal');$('playerNote').textContent=tracks.length===0?(p?'ambient modu':'şarkı bulunamadı'):(p?'çalıyor · '+fileName(tracks[current]):(userStarted?'duraklatıldı':'oynat\'a basarak başlayın'))}
-function updateTrackLabel(){var n=$('trackName'),s=$('trackSub');if(tracks.length===0){n.textContent='ambient modu';s.textContent='şarkı bulunamadı'}else{n.textContent=fileName(tracks[current]);s.textContent='track '+(current+1)+'/'+tracks.length}$('trackDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}
-function fileName(f){return String(f).replace(/^.*\//,'')}
-function loadTrack(){if(!tracks.length)return;player.src=tracks[current];updateTrackLabel()}
-function stopSynth(){if(synth&&synth.running){synth.running=false;clearTimeout(synth.timer);synth=null}}
-function tryPlay(){if(!ensureCtx())return;if(tracks.length>0){stopSynth();connectSource();player.play().then(function(){setPlaying(true)}).catch(function(e){if(e&&e.name==='AbortError')return;setPlaying(false)})}else{startSynth()}}
-function playPause(){userStarted=true;if(!probeDone){wantPlay=true;return}if(!ensureCtx())return;if(tracks.length>0){if(playing){player.pause();stopSynth();setPlaying(false)}else{tryPlay()}}else{if(synth&&synth.running){stopSynth();setPlaying(false)}else{startSynth()}}}
-function cycle(dir){if(!probeDone||!tracks.length)return;userStarted=true;current=(current+dir+tracks.length)%tracks.length;loadTrack();tryPlay()}
-function getNoise(){if(noiseBuf)return noiseBuf;var len=Math.floor(ctx.sampleRate*.5);noiseBuf=ctx.createBuffer(1,len,ctx.sampleRate);var d=noiseBuf.getChannelData(0);for(var i=0;i<len;i++)d[i]=Math.random()*2-1;return noiseBuf}
-function kick(t){var o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(165,t);o.frequency.exponentialRampToValueAtTime(42,t+.13);g.gain.setValueAtTime(.95,t);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.connect(g);g.connect(analyser);o.start(t);o.stop(t+.18)}
-function hat(t,dur,vol){var s=ctx.createBufferSource(),f=ctx.createBiquadFilter(),g=ctx.createGain();s.buffer=getNoise();f.type='highpass';f.frequency.value=7500;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(analyser);s.start(t);s.stop(t+dur+.02)}
-function bassNote(t,freq){var o=ctx.createOscillator(),f=ctx.createBiquadFilter(),g=ctx.createGain();o.type='triangle';o.frequency.value=freq;f.type='lowpass';f.frequency.value=340;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.16,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.24);o.connect(f);f.connect(g);g.connect(analyser);o.start(t);o.stop(t+.26)}
-function padChord(t,dur,freqs){freqs.forEach(function(fr){var o=ctx.createOscillator(),f2=ctx.createBiquadFilter(),g=ctx.createGain();o.type='sawtooth';o.frequency.value=fr;o.detune.value=(Math.random()-.5)*10;f2.type='lowpass';f2.frequency.value=1600;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.045,t+.6);g.gain.setValueAtTime(.045,t+dur-.5);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(f2);f2.connect(g);g.connect(analyser);o.start(t);o.stop(t+dur+.05)})}
-var CHORDS=[[220,261.63,329.63],[174.61,220,261.63],[130.81,164.81,196],[196,246.94,293.66]],ROOTS=[110,87.31,65.41,98],PAD_OFFSET=dayOfYear()%4;
-function userHasGestured(){return navigator.userActivation?navigator.userActivation.hasBeenActive:true}
-function startSynth(){if(!ensureCtx())return;if(synth&&synth.running)return;if(tracks.length>0)return;if(ctx.state==='suspended'&&!userHasGestured())return;stopSynth();if(!player.paused)player.pause();synth={running:true,step:0,nextTime:ctx.currentTime+.06,timer:null};scheduleLoop();setPlaying(true)}
-function scheduleStep(step,t){var eighth=60/105/2,bar=Math.floor(step/16)%4,s=step%16;if(s%4===0)kick(t);if(s%2===1)hat(t,.035,.12);if(s===14)hat(t,.15,.09);if(s===0||s===8)bassNote(t,ROOTS[(PAD_OFFSET+bar)%4]);if(step%32===0)padChord(t,eighth*32,CHORDS[(PAD_OFFSET+Math.floor(step/32))%4])}
-function scheduleLoop(){if(!synth||!synth.running)return;while(synth.nextTime<ctx.currentTime+.12){scheduleStep(synth.step,synth.nextTime);synth.step++;synth.nextTime+=60/105/2;if(synth.step>=64)synth.step=0}synth.timer=setTimeout(scheduleLoop,30)}
-
-playBtn.addEventListener('click',playPause);
-prevBtn.addEventListener('click',function(){cycle(-1)});
-nextBtn.addEventListener('click',function(){cycle(1)});
-
-var skipFails=0;
-player.addEventListener('error',function(){if(!probeDone||!tracks.length||!userStarted)return;skipFails++;if(skipFails>=tracks.length){skipFails=0;setPlaying(false);return}cycle(1)});
-player.addEventListener('playing',function(){skipFails=0});
-player.addEventListener('ended',function(){if(tracks.length>1)cycle(1)});
+function maybeAutoGallery(){if(gallerySlides.length<2)return;clearInterval(galleryTimer);  galleryTimer=setInterval(function(){if(!document.hidden)goGallery(galleryIdx+1)},5000)}
 
 $('gPrev').addEventListener('click',function(){maybeAutoGallery();goGallery(galleryIdx-1)});
 $('gNext').addEventListener('click',function(){maybeAutoGallery();goGallery(galleryIdx+1)});
 $('wikiSearch').addEventListener('input',wikiFilter);
 
-document.addEventListener('keydown',function(e){var tag=e.target&&e.target.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='BUTTON'||tag==='A')return;if(e.code==='Space'){e.preventDefault();playPause()}else if(e.key==='ArrowRight')cycle(1);else if(e.key==='ArrowLeft')cycle(-1)});
+document.addEventListener('keydown',function(e){var tag=e.target&&e.target.tagName;if(tag==='INPUT'||tag==='TEXTAREA'||tag==='BUTTON'||tag==='A')return});
 
-function initAudio(){Promise.all([fetch('../music/songs.json').then(function(r){if(!r.ok)throw new Error();return r.json()}).then(function(list){if(!Array.isArray(list))return[];return list.filter(function(f){return typeof f==='string'&&f.trim()}).map(function(f){return/^music\//.test(f.trim())?f.trim():'../music/'+f.trim()})}).catch(function(){return[]}),probeTracks().then(function(ok){var files=[];for(var i=0;i<ok.length;i++)if(ok[i])files.push('../music/music'+(i+1)+'.'+TRACK_EXT);return files})]).then(function(res){var seen={},list=[];function add(f){if(f&&!seen[f]){seen[f]=1;list.push(f)}}(res[0]||[]).forEach(add);(res[1]||[]).forEach(add);tracks=list;probeDone=true;if(!tracks.length){updateTrackLabel();$('playerNote').textContent='şarkı bulunamadı — oynat\'a basarak ambient çalın';return}current=dayOfYear()%tracks.length;loadTrack();[playBtn,prevBtn,nextBtn].forEach(function(b){b.disabled=false});updateTrackLabel()})}
-
-function boot(){renderWiki();renderCredits();renderNotes();renderGallery();updateTrackLabel();initAudio()}
+function boot(){renderWiki();renderCredits();renderNotes();renderGallery();}
 boot();
 })();
 </script>
