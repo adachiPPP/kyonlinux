@@ -3,7 +3,7 @@
 an independent arch-based distribution designed with a focus on user-friendly accessibility and refined aesthetics with a custom package manager
 
 # isos
-in the [website](https://adachippp.github.io/kyonlinux/)
+in the [website](https://kyonlinux.github.io/kyon-website/)
 
 # people who helped me <3
 
