@@ -1,5 +1,15 @@
 [
   {
+    "date": "26-11-21",
+    "changes": [
+      "KYON ISO IS FINALLY COMPLETELY FIXED — the python slop in calamares was buggy as hell, but it has finally been sorted (systemd build)",
+      "the new systemd ISO is available from the download button in the hero; the artix build is still in beta",
+      "kyonDE is coming — after it is finished it will be the default WM/DE in kyon linux",
+      "kyonDE features: scrolling, tiling and floating windows; easily customisable from the settings app directly or from the lua config; more features coming soon",
+      "note: kyonDE is currently in alpha and can be laggy"
+    ]
+  },
+  {
     "date": "26-08-15",
     "changes": [
       "nya package manager has been finished and been released this is a huge update for kyon! and it has aur malware scanner to so you can use aur packages freely :3"

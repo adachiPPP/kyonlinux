@@ -1,5 +1,15 @@
 [
   {
+    "date": "26-11-21",
+    "changes": [
+      "DIE KYON-ISO IST ENDLICH KOMPLETT GEFIXT — der Python-Pfusch in calamares war verdammt buggy, aber jetzt ist es endlich behoben (systemd-Build)",
+      "das neue systemd-ISO gibt es jetzt über den Download-Button im Hero; der artix-Build ist noch Beta",
+      "kyonDE kommt — sobald es fertig ist, wird es die Standard-WM/DE in kyon linux",
+      "kyonDE-Funktionen: scrollende, kachelnde und schwebende Fenster; einfach über die Einstellungen-App oder direkt über die Lua-Konfiguration anpassbar; weitere Funktionen folgen",
+      "Hinweis: kyonDE ist aktuell Alpha und kann laggen"
+    ]
+  },
+  {
     "date": "26-08-15",
     "changes": [
       "nya Paketmanager ist fertig und veröffentlicht worden — das ist ein riesiges Update für kyon! Und es hat auch einen AUR-Malware-Scanner, sodass du AUR-Pakete frei verwenden kannst :3"

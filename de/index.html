@@ -99,6 +99,15 @@ nav a.active{color:#4aa8d8}
   line-height:1.7;
   max-width:600px;
 }
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin:-.75rem 0 2rem}
+.hero-badges span{
+  border:1px solid rgba(74,168,216,.2);
+  background:rgba(15,36,56,.45);
+  color:#8faabe;
+  padding:5px 11px;border-radius:999px;
+  font-size:.7rem;font-weight:500;
+  letter-spacing:.09em;text-transform:uppercase;
+}
 .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -117,6 +126,7 @@ nav a.active{color:#4aa8d8}
 }
 .btn.primary:hover{background:#3a98c8}
 .iso-dropdown{position:relative;display:inline-flex}
+.iso-dropdown::after{content:"";position:absolute;top:100%;left:0;width:240px;height:10px}
 .iso-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:240px;background:#0f2438;border:1px solid rgba(74,168,216,.25);border-radius:6px;padding:6px 0;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .iso-dropdown:hover .dropdown-menu,.iso-dropdown.open .dropdown-menu{display:block}
 .iso-dropdown .dropdown-menu a{display:block;padding:10px 16px;color:#c8d6e5;text-decoration:none;font-size:.85rem;font-weight:500;transition:background .15s}
@@ -154,25 +164,6 @@ section .subtitle{
   border:none;border-top:1px solid rgba(74,168,216,.12);
   margin:0 clamp(2rem,5vw,4rem);
 }
-
-.ticker{
-  width:100%;overflow:hidden;
-  border-top:1px solid rgba(74,168,216,.1);
-  border-bottom:1px solid rgba(74,168,216,.1);
-  background:#0f2438;
-  padding:14px 0;
-}
-.ticker-track{
-  display:flex;gap:3rem;white-space:nowrap;
-  width:max-content;
-  animation:marquee 30s linear infinite;
-  font-size:.8rem;color:#5a7a8e;
-  letter-spacing:.1em;text-transform:uppercase;
-  font-weight:500;
-}
-.ticker-track span{display:flex;align-items:center;gap:3rem}
-.ticker-track i{color:#4aa8d8;font-style:normal}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 .gallery-carousel{position:relative;overflow:hidden;border-radius:8px;border:1px solid rgba(74,168,216,.1)}
 .gallery-track{display:flex;transition:transform .4s ease}
@@ -232,11 +223,12 @@ section .subtitle{
   max-height:0;overflow:hidden;
   transition:max-height .4s ease,opacity .3s ease;opacity:0;
 }
-.wiki-entry.active .wiki-content{max-height:2000px;opacity:1}
+.wiki-entry.active .wiki-content{max-height:12000px;opacity:1}
 .wiki-content ul{list-style:none;padding:0 18px 18px;color:#8faabe}
 .wiki-content li{
   padding:6px 0 6px 18px;position:relative;
   line-height:1.6;font-size:.9rem;
+  overflow-wrap:anywhere;
 }
 .wiki-content li::before{content:"›";position:absolute;left:0;color:#4aa8d8}
 .wiki-more{
@@ -320,12 +312,21 @@ footer a:hover{color:#4aa8d8}
     <div class="hero-content">
     <h1>kyon linux</h1>
     <p class="tagline">eine unabhängige arch-basierte Distribution mit einem maßgeschneiderten Paketmanager (nya), entwickelt mit Fokus auf benutzerfreundliche Barrierefreiheit und anspruchsvolle Ästhetik.</p>
+    <div class="hero-badges" aria-label="Eigenschaften">
+      <span>mit Liebe gemacht</span>
+      <span>eigener Paketmanager</span>
+      <span>zugänglich</span>
+      <span>kyon linux</span>
+      <span>arch-basiert</span>
+      <span>kein bloat</span>
+    </div>
     <div class="hero-actions">
       <div class="iso-dropdown">
         <a class="btn primary" href="#" onclick="this.parentElement.classList.toggle('open');return false">ISO Herunterladen ▾</a>
         <div class="dropdown-menu">
-          <a href="https://mega.nz/file/6zoAgJ4Z#YvotlVo0hFdjtLMn97C_j_DqIEEV_V3oUE58e7wrVMY"><span class="label">systemd (empfohlen)</span></a>
+          <a href="https://drive.google.com/file/d/1CRRmqdXTP9K90-1pjGMA3OWUpRJdGg02/view?usp=sharing" target="_blank"><span class="label">systemd (empfohlen)</span></a>
           <a class="disabled" href="#"><span class="label">dinit (kommt bald!)</span></a>
+          <a class="disabled" href="#"><span class="label">artix (Beta — kommt bald)</span></a>
         </div>
       </div>
       <a class="btn" href="https://github.com/sponsors/adachiPPP" target="_blank">Unterstützen ❤️</a>
@@ -343,13 +344,6 @@ footer a:hover{color:#4aa8d8}
   </div>
   </div>
 </section>
-
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-track">
-    <span>kyon linux <i>·</i> arch-basiert <i>·</i> kein bloat <i>·</i> mit Liebe gemacht <i>·</i> eigener Paketmanager <i>·</i> zugänglich <i>·</i></span>
-    <span>kyon linux <i>·</i> arch-basiert <i>·</i> kein bloat <i>·</i> mit Liebe gemacht <i>·</i> eigener Paketmanager <i>·</i> zugänglich <i>·</i></span>
-  </div>
-</div>
 
 <section id="gallery">
   <h2>Galerie</h2>
@@ -408,7 +402,7 @@ function dayOfYear(){var n=new Date();return Math.floor((n-new Date(n.getFullYea
 
 var wikiEntries=[],wikiData=[],wikiShowingAll=false;
 function renderWiki(){fetch('wiki.json').then(function(r){if(!r.ok)throw new Error();return r.json()}).then(drawWiki).catch(function(){})}
-function drawWiki(data){if(!Array.isArray(data))return;wikiData=data;var list=$('wikiList');wikiData.forEach(function(item,i){var entry=document.createElement('div');entry.className='wiki-entry'+(i>=WIKI_INITIAL?' wiki-hidden':'');var lines=item.paragraph||item.changes||[];var lis=lines.map(function(line){if(line.trim()==='')return'<li style="height:.5em"></li>';var content=line;if(/^\s*@!/.test(content))content=content.replace(/^\s*@!\s*/,'');return'<li>'+esc(content).replace(/\\n|\n/g,'<br>')+'</li>'}).join('');entry.innerHTML='<div class="wiki-header"><span class="wiki-title">'+esc(item.header)+'</span><span class="wiki-date">'+esc(item.date)+'</span><span class="wiki-trigger">[öffnen]</span></div><div class="wiki-content"><ul>'+lis+'</ul></div>';entry.querySelector('.wiki-header').addEventListener('click',function(){var active=entry.classList.toggle('active');entry.querySelector('.wiki-trigger').textContent=active?'[schließen]':'[öffnen]'});list.appendChild(entry);wikiEntries.push(entry)});updateWikiMoreBtn()}
+function drawWiki(data){if(!Array.isArray(data))return;wikiData=data;var list=$('wikiList');wikiData.forEach(function(item,i){var entry=document.createElement('div');entry.className='wiki-entry'+(i>=WIKI_INITIAL?' wiki-hidden':'');var lines=item.paragraph||item.changes||[];var lis=lines.map(function(line){if(line.trim()==='')return'<li style="height:.5em"></li>';var content=line,noBullet=false;if(/^\s*@!/.test(content)){noBullet=true;content=content.replace(/^\s*@!\s*/,'')}return'<li style="'+(noBullet?'padding-left:0':'')+'">'+esc(content).replace(/\\n|\n/g,'<br>')+'</li>'}).join('');entry.innerHTML='<div class="wiki-header"><span class="wiki-title">'+esc(item.header)+'</span><span class="wiki-date">'+esc(item.date)+'</span><span class="wiki-trigger">[öffnen]</span></div><div class="wiki-content"><ul>'+lis+'</ul></div>';entry.querySelector('.wiki-header').addEventListener('click',function(){var active=entry.classList.toggle('active');entry.querySelector('.wiki-trigger').textContent=active?'[schließen]':'[öffnen]'});list.appendChild(entry);wikiEntries.push(entry)});updateWikiMoreBtn()}
 function updateWikiMoreBtn(){var btn=$('wikiMoreBtn'),h=0;for(var i=0;i<wikiEntries.length;i++){if(wikiEntries[i].classList.contains('wiki-hidden')&&wikiEntries[i].style.display!=='none')h++}var q=$('wikiSearch').value.trim().toLowerCase();if(h>0&&!q){btn.style.display='block';btn.textContent='Mehr anzeigen ('+h+' versteckt)'}else{btn.style.display='none'}}
 function wikiFilter(){var q=$('wikiSearch').value.trim().toLowerCase(),shown=0;if(!wikiData.length)return;wikiData.forEach(function(item,i){var hay=(item.header+' '+item.date+' '+(item.paragraph||[]).join(' ')).toLowerCase();var ok=!q||hay.indexOf(q)!==-1;if(ok&&!q){if(i<WIKI_INITIAL||wikiShowingAll){wikiEntries[i].style.display='';wikiEntries[i].classList.remove('wiki-hidden')}else{wikiEntries[i].style.display='none';wikiEntries[i].classList.add('wiki-hidden')}}else if(ok&&q){wikiEntries[i].style.display='';wikiEntries[i].classList.remove('wiki-hidden')}else{wikiEntries[i].style.display='none';if(wikiEntries[i].classList.contains('active')){wikiEntries[i].classList.remove('active');var tg=wikiEntries[i].querySelector('.wiki-trigger');if(tg)tg.textContent='[öffnen]'}}if(ok)shown++});$('wikiCount').textContent=q?shown+'/'+wikiEntries.length:'';updateWikiMoreBtn()}
 $('wikiMoreBtn').addEventListener('click',function(){wikiShowingAll=true;wikiFilter()});

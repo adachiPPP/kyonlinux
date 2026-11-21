@@ -85,6 +85,15 @@ nav a.active{color:#4aa8d8}
   line-height:1.7;
   max-width:600px;
 }
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin:-.75rem 0 2rem}
+.hero-badges span{
+  border:1px solid rgba(74,168,216,.2);
+  background:rgba(15,36,56,.45);
+  color:#8faabe;
+  padding:5px 11px;border-radius:999px;
+  font-size:.7rem;font-weight:500;
+  letter-spacing:.09em;text-transform:uppercase;
+}
 .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -103,6 +112,7 @@ nav a.active{color:#4aa8d8}
 }
 .btn.primary:hover{background:#3a98c8}
 .iso-dropdown{position:relative;display:inline-flex}
+.iso-dropdown::after{content:"";position:absolute;top:100%;left:0;width:240px;height:10px}
 .iso-dropdown .dropdown-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:240px;background:#0f2438;border:1px solid rgba(74,168,216,.25);border-radius:6px;padding:6px 0;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .iso-dropdown:hover .dropdown-menu,.iso-dropdown.open .dropdown-menu{display:block}
 .iso-dropdown .dropdown-menu a{display:block;padding:10px 16px;color:#c8d6e5;text-decoration:none;font-size:.85rem;font-weight:500;transition:background .15s}
@@ -140,25 +150,6 @@ section .subtitle{
   border:none;border-top:1px solid rgba(74,168,216,.12);
   margin:0 clamp(2rem,5vw,4rem);
 }
-
-.ticker{
-  width:100%;overflow:hidden;
-  border-top:1px solid rgba(74,168,216,.1);
-  border-bottom:1px solid rgba(74,168,216,.1);
-  background:#0f2438;
-  padding:14px 0;
-}
-.ticker-track{
-  display:flex;gap:3rem;white-space:nowrap;
-  width:max-content;
-  animation:marquee 30s linear infinite;
-  font-size:.8rem;color:#5a7a8e;
-  letter-spacing:.1em;text-transform:uppercase;
-  font-weight:500;
-}
-.ticker-track span{display:flex;align-items:center;gap:3rem}
-.ticker-track i{color:#4aa8d8;font-style:normal}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 .gallery-carousel{position:relative;overflow:hidden;border-radius:8px;border:1px solid rgba(74,168,216,.1)}
 .gallery-track{display:flex;transition:transform .4s ease}
@@ -218,11 +209,12 @@ section .subtitle{
   max-height:0;overflow:hidden;
   transition:max-height .4s ease,opacity .3s ease;opacity:0;
 }
-.wiki-entry.active .wiki-content{max-height:2000px;opacity:1}
+.wiki-entry.active .wiki-content{max-height:12000px;opacity:1}
 .wiki-content ul{list-style:none;padding:0 18px 18px;color:#8faabe}
 .wiki-content li{
   padding:6px 0 6px 18px;position:relative;
   line-height:1.6;font-size:.9rem;
+  overflow-wrap:anywhere;
 }
 .wiki-content li::before{content:"›";position:absolute;left:0;color:#4aa8d8}
 .wiki-more{

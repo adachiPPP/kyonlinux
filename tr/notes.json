@@ -1,5 +1,15 @@
 [
   {
+    "date": "26-11-21",
+    "changes": [
+      "KYON ISO SONUNDA TAMAMEN DÜZELTİLDİ — calamares'teki python saçmalığı berbat derecede hatalıydı ama sonunda çözüldü (systemd sürümü)",
+      "yeni systemd ISO'su artık hero bölümündeki indirme butonundan indirilebilir; artix sürümü hâlâ beta",
+      "kyonDE geliyor — tamamlandığında kyon linux'ta varsayılan WM/DE olacak",
+      "kyonDE özellikleri: kayan, döşemeli ve serbest pencereler; ayarlar uygulamasından veya doğrudan lua yapılandırmasından kolayca özelleştirilebilir; daha fazla özellik yakında",
+      "not: kyonDE şu anda alfa aşamasında ve takılabilir"
+    ]
+  },
+  {
     "date": "26-08-15",
     "changes": [
       "nya paket yöneticisi tamamlandı ve yayınlandı — bu kyon için büyük bir güncelleme! Ayrıca AUR kötü amaçlı yazılım tarayıcısı da var, böylece AUR paketlerini özgürce kullanabilirsiniz :3"
